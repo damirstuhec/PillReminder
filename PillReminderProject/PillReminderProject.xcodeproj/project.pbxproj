@@ -1,0 +1,282 @@
+// !$*UTF8*$!
+{
+	archiveVersion = 1;
+	classes = {
+	};
+	objectVersion = 46;
+	objects = {
+
+/* Begin PBXBuildFile section */
+		26DAFBF1152E28A90025B7CF /* UIKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 26DAFBF0152E28A90025B7CF /* UIKit.framework */; };
+		26DAFBF3152E28A90025B7CF /* Foundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 26DAFBF2152E28A90025B7CF /* Foundation.framework */; };
+		26DAFBF5152E28A90025B7CF /* CoreGraphics.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 26DAFBF4152E28A90025B7CF /* CoreGraphics.framework */; };
+		26DAFBFB152E28A90025B7CF /* InfoPlist.strings in Resources */ = {isa = PBXBuildFile; fileRef = 26DAFBF9152E28A90025B7CF /* InfoPlist.strings */; };
+		26DAFBFD152E28A90025B7CF /* main.m in Sources */ = {isa = PBXBuildFile; fileRef = 26DAFBFC152E28A90025B7CF /* main.m */; };
+		26DAFC01152E28A90025B7CF /* PRAppDelegate.m in Sources */ = {isa = PBXBuildFile; fileRef = 26DAFC00152E28A90025B7CF /* PRAppDelegate.m */; };
+		26DAFC04152E28A90025B7CF /* MainStoryboard.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 26DAFC02152E28A90025B7CF /* MainStoryboard.storyboard */; };
+		26DAFC07152E28A90025B7CF /* PRViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 26DAFC06152E28A90025B7CF /* PRViewController.m */; };
+/* End PBXBuildFile section */
+
+/* Begin PBXFileReference section */
+		26DAFBEC152E28A90025B7CF /* PillReminderProject.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = PillReminderProject.app; sourceTree = BUILT_PRODUCTS_DIR; };
+		26DAFBF0152E28A90025B7CF /* UIKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = UIKit.framework; path = System/Library/Frameworks/UIKit.framework; sourceTree = SDKROOT; };
+		26DAFBF2152E28A90025B7CF /* Foundation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Foundation.framework; path = System/Library/Frameworks/Foundation.framework; sourceTree = SDKROOT; };
+		26DAFBF4152E28A90025B7CF /* CoreGraphics.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreGraphics.framework; path = System/Library/Frameworks/CoreGraphics.framework; sourceTree = SDKROOT; };
+		26DAFBF8152E28A90025B7CF /* PillReminderProject-Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = "PillReminderProject-Info.plist"; sourceTree = "<group>"; };
+		26DAFBFA152E28A90025B7CF /* en */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = en; path = en.lproj/InfoPlist.strings; sourceTree = "<group>"; };
+		26DAFBFC152E28A90025B7CF /* main.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = main.m; sourceTree = "<group>"; };
+		26DAFBFE152E28A90025B7CF /* PillReminderProject-Prefix.pch */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "PillReminderProject-Prefix.pch"; sourceTree = "<group>"; };
+		26DAFBFF152E28A90025B7CF /* PRAppDelegate.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = PRAppDelegate.h; sourceTree = "<group>"; };
+		26DAFC00152E28A90025B7CF /* PRAppDelegate.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = PRAppDelegate.m; sourceTree = "<group>"; };
+		26DAFC03152E28A90025B7CF /* en */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = en; path = en.lproj/MainStoryboard.storyboard; sourceTree = "<group>"; };
+		26DAFC05152E28A90025B7CF /* PRViewController.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = PRViewController.h; sourceTree = "<group>"; };
+		26DAFC06152E28A90025B7CF /* PRViewController.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = PRViewController.m; sourceTree = "<group>"; };
+/* End PBXFileReference section */
+
+/* Begin PBXFrameworksBuildPhase section */
+		26DAFBE9152E28A90025B7CF /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				26DAFBF1152E28A90025B7CF /* UIKit.framework in Frameworks */,
+				26DAFBF3152E28A90025B7CF /* Foundation.framework in Frameworks */,
+				26DAFBF5152E28A90025B7CF /* CoreGraphics.framework in Frameworks */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXFrameworksBuildPhase section */
+
+/* Begin PBXGroup section */
+		26DAFBE1152E28A90025B7CF = {
+			isa = PBXGroup;
+			children = (
+				26DAFBF6152E28A90025B7CF /* PillReminderProject */,
+				26DAFBEF152E28A90025B7CF /* Frameworks */,
+				26DAFBED152E28A90025B7CF /* Products */,
+			);
+			sourceTree = "<group>";
+		};
+		26DAFBED152E28A90025B7CF /* Products */ = {
+			isa = PBXGroup;
+			children = (
+				26DAFBEC152E28A90025B7CF /* PillReminderProject.app */,
+			);
+			name = Products;
+			sourceTree = "<group>";
+		};
+		26DAFBEF152E28A90025B7CF /* Frameworks */ = {
+			isa = PBXGroup;
+			children = (
+				26DAFBF0152E28A90025B7CF /* UIKit.framework */,
+				26DAFBF2152E28A90025B7CF /* Foundation.framework */,
+				26DAFBF4152E28A90025B7CF /* CoreGraphics.framework */,
+			);
+			name = Frameworks;
+			sourceTree = "<group>";
+		};
+		26DAFBF6152E28A90025B7CF /* PillReminderProject */ = {
+			isa = PBXGroup;
+			children = (
+				26DAFBFF152E28A90025B7CF /* PRAppDelegate.h */,
+				26DAFC00152E28A90025B7CF /* PRAppDelegate.m */,
+				26DAFC02152E28A90025B7CF /* MainStoryboard.storyboard */,
+				26DAFC05152E28A90025B7CF /* PRViewController.h */,
+				26DAFC06152E28A90025B7CF /* PRViewController.m */,
+				26DAFBF7152E28A90025B7CF /* Supporting Files */,
+			);
+			path = PillReminderProject;
+			sourceTree = "<group>";
+		};
+		26DAFBF7152E28A90025B7CF /* Supporting Files */ = {
+			isa = PBXGroup;
+			children = (
+				26DAFBF8152E28A90025B7CF /* PillReminderProject-Info.plist */,
+				26DAFBF9152E28A90025B7CF /* InfoPlist.strings */,
+				26DAFBFC152E28A90025B7CF /* main.m */,
+				26DAFBFE152E28A90025B7CF /* PillReminderProject-Prefix.pch */,
+			);
+			name = "Supporting Files";
+			sourceTree = "<group>";
+		};
+/* End PBXGroup section */
+
+/* Begin PBXNativeTarget section */
+		26DAFBEB152E28A90025B7CF /* PillReminderProject */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = 26DAFC0A152E28A90025B7CF /* Build configuration list for PBXNativeTarget "PillReminderProject" */;
+			buildPhases = (
+				26DAFBE8152E28A90025B7CF /* Sources */,
+				26DAFBE9152E28A90025B7CF /* Frameworks */,
+				26DAFBEA152E28A90025B7CF /* Resources */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+			);
+			name = PillReminderProject;
+			productName = PillReminderProject;
+			productReference = 26DAFBEC152E28A90025B7CF /* PillReminderProject.app */;
+			productType = "com.apple.product-type.application";
+		};
+/* End PBXNativeTarget section */
+
+/* Begin PBXProject section */
+		26DAFBE3152E28A90025B7CF /* Project object */ = {
+			isa = PBXProject;
+			attributes = {
+				LastUpgradeCheck = 0420;
+				ORGANIZATIONNAME = "FERI Maribor, Slovenia";
+			};
+			buildConfigurationList = 26DAFBE6152E28A90025B7CF /* Build configuration list for PBXProject "PillReminderProject" */;
+			compatibilityVersion = "Xcode 3.2";
+			developmentRegion = English;
+			hasScannedForEncodings = 0;
+			knownRegions = (
+				en,
+			);
+			mainGroup = 26DAFBE1152E28A90025B7CF;
+			productRefGroup = 26DAFBED152E28A90025B7CF /* Products */;
+			projectDirPath = "";
+			projectRoot = "";
+			targets = (
+				26DAFBEB152E28A90025B7CF /* PillReminderProject */,
+			);
+		};
+/* End PBXProject section */
+
+/* Begin PBXResourcesBuildPhase section */
+		26DAFBEA152E28A90025B7CF /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				26DAFBFB152E28A90025B7CF /* InfoPlist.strings in Resources */,
+				26DAFC04152E28A90025B7CF /* MainStoryboard.storyboard in Resources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXResourcesBuildPhase section */
+
+/* Begin PBXSourcesBuildPhase section */
+		26DAFBE8152E28A90025B7CF /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				26DAFBFD152E28A90025B7CF /* main.m in Sources */,
+				26DAFC01152E28A90025B7CF /* PRAppDelegate.m in Sources */,
+				26DAFC07152E28A90025B7CF /* PRViewController.m in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXSourcesBuildPhase section */
+
+/* Begin PBXVariantGroup section */
+		26DAFBF9152E28A90025B7CF /* InfoPlist.strings */ = {
+			isa = PBXVariantGroup;
+			children = (
+				26DAFBFA152E28A90025B7CF /* en */,
+			);
+			name = InfoPlist.strings;
+			sourceTree = "<group>";
+		};
+		26DAFC02152E28A90025B7CF /* MainStoryboard.storyboard */ = {
+			isa = PBXVariantGroup;
+			children = (
+				26DAFC03152E28A90025B7CF /* en */,
+			);
+			name = MainStoryboard.storyboard;
+			sourceTree = "<group>";
+		};
+/* End PBXVariantGroup section */
+
+/* Begin XCBuildConfiguration section */
+		26DAFC08152E28A90025B7CF /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				ARCHS = "$(ARCHS_STANDARD_32_BIT)";
+				CLANG_ENABLE_OBJC_ARC = YES;
+				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
+				COPY_PHASE_STRIP = NO;
+				GCC_C_LANGUAGE_STANDARD = gnu99;
+				GCC_DYNAMIC_NO_PIC = NO;
+				GCC_OPTIMIZATION_LEVEL = 0;
+				GCC_PREPROCESSOR_DEFINITIONS = (
+					"DEBUG=1",
+					"$(inherited)",
+				);
+				GCC_SYMBOLS_PRIVATE_EXTERN = NO;
+				GCC_VERSION = com.apple.compilers.llvm.clang.1_0;
+				GCC_WARN_ABOUT_MISSING_PROTOTYPES = YES;
+				GCC_WARN_ABOUT_RETURN_TYPE = YES;
+				GCC_WARN_UNUSED_VARIABLE = YES;
+				IPHONEOS_DEPLOYMENT_TARGET = 5.0;
+				SDKROOT = iphoneos;
+			};
+			name = Debug;
+		};
+		26DAFC09152E28A90025B7CF /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				ARCHS = "$(ARCHS_STANDARD_32_BIT)";
+				CLANG_ENABLE_OBJC_ARC = YES;
+				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
+				COPY_PHASE_STRIP = YES;
+				GCC_C_LANGUAGE_STANDARD = gnu99;
+				GCC_VERSION = com.apple.compilers.llvm.clang.1_0;
+				GCC_WARN_ABOUT_MISSING_PROTOTYPES = YES;
+				GCC_WARN_ABOUT_RETURN_TYPE = YES;
+				GCC_WARN_UNUSED_VARIABLE = YES;
+				IPHONEOS_DEPLOYMENT_TARGET = 5.0;
+				OTHER_CFLAGS = "-DNS_BLOCK_ASSERTIONS=1";
+				SDKROOT = iphoneos;
+				VALIDATE_PRODUCT = YES;
+			};
+			name = Release;
+		};
+		26DAFC0B152E28A90025B7CF /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				GCC_PRECOMPILE_PREFIX_HEADER = YES;
+				GCC_PREFIX_HEADER = "PillReminderProject/PillReminderProject-Prefix.pch";
+				INFOPLIST_FILE = "PillReminderProject/PillReminderProject-Info.plist";
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				WRAPPER_EXTENSION = app;
+			};
+			name = Debug;
+		};
+		26DAFC0C152E28A90025B7CF /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				GCC_PRECOMPILE_PREFIX_HEADER = YES;
+				GCC_PREFIX_HEADER = "PillReminderProject/PillReminderProject-Prefix.pch";
+				INFOPLIST_FILE = "PillReminderProject/PillReminderProject-Info.plist";
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				WRAPPER_EXTENSION = app;
+			};
+			name = Release;
+		};
+/* End XCBuildConfiguration section */
+
+/* Begin XCConfigurationList section */
+		26DAFBE6152E28A90025B7CF /* Build configuration list for PBXProject "PillReminderProject" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				26DAFC08152E28A90025B7CF /* Debug */,
+				26DAFC09152E28A90025B7CF /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+		26DAFC0A152E28A90025B7CF /* Build configuration list for PBXNativeTarget "PillReminderProject" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				26DAFC0B152E28A90025B7CF /* Debug */,
+				26DAFC0C152E28A90025B7CF /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+		};
+/* End XCConfigurationList section */
+	};
+	rootObject = 26DAFBE3152E28A90025B7CF /* Project object */;
+}
