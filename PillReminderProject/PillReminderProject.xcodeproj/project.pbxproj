@@ -18,6 +18,9 @@
 		26DAFC0F152E2D370025B7CF /* PillsTableViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 26DAFC0E152E2D370025B7CF /* PillsTableViewController.m */; };
 		26DAFC12152E2E920025B7CF /* PillDataTableViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 26DAFC11152E2E920025B7CF /* PillDataTableViewController.m */; };
 		26DAFC18152E34EF0025B7CF /* CoreDataTableViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 26DAFC17152E34EF0025B7CF /* CoreDataTableViewController.m */; };
+		26DAFC1B152E388B0025B7CF /* PillReminder.xcdatamodeld in Sources */ = {isa = PBXBuildFile; fileRef = 26DAFC19152E388B0025B7CF /* PillReminder.xcdatamodeld */; };
+		26DAFC24152E41E00025B7CF /* Reminder.m in Sources */ = {isa = PBXBuildFile; fileRef = 26DAFC23152E41E00025B7CF /* Reminder.m */; };
+		26DAFC27152E41E00025B7CF /* Pill.m in Sources */ = {isa = PBXBuildFile; fileRef = 26DAFC26152E41E00025B7CF /* Pill.m */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -40,6 +43,11 @@
 		26DAFC11152E2E920025B7CF /* PillDataTableViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = PillDataTableViewController.m; sourceTree = "<group>"; };
 		26DAFC16152E34EF0025B7CF /* CoreDataTableViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CoreDataTableViewController.h; sourceTree = "<group>"; };
 		26DAFC17152E34EF0025B7CF /* CoreDataTableViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = CoreDataTableViewController.m; sourceTree = "<group>"; };
+		26DAFC1A152E388B0025B7CF /* PillReminder.xcdatamodel */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcdatamodel; path = PillReminder.xcdatamodel; sourceTree = "<group>"; };
+		26DAFC22152E41E00025B7CF /* Reminder.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Reminder.h; sourceTree = "<group>"; };
+		26DAFC23152E41E00025B7CF /* Reminder.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = Reminder.m; sourceTree = "<group>"; };
+		26DAFC25152E41E00025B7CF /* Pill.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Pill.h; sourceTree = "<group>"; };
+		26DAFC26152E41E00025B7CF /* Pill.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = Pill.m; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -93,6 +101,11 @@
 				26DAFC11152E2E920025B7CF /* PillDataTableViewController.m */,
 				26DAFC0D152E2D370025B7CF /* PillsTableViewController.h */,
 				26DAFC0E152E2D370025B7CF /* PillsTableViewController.m */,
+				26DAFC19152E388B0025B7CF /* PillReminder.xcdatamodeld */,
+				26DAFC25152E41E00025B7CF /* Pill.h */,
+				26DAFC26152E41E00025B7CF /* Pill.m */,
+				26DAFC22152E41E00025B7CF /* Reminder.h */,
+				26DAFC23152E41E00025B7CF /* Reminder.m */,
 				26DAFC05152E28A90025B7CF /* PRViewController.h */,
 				26DAFC06152E28A90025B7CF /* PRViewController.m */,
 				26DAFC16152E34EF0025B7CF /* CoreDataTableViewController.h */,
@@ -182,6 +195,9 @@
 				26DAFC0F152E2D370025B7CF /* PillsTableViewController.m in Sources */,
 				26DAFC12152E2E920025B7CF /* PillDataTableViewController.m in Sources */,
 				26DAFC18152E34EF0025B7CF /* CoreDataTableViewController.m in Sources */,
+				26DAFC1B152E388B0025B7CF /* PillReminder.xcdatamodeld in Sources */,
+				26DAFC24152E41E00025B7CF /* Reminder.m in Sources */,
+				26DAFC27152E41E00025B7CF /* Pill.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -295,6 +311,19 @@
 			defaultConfigurationIsVisible = 0;
 		};
 /* End XCConfigurationList section */
+
+/* Begin XCVersionGroup section */
+		26DAFC19152E388B0025B7CF /* PillReminder.xcdatamodeld */ = {
+			isa = XCVersionGroup;
+			children = (
+				26DAFC1A152E388B0025B7CF /* PillReminder.xcdatamodel */,
+			);
+			currentVersion = 26DAFC1A152E388B0025B7CF /* PillReminder.xcdatamodel */;
+			path = PillReminder.xcdatamodeld;
+			sourceTree = "<group>";
+			versionGroupType = wrapper.xcdatamodel;
+		};
+/* End XCVersionGroup section */
 	};
 	rootObject = 26DAFBE3152E28A90025B7CF /* Project object */;
 }

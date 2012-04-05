@@ -7,7 +7,8 @@
 //
 
 #import "PillsTableViewController.h"
-
+#import "Pill.h"
+#import "Reminder.h"
 
 @implementation PillsTableViewController
 
@@ -18,13 +19,28 @@
 
 @synthesize pillDatabase = _pillDatabase;
 
+-(void)populateTestPillsIntoDocument:(UIManagedDocument *)document
+{
+    /*
+    dispatch_queue_t populateQ = dispatch_queue_create("Test pills populate", NULL);
+    dispatch_async(populateQ, ^{
+        [document.managedObjectContext performBlock:^{
+            // populate testing pills
+        }];
+    });
+    dispatch_release(populateQ);
+    */
+}
+
 -(void)useDocument
 {
-    // sinhronizacijski dokument podatkovne baze še ne obstaja
+    // sinhronizacijski dokument podatkovne baze še ne obstaja - kreacija sinhronizacijskega dokumenta
     if (![[NSFileManager defaultManager] fileExistsAtPath:[self.pillDatabase.fileURL path]])
     {
         [self.pillDatabase saveToURL:self.pillDatabase.fileURL forSaveOperation:UIDocumentSaveForCreating completionHandler:^(BOOL success){
             [self setupFetchedResultsController];
+            
+            [self populateTestPillsIntoDocument:self.pillDatabase];
         }];
         
     // sinhronizacijski dokument podatkovne baze je zaprt
