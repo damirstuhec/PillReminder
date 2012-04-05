@@ -10,4 +10,6 @@
 
 @interface PRViewController : UIViewController
 
+@property (strong, nonatomic) NSString *name;
+
 @end
