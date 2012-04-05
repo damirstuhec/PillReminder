@@ -10,8 +10,6 @@
 
 @implementation PRViewController
 
-@synthesize name = _name;
-
 - (void)didReceiveMemoryWarning
 {
     [super didReceiveMemoryWarning];

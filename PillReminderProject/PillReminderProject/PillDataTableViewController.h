@@ -1,5 +1,5 @@
 //
-//  PRViewController.h
+//  PillDataTableViewController.h
 //  PillReminderProject
 //
 //  Created by Damir Stuhec on 4/5/12.
@@ -8,6 +8,6 @@
 
 #import <UIKit/UIKit.h>
 
-@interface PRViewController : UIViewController
+@interface PillDataTableViewController : UITableViewController
 
 @end

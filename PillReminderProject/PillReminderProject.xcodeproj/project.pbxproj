@@ -15,6 +15,9 @@
 		26DAFC01152E28A90025B7CF /* PRAppDelegate.m in Sources */ = {isa = PBXBuildFile; fileRef = 26DAFC00152E28A90025B7CF /* PRAppDelegate.m */; };
 		26DAFC04152E28A90025B7CF /* MainStoryboard.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 26DAFC02152E28A90025B7CF /* MainStoryboard.storyboard */; };
 		26DAFC07152E28A90025B7CF /* PRViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 26DAFC06152E28A90025B7CF /* PRViewController.m */; };
+		26DAFC0F152E2D370025B7CF /* PillsTableViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 26DAFC0E152E2D370025B7CF /* PillsTableViewController.m */; };
+		26DAFC12152E2E920025B7CF /* PillDataTableViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 26DAFC11152E2E920025B7CF /* PillDataTableViewController.m */; };
+		26DAFC18152E34EF0025B7CF /* CoreDataTableViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 26DAFC17152E34EF0025B7CF /* CoreDataTableViewController.m */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -31,6 +34,12 @@
 		26DAFC03152E28A90025B7CF /* en */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = en; path = en.lproj/MainStoryboard.storyboard; sourceTree = "<group>"; };
 		26DAFC05152E28A90025B7CF /* PRViewController.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = PRViewController.h; sourceTree = "<group>"; };
 		26DAFC06152E28A90025B7CF /* PRViewController.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = PRViewController.m; sourceTree = "<group>"; };
+		26DAFC0D152E2D370025B7CF /* PillsTableViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PillsTableViewController.h; sourceTree = "<group>"; };
+		26DAFC0E152E2D370025B7CF /* PillsTableViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = PillsTableViewController.m; sourceTree = "<group>"; };
+		26DAFC10152E2E920025B7CF /* PillDataTableViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PillDataTableViewController.h; sourceTree = "<group>"; };
+		26DAFC11152E2E920025B7CF /* PillDataTableViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = PillDataTableViewController.m; sourceTree = "<group>"; };
+		26DAFC16152E34EF0025B7CF /* CoreDataTableViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CoreDataTableViewController.h; sourceTree = "<group>"; };
+		26DAFC17152E34EF0025B7CF /* CoreDataTableViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = CoreDataTableViewController.m; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -80,8 +89,14 @@
 				26DAFBFF152E28A90025B7CF /* PRAppDelegate.h */,
 				26DAFC00152E28A90025B7CF /* PRAppDelegate.m */,
 				26DAFC02152E28A90025B7CF /* MainStoryboard.storyboard */,
+				26DAFC10152E2E920025B7CF /* PillDataTableViewController.h */,
+				26DAFC11152E2E920025B7CF /* PillDataTableViewController.m */,
+				26DAFC0D152E2D370025B7CF /* PillsTableViewController.h */,
+				26DAFC0E152E2D370025B7CF /* PillsTableViewController.m */,
 				26DAFC05152E28A90025B7CF /* PRViewController.h */,
 				26DAFC06152E28A90025B7CF /* PRViewController.m */,
+				26DAFC16152E34EF0025B7CF /* CoreDataTableViewController.h */,
+				26DAFC17152E34EF0025B7CF /* CoreDataTableViewController.m */,
 				26DAFBF7152E28A90025B7CF /* Supporting Files */,
 			);
 			path = PillReminderProject;
@@ -164,6 +179,9 @@
 				26DAFBFD152E28A90025B7CF /* main.m in Sources */,
 				26DAFC01152E28A90025B7CF /* PRAppDelegate.m in Sources */,
 				26DAFC07152E28A90025B7CF /* PRViewController.m in Sources */,
+				26DAFC0F152E2D370025B7CF /* PillsTableViewController.m in Sources */,
+				26DAFC12152E2E920025B7CF /* PillDataTableViewController.m in Sources */,
+				26DAFC18152E34EF0025B7CF /* CoreDataTableViewController.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
