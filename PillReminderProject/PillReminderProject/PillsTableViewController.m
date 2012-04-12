@@ -14,7 +14,12 @@
 
 -(void)setupFetchedResultsController
 {
-    // self.fetchedResultsController = ..
+    NSFetchRequest *request = [NSFetchRequest fetchRequestWithEntityName:@"Pill"];
+    request.sortDescriptors = [NSArray arrayWithObject:[NSSortDescriptor sortDescriptorWithKey:@"name" ascending:YES]];
+    
+    self.fetchedResultsController = [[NSFetchedResultsController alloc] initWithFetchRequest:request 
+                                                                        managedObjectContext:self.pillDatabase.managedObjectContext 
+                                                                          sectionNameKeyPath:nil cacheName:nil];
 }
 
 @synthesize pillDatabase = _pillDatabase;
@@ -87,8 +92,14 @@
     }
     
     // Configure the cell...
+    Pill *pill = [self.fetchedResultsController objectAtIndexPath:indexPath];
+    cell.textLabel.text = pill.name;
+    cell.detailTextLabel.text = [NSString stringWithFormat:@"%d mg", pill.amount];
     
     return cell;
 }
 
+- (void)viewDidUnload {
+    [super viewDidUnload];
+}
 @end

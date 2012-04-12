@@ -1,17 +1,19 @@
 //
-//  PillsTableViewController.h
+//  PillSaver.h
 //  PillReminderProject
 //
-//  Created by Damir Stuhec on 4/5/12.
+//  Created by Damir Stuhec on 4/12/12.
 //  Copyright (c) 2012 FERI Maribor, Slovenia. All rights reserved.
 //
 
 #import <UIKit/UIKit.h>
-#import "CoreDataTableViewController.h"
 
-
-@interface PillsTableViewController : CoreDataTableViewController
+@interface PillSaver : UIViewController
 
 @property (nonatomic, strong) UIManagedDocument *pillDatabase;
+
+@property (weak, nonatomic) IBOutlet UITextField *pillNameFld;
+
+- (IBAction)savePill:(id)sender;
 
 @end

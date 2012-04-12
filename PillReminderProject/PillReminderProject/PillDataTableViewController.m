@@ -25,4 +25,8 @@
     return cell;
 }
 
+- (void)viewDidUnload {
+    [super viewDidUnload];
+}
+
 @end
