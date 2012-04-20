@@ -22,6 +22,14 @@
 		26DAFC1B152E388B0025B7CF /* PillReminder.xcdatamodeld in Sources */ = {isa = PBXBuildFile; fileRef = 26DAFC19152E388B0025B7CF /* PillReminder.xcdatamodeld */; };
 		26DAFC24152E41E00025B7CF /* Reminder.m in Sources */ = {isa = PBXBuildFile; fileRef = 26DAFC23152E41E00025B7CF /* Reminder.m */; };
 		26DAFC27152E41E00025B7CF /* Pill.m in Sources */ = {isa = PBXBuildFile; fileRef = 26DAFC26152E41E00025B7CF /* Pill.m */; };
+		26EAB8CA15411DF2003BD336 /* CoreDataTableViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 26EAB8BD15411DF2003BD336 /* CoreDataTableViewController.m */; };
+		26EAB8CB15411DF2003BD336 /* Pill.m in Sources */ = {isa = PBXBuildFile; fileRef = 26EAB8BF15411DF2003BD336 /* Pill.m */; };
+		26EAB8CC15411DF2003BD336 /* Pill+Create.m in Sources */ = {isa = PBXBuildFile; fileRef = 26EAB8C115411DF2003BD336 /* Pill+Create.m */; };
+		26EAB8CD15411DF2003BD336 /* PillAddingViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 26EAB8C315411DF2003BD336 /* PillAddingViewController.m */; };
+		26EAB8CE15411DF2003BD336 /* PillDetailsViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 26EAB8C515411DF2003BD336 /* PillDetailsViewController.m */; };
+		26EAB8CF15411DF2003BD336 /* PillEditingViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 26EAB8C715411DF2003BD336 /* PillEditingViewController.m */; };
+		26EAB8D015411DF2003BD336 /* Reminder.m in Sources */ = {isa = PBXBuildFile; fileRef = 26EAB8C915411DF2003BD336 /* Reminder.m */; };
+		26EAB8D415411EB6003BD336 /* PillsViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 26EAB8D315411EB6003BD336 /* PillsViewController.m */; };
 		26EEA45415374F8900B38E6D /* CoreData.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 26EEA45315374F8900B38E6D /* CoreData.framework */; };
 /* End PBXBuildFile section */
 
@@ -52,6 +60,22 @@
 		26DAFC23152E41E00025B7CF /* Reminder.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = Reminder.m; sourceTree = "<group>"; };
 		26DAFC25152E41E00025B7CF /* Pill.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Pill.h; sourceTree = "<group>"; };
 		26DAFC26152E41E00025B7CF /* Pill.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = Pill.m; sourceTree = "<group>"; };
+		26EAB8BC15411DF2003BD336 /* CoreDataTableViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CoreDataTableViewController.h; sourceTree = "<group>"; };
+		26EAB8BD15411DF2003BD336 /* CoreDataTableViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = CoreDataTableViewController.m; sourceTree = "<group>"; };
+		26EAB8BE15411DF2003BD336 /* Pill.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Pill.h; sourceTree = "<group>"; };
+		26EAB8BF15411DF2003BD336 /* Pill.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = Pill.m; sourceTree = "<group>"; };
+		26EAB8C015411DF2003BD336 /* Pill+Create.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "Pill+Create.h"; sourceTree = "<group>"; };
+		26EAB8C115411DF2003BD336 /* Pill+Create.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "Pill+Create.m"; sourceTree = "<group>"; };
+		26EAB8C215411DF2003BD336 /* PillAddingViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PillAddingViewController.h; sourceTree = "<group>"; };
+		26EAB8C315411DF2003BD336 /* PillAddingViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = PillAddingViewController.m; sourceTree = "<group>"; };
+		26EAB8C415411DF2003BD336 /* PillDetailsViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PillDetailsViewController.h; sourceTree = "<group>"; };
+		26EAB8C515411DF2003BD336 /* PillDetailsViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = PillDetailsViewController.m; sourceTree = "<group>"; };
+		26EAB8C615411DF2003BD336 /* PillEditingViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PillEditingViewController.h; sourceTree = "<group>"; };
+		26EAB8C715411DF2003BD336 /* PillEditingViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = PillEditingViewController.m; sourceTree = "<group>"; };
+		26EAB8C815411DF2003BD336 /* Reminder.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Reminder.h; sourceTree = "<group>"; };
+		26EAB8C915411DF2003BD336 /* Reminder.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = Reminder.m; sourceTree = "<group>"; };
+		26EAB8D215411EB6003BD336 /* PillsViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PillsViewController.h; sourceTree = "<group>"; };
+		26EAB8D315411EB6003BD336 /* PillsViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = PillsViewController.m; sourceTree = "<group>"; };
 		26EEA45315374F8900B38E6D /* CoreData.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreData.framework; path = System/Library/Frameworks/CoreData.framework; sourceTree = SDKROOT; };
 /* End PBXFileReference section */
 
@@ -73,7 +97,7 @@
 		26DAFBE1152E28A90025B7CF = {
 			isa = PBXGroup;
 			children = (
-				26EEA45315374F8900B38E6D /* CoreData.framework */,
+				26E825A815411CD9007BA0C5 /* New Group */,
 				26DAFBF6152E28A90025B7CF /* PillReminderProject */,
 				26DAFBEF152E28A90025B7CF /* Frameworks */,
 				26DAFBED152E28A90025B7CF /* Products */,
@@ -91,6 +115,7 @@
 		26DAFBEF152E28A90025B7CF /* Frameworks */ = {
 			isa = PBXGroup;
 			children = (
+				26EEA45315374F8900B38E6D /* CoreData.framework */,
 				26DAFBF0152E28A90025B7CF /* UIKit.framework */,
 				26DAFBF2152E28A90025B7CF /* Foundation.framework */,
 				26DAFBF4152E28A90025B7CF /* CoreGraphics.framework */,
@@ -133,6 +158,29 @@
 				26DAFBFE152E28A90025B7CF /* PillReminderProject-Prefix.pch */,
 			);
 			name = "Supporting Files";
+			sourceTree = "<group>";
+		};
+		26E825A815411CD9007BA0C5 /* New Group */ = {
+			isa = PBXGroup;
+			children = (
+				26EAB8D215411EB6003BD336 /* PillsViewController.h */,
+				26EAB8D315411EB6003BD336 /* PillsViewController.m */,
+				26EAB8BC15411DF2003BD336 /* CoreDataTableViewController.h */,
+				26EAB8BD15411DF2003BD336 /* CoreDataTableViewController.m */,
+				26EAB8BE15411DF2003BD336 /* Pill.h */,
+				26EAB8BF15411DF2003BD336 /* Pill.m */,
+				26EAB8C015411DF2003BD336 /* Pill+Create.h */,
+				26EAB8C115411DF2003BD336 /* Pill+Create.m */,
+				26EAB8C215411DF2003BD336 /* PillAddingViewController.h */,
+				26EAB8C315411DF2003BD336 /* PillAddingViewController.m */,
+				26EAB8C415411DF2003BD336 /* PillDetailsViewController.h */,
+				26EAB8C515411DF2003BD336 /* PillDetailsViewController.m */,
+				26EAB8C615411DF2003BD336 /* PillEditingViewController.h */,
+				26EAB8C715411DF2003BD336 /* PillEditingViewController.m */,
+				26EAB8C815411DF2003BD336 /* Reminder.h */,
+				26EAB8C915411DF2003BD336 /* Reminder.m */,
+			);
+			name = "New Group";
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -208,6 +256,14 @@
 				26DAFC24152E41E00025B7CF /* Reminder.m in Sources */,
 				26DAFC27152E41E00025B7CF /* Pill.m in Sources */,
 				2694D9C91537797800A77265 /* PillSaver.m in Sources */,
+				26EAB8CA15411DF2003BD336 /* CoreDataTableViewController.m in Sources */,
+				26EAB8CB15411DF2003BD336 /* Pill.m in Sources */,
+				26EAB8CC15411DF2003BD336 /* Pill+Create.m in Sources */,
+				26EAB8CD15411DF2003BD336 /* PillAddingViewController.m in Sources */,
+				26EAB8CE15411DF2003BD336 /* PillDetailsViewController.m in Sources */,
+				26EAB8CF15411DF2003BD336 /* PillEditingViewController.m in Sources */,
+				26EAB8D015411DF2003BD336 /* Reminder.m in Sources */,
+				26EAB8D415411EB6003BD336 /* PillsViewController.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
