@@ -8,6 +8,7 @@
 
 #import "PillSaver.h"
 #import <CoreData/CoreData.h>
+#import "PillsTableViewController.h"
 
 @implementation PillSaver
 
@@ -15,7 +16,6 @@
 @synthesize pillDatabase = _pillDatabase;
 
 @synthesize pillNameFld = _pillNameFld;
-
 
 - (id)initWithNibName:(NSString *)nibNameOrNil bundle:(NSBundle *)nibBundleOrNil
 {
