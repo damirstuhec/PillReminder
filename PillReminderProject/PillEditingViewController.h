@@ -9,7 +9,7 @@
 #import <UIKit/UIKit.h>
 #import "Pill.h"
 
-@interface PillEditingViewController : UIViewController
+@interface PillEditingViewController : UIViewController <UIPickerViewDelegate, UIPickerViewDataSource>
 
 @property (nonatomic, strong) Pill *editedPill;
 @property (nonatomic, strong) NSString *editedFieldKey;
