@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8" standalone="yes"?>
 <model name="" userDefinedModelVersionIdentifier="" type="com.apple.IDECoreDataModeler.DataModel" documentVersion="1.0" lastSavedToolsVersion="878" systemVersion="11D50" minimumToolsVersion="Automatic" macOSVersion="Automatic" iOSVersion="Automatic">
-    <entity name="Pill" syncable="YES">
+    <entity name="Pill" representedClassName="Pill" syncable="YES">
         <attribute name="amount" optional="YES" attributeType="Integer 16" defaultValueString="0" syncable="YES"/>
         <attribute name="extra" optional="YES" attributeType="String" syncable="YES"/>
         <attribute name="id" optional="YES" attributeType="Integer 16" defaultValueString="0" syncable="YES"/>
@@ -9,8 +9,9 @@
         <attribute name="side_effects" optional="YES" attributeType="String" syncable="YES"/>
         <attribute name="storage" optional="YES" attributeType="String" syncable="YES"/>
         <attribute name="warnings" optional="YES" attributeType="String" syncable="YES"/>
+        <relationship name="whoRemindFor" optional="YES" minCount="1" maxCount="1" deletionRule="Nullify" destinationEntity="Reminder" inverseName="pills" inverseEntity="Reminder" syncable="YES"/>
     </entity>
-    <entity name="Reminder" syncable="YES">
+    <entity name="Reminder" representedClassName="Reminder" syncable="YES">
         <attribute name="end_date" optional="YES" attributeType="Date" syncable="YES"/>
         <attribute name="hours" optional="YES" attributeType="String" syncable="YES"/>
         <attribute name="id" optional="YES" attributeType="Integer 16" defaultValueString="0" syncable="YES"/>
@@ -19,9 +20,10 @@
         <attribute name="periodicity_special" optional="YES" attributeType="String" syncable="YES"/>
         <attribute name="start_date" optional="YES" attributeType="Date" syncable="YES"/>
         <attribute name="weekdays" optional="YES" attributeType="String" syncable="YES"/>
+        <relationship name="pills" optional="YES" toMany="YES" deletionRule="Nullify" destinationEntity="Pill" inverseName="whoRemindFor" inverseEntity="Pill" syncable="YES"/>
     </entity>
     <elements>
-        <element name="Reminder" positionX="160" positionY="192" width="128" height="165"/>
-        <element name="Pill" positionX="160" positionY="192" width="128" height="165"/>
+        <element name="Reminder" positionX="-414" positionY="60" width="128" height="180"/>
+        <element name="Pill" positionX="-45" positionY="135" width="128" height="180"/>
     </elements>
 </model>
