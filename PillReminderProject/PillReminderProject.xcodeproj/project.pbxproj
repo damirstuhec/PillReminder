@@ -8,7 +8,7 @@
 
 /* Begin PBXBuildFile section */
 		263D552F154A9756002C65B6 /* MainStoryboard.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 263D552E154A9756002C65B6 /* MainStoryboard.storyboard */; };
-		263D5537154A9AD6002C65B6 /* PillReminder.xcdatamodel in Sources */ = {isa = PBXBuildFile; fileRef = 263D5536154A9AD6002C65B6 /* PillReminder.xcdatamodel */; };
+		263D553A154A9C5F002C65B6 /* PillReminderProject.xcdatamodeld in Sources */ = {isa = PBXBuildFile; fileRef = 263D5538154A9C5F002C65B6 /* PillReminderProject.xcdatamodeld */; };
 		26DAFBF1152E28A90025B7CF /* UIKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 26DAFBF0152E28A90025B7CF /* UIKit.framework */; };
 		26DAFBF3152E28A90025B7CF /* Foundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 26DAFBF2152E28A90025B7CF /* Foundation.framework */; };
 		26DAFBF5152E28A90025B7CF /* CoreGraphics.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 26DAFBF4152E28A90025B7CF /* CoreGraphics.framework */; };
@@ -28,7 +28,7 @@
 
 /* Begin PBXFileReference section */
 		263D552E154A9756002C65B6 /* MainStoryboard.storyboard */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.storyboard; path = MainStoryboard.storyboard; sourceTree = "<group>"; };
-		263D5536154A9AD6002C65B6 /* PillReminder.xcdatamodel */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcdatamodel; path = PillReminder.xcdatamodel; sourceTree = "<group>"; };
+		263D5539154A9C5F002C65B6 /* PillReminderProject.xcdatamodel */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcdatamodel; path = PillReminderProject.xcdatamodel; sourceTree = "<group>"; };
 		26DAFBEC152E28A90025B7CF /* PillReminderProject.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = PillReminderProject.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		26DAFBF0152E28A90025B7CF /* UIKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = UIKit.framework; path = System/Library/Frameworks/UIKit.framework; sourceTree = SDKROOT; };
 		26DAFBF2152E28A90025B7CF /* Foundation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Foundation.framework; path = System/Library/Frameworks/Foundation.framework; sourceTree = SDKROOT; };
@@ -107,7 +107,7 @@
 			children = (
 				26DAFBFF152E28A90025B7CF /* PRAppDelegate.h */,
 				26DAFC00152E28A90025B7CF /* PRAppDelegate.m */,
-				263D5536154A9AD6002C65B6 /* PillReminder.xcdatamodel */,
+				263D5538154A9C5F002C65B6 /* PillReminderProject.xcdatamodeld */,
 				263D552E154A9756002C65B6 /* MainStoryboard.storyboard */,
 				26DAFBF7152E28A90025B7CF /* Supporting Files */,
 			);
@@ -221,7 +221,7 @@
 				26EAB8CF15411DF2003BD336 /* PillEditingViewController.m in Sources */,
 				26EAB8D015411DF2003BD336 /* Reminder.m in Sources */,
 				26EAB8D415411EB6003BD336 /* PillsViewController.m in Sources */,
-				263D5537154A9AD6002C65B6 /* PillReminder.xcdatamodel in Sources */,
+				263D553A154A9C5F002C65B6 /* PillReminderProject.xcdatamodeld in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -328,6 +328,19 @@
 			defaultConfigurationName = Release;
 		};
 /* End XCConfigurationList section */
+
+/* Begin XCVersionGroup section */
+		263D5538154A9C5F002C65B6 /* PillReminderProject.xcdatamodeld */ = {
+			isa = XCVersionGroup;
+			children = (
+				263D5539154A9C5F002C65B6 /* PillReminderProject.xcdatamodel */,
+			);
+			currentVersion = 263D5539154A9C5F002C65B6 /* PillReminderProject.xcdatamodel */;
+			path = PillReminderProject.xcdatamodeld;
+			sourceTree = "<group>";
+			versionGroupType = wrapper.xcdatamodel;
+		};
+/* End XCVersionGroup section */
 	};
 	rootObject = 26DAFBE3152E28A90025B7CF /* Project object */;
 }
