@@ -7,12 +7,18 @@
 //
 
 #import "PillEditingViewController.h"
+#import <QuartzCore/QuartzCore.h>
 
 @interface PillEditingViewController ()
 @property (nonatomic, weak) IBOutlet UITextField *textField;
+@property (nonatomic, weak) IBOutlet UITextView *textView;
+
 @property (nonatomic, retain) NSArray *wheelPickerItemsArray;
 @property (nonatomic, weak) IBOutlet UIPickerView *wheelPicker;
 @property (nonatomic, readonly, getter=isEditingPillWeight) BOOL editingPillWeight;
+@property (nonatomic) BOOL editingTextField;
+@property (nonatomic) BOOL editingTextView;
+
 @end
 
 
@@ -21,7 +27,7 @@
     BOOL hasDeterminedWhetherEditingPillWeight;
 }
 
-@synthesize textField = _textField, editedPill=_editedPill, editedFieldKey=_editedFieldKey, editedFieldName=_editedFieldName, wheelPicker = _wheelPicker, wheelPickerItemsArray = _wheelPickerItemsArray, editingPillWeight = _editingPillWeight;
+@synthesize textField = _textField, editedPill=_editedPill, editedFieldKey=_editedFieldKey, editedFieldName=_editedFieldName, wheelPicker = _wheelPicker, wheelPickerItemsArray = _wheelPickerItemsArray, editingPillWeight = _editingPillWeight, textView = _textView, editingTextField = _editingTextField, editingTextView = _editingTextView;
 
 
 #pragma mark -
@@ -52,17 +58,35 @@
         
         self.wheelPickerItemsArray = [temp copy];
         self.wheelPicker.hidden = NO;
+        self.textView.hidden = YES;
+        self.textField.hidden = NO;
+        self.textField.enabled = NO;
         self.wheelPicker.delegate = self;
         self.wheelPicker.dataSource = self;
-        self.textField.enabled = NO;
     
-    }else {
+    }else if ([self.editedFieldKey isEqualToString:@"name"]) {
         self.wheelPicker.hidden = YES;
+        self.textView.hidden = YES;
         self.textField.hidden = NO;
         self.textField.enabled = YES;
         self.textField.text = [NSString stringWithFormat:@"%@", [self.editedPill valueForKey:self.editedFieldKey]];
         self.textField.placeholder = self.title;
+        [self.textView resignFirstResponder];
         [self.textField becomeFirstResponder];
+        self.editingTextField = YES;
+    
+    }else if ([self.editedFieldKey isEqualToString:@"warnings"]) {
+        self.wheelPicker.hidden = YES;
+        self.textField.hidden = YES;
+        self.textView.hidden = NO;
+        self.textView.text = [NSString stringWithFormat:@"%@", [self.editedPill valueForKey:self.editedFieldKey]];
+        self.textView.clipsToBounds = YES;
+        self.textView.layer.cornerRadius = 8.0f;
+        self.textView.layer.borderColor = [[UIColor grayColor] CGColor];
+        self.textView.layer.borderWidth = 1.4f;
+        [self.textField resignFirstResponder];
+        [self.textView becomeFirstResponder];
+        self.editingTextView = YES;
     }
 }
 
@@ -79,8 +103,11 @@
         NSNumber *pillWeight = [NSNumber numberWithInt:[self.textField.text integerValue]];
         [self.editedPill setValue:pillWeight forKey:self.editedFieldKey];
     
-    }else {
+    }else if (self.editingTextField) {
         [self.editedPill setValue:self.textField.text forKey:self.editedFieldKey];
+    
+    }else if (self.editingTextView) {
+        [self.editedPill setValue:self.textView.text forKey:self.editedFieldKey];
     }
     
     [self.navigationController popViewControllerAnimated:YES];
@@ -95,6 +122,7 @@
 
 - (void)viewDidUnload {
     [self setWheelPicker:nil];
+    [self setTextView:nil];
     [super viewDidUnload];
 }
 
@@ -105,6 +133,9 @@
 {
     if (![_editedFieldKey isEqualToString:editedFieldKey]) {
         hasDeterminedWhetherEditingPillWeight = NO;
+        self.editingTextField = NO;
+        self.editingTextView = NO;
+        
         _editedFieldKey = editedFieldKey;
     }
 }
