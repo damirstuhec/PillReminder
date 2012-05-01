@@ -7,6 +7,7 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		262179A9154C4D3800AAB715 /* PillNotesList.m in Sources */ = {isa = PBXBuildFile; fileRef = 262179A8154C4D3800AAB715 /* PillNotesList.m */; };
 		263D552F154A9756002C65B6 /* MainStoryboard.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 263D552E154A9756002C65B6 /* MainStoryboard.storyboard */; };
 		265C30BB154AA82D000C255E /* PillReminderModel.xcdatamodeld in Sources */ = {isa = PBXBuildFile; fileRef = 265C30B9154AA82D000C255E /* PillReminderModel.xcdatamodeld */; };
 		26DAFBF1152E28A90025B7CF /* UIKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 26DAFBF0152E28A90025B7CF /* UIKit.framework */; };
@@ -27,6 +28,8 @@
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
+		262179A7154C4D3800AAB715 /* PillNotesList.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PillNotesList.h; sourceTree = "<group>"; };
+		262179A8154C4D3800AAB715 /* PillNotesList.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = PillNotesList.m; sourceTree = "<group>"; };
 		263D552E154A9756002C65B6 /* MainStoryboard.storyboard */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.storyboard; name = MainStoryboard.storyboard; path = PillReminderProject/MainStoryboard.storyboard; sourceTree = "<group>"; };
 		265C30BA154AA82D000C255E /* PillReminderModel.xcdatamodel */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcdatamodel; path = PillReminderModel.xcdatamodel; sourceTree = "<group>"; };
 		26DAFBEC152E28A90025B7CF /* PillReminderProject.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = PillReminderProject.app; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -76,6 +79,8 @@
 		263D553F154AA285002C65B6 /* View Controllers */ = {
 			isa = PBXGroup;
 			children = (
+				262179A7154C4D3800AAB715 /* PillNotesList.h */,
+				262179A8154C4D3800AAB715 /* PillNotesList.m */,
 				26EAB8D215411EB6003BD336 /* PillsViewController.h */,
 				26EAB8D315411EB6003BD336 /* PillsViewController.m */,
 				26EAB8BC15411DF2003BD336 /* CoreDataTableViewController.h */,
@@ -240,6 +245,7 @@
 				26EAB8D015411DF2003BD336 /* Reminder.m in Sources */,
 				26EAB8D415411EB6003BD336 /* PillsViewController.m in Sources */,
 				265C30BB154AA82D000C255E /* PillReminderModel.xcdatamodeld in Sources */,
+				262179A9154C4D3800AAB715 /* PillNotesList.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

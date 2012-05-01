@@ -18,7 +18,6 @@
 @property (nonatomic, readonly, getter=isEditingPillWeight) BOOL editingPillWeight;
 @property (nonatomic) BOOL editingTextField;
 @property (nonatomic) BOOL editingTextView;
-
 @end
 
 
@@ -28,7 +27,6 @@
 }
 
 @synthesize textField = _textField, editedPill=_editedPill, editedFieldKey=_editedFieldKey, editedFieldName=_editedFieldName, wheelPicker = _wheelPicker, wheelPickerItemsArray = _wheelPickerItemsArray, editingPillWeight = _editingPillWeight, textView = _textView, editingTextField = _editingTextField, editingTextView = _editingTextView;
-
 
 #pragma mark -
 #pragma mark View lifecycle
@@ -75,7 +73,7 @@
         [self.textField becomeFirstResponder];
         self.editingTextField = YES;
     
-    }else if ([self.editedFieldKey isEqualToString:@"warnings"]) {
+    }else if ([self.editedFieldKey isEqualToString:@"warnings"] || [self.editedFieldKey isEqualToString:@"side_effects"] || [self.editedFieldKey isEqualToString:@"storage"] || [self.editedFieldKey isEqualToString:@"extra"]) {
         self.wheelPicker.hidden = YES;
         self.textField.hidden = YES;
         self.textView.hidden = NO;
