@@ -11,8 +11,9 @@
 
 @interface Pill (Create)
 
-+ (Pill *)pillWithName:(NSString *)name 
-                amount:(NSNumber *)amount 
++ (Pill *)pillWithName:(NSString *)name
+              strength:(NSString *)strength
+               perDose:(NSNumber *)perDose 
               warnings:(NSString *)warnings 
            sideEffects:(NSString *)sideEffects 
                storage:(NSString *)storage 

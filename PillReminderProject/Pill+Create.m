@@ -12,7 +12,8 @@
 @implementation Pill (Create)
 
 + (Pill *)pillWithName:(NSString *)name 
-                amount:(NSNumber *)amount 
+              strength:(NSString *)strength
+              perDose:(NSNumber *)perDose 
               warnings:(NSString *)warnings 
            sideEffects:(NSString *)sideEffects 
                storage:(NSString *)storage 
@@ -26,7 +27,7 @@ inManagedObjectContext:(NSManagedObjectContext *)context
     NSFetchRequest *request = [NSFetchRequest fetchRequestWithEntityName:@"Pill"];
     
     NSPredicate *predicate1 = [NSPredicate predicateWithFormat:@"name = %@", name];
-    NSPredicate *predicate2 = [NSPredicate predicateWithFormat:@"amount = %d", amount];
+    NSPredicate *predicate2 = [NSPredicate predicateWithFormat:@"strength = %@", strength];
     NSArray *arrayOfPredicates = [NSArray arrayWithObjects:predicate1, predicate2, nil];
     request.predicate = [NSCompoundPredicate andPredicateWithSubpredicates:arrayOfPredicates];
     
@@ -47,7 +48,8 @@ inManagedObjectContext:(NSManagedObjectContext *)context
         pill = [NSEntityDescription insertNewObjectForEntityForName:@"Pill"
                                                      inManagedObjectContext:context];
         pill.name = name;
-        pill.amount = amount;
+        pill.strength = strength;
+        pill.per_dose = perDose;
         pill.warnings = warnings;
         pill.side_effects = sideEffects;
         pill.storage = storage;

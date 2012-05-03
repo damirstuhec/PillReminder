@@ -28,8 +28,9 @@
 @synthesize pillNotes = _pillNotes;
 
 #define PILL_SECTION 0
-#define NOTES_SECTION 1
-#define REMINDER_SECTION 2
+#define DOSAGE_SECTION 1
+#define NOTES_SECTION 2
+#define REMINDER_SECTION 3
 
 
 #pragma mark -
@@ -90,7 +91,7 @@
     [super viewDidLoad];
     
     if ([self class] == [PillDetailsViewController class]) {
-        self.title = [NSString stringWithFormat:@"%@ [%d]", self.pill.name, [self.pill.amount integerValue]];
+        self.title = [NSString stringWithFormat:@"%@", self.pill.name];
         self.navigationItem.rightBarButtonItem = self.editButtonItem;
     }
     self.tableView.allowsSelection = NO;
@@ -159,12 +160,9 @@
         
         // Save the changes.
         NSError *error;
+        NSLog(@"SAVING!!!");
         if (![self.pill.managedObjectContext save:&error]) {
-            /*
-             Replace this implementation with code to handle the error appropriately.
-             
-             abort() causes the application to generate a crash log and terminate. You should not use this function in a shipping application, although it may be useful during development. 
-             */
+ 
             NSLog(@"Unresolved error %@, %@", error, [error userInfo]);
             abort();
         }
@@ -176,7 +174,7 @@
 
 - (NSInteger)numberOfSectionsInTableView:(UITableView *)tableView
 {
-	return 2;
+	return 3;
 }
 
 
@@ -187,6 +185,9 @@
     switch (section) {
         case PILL_SECTION:
             rows = 2;
+            break;
+        case DOSAGE_SECTION:
+            rows = 1;
             break;
         case NOTES_SECTION:
             rows = [self calculateNumberOfNonNilProperties];
@@ -205,7 +206,10 @@
     
     switch (section) {
         case PILL_SECTION:
-            title = @"Drug";
+            title = @"Pill";
+            break;
+        case DOSAGE_SECTION:
+            title = @"Dosage";
             break;
         case NOTES_SECTION:
             title = @"Notes";
@@ -241,7 +245,10 @@
 {
     NSUInteger numberOfNonNilProperties = [self calculateNumberOfNonNilProperties];
     
-    if ((self.editing && indexPath.section == PILL_SECTION) || (self.editing && indexPath.section == NOTES_SECTION && indexPath.row < numberOfNonNilProperties)) {
+    if ((self.editing && indexPath.section == PILL_SECTION) || (self.editing && indexPath.section == DOSAGE_SECTION) ||
+        (self.editing && indexPath.section == NOTES_SECTION && indexPath.row < numberOfNonNilProperties)) {
+        
+        NSLog(@"%@", [self.tableView cellForRowAtIndexPath:indexPath].textLabel.text);
         [self performSegueWithIdentifier:@"EditPillData" sender:self];
         
     } else if (self.editing && indexPath.section == NOTES_SECTION) {
@@ -272,8 +279,20 @@
             
         } else if (indexPath.row == 1) {
             cell.textLabel.text = @"Strength";
-            cell.detailTextLabel.text = [NSString stringWithFormat:@"%d mg", [self.pill.amount integerValue]];
+            cell.detailTextLabel.text = [NSString stringWithFormat:@"%@", self.pill.strength];
         }
+    
+    } else if (indexPath.section == DOSAGE_SECTION) {
+        cell = [tableView dequeueReusableCellWithIdentifier:PillDetailsCellIdentifier];
+        
+        if (cell == nil) {
+            // Create a cell to display pill property.
+            cell = [[UITableViewCell alloc] initWithStyle:UITableViewCellStyleSubtitle reuseIdentifier:PillDetailsCellIdentifier];
+            cell.accessoryType = UITableViewCellAccessoryNone;
+        }
+        
+        cell.textLabel.text = @"Pills per dose";
+        cell.detailTextLabel.text = [NSString stringWithFormat:@"%d", [self.pill.per_dose integerValue]];
     
     } else if (indexPath.section == NOTES_SECTION) {
         
@@ -493,12 +512,35 @@
                     pillEditingViewController.editedFieldName = NSLocalizedString(@"Name", @"display name for name");
                 } break;
                 case 1: {
-                    pillEditingViewController.editedFieldKey = @"amount";
-                    pillEditingViewController.editedFieldName = NSLocalizedString(@"Amount", @"display name for amount");
+                    pillEditingViewController.editedFieldKey = @"strength";
+                    pillEditingViewController.editedFieldName = NSLocalizedString(@"Strength", @"display name for amount");
                 } break;
             } 
         
+        } else if (indexPath.section == DOSAGE_SECTION) {
+            pillEditingViewController.editedFieldKey = @"per_dose";
+            pillEditingViewController.editedFieldName = NSLocalizedString(@"Dosage", @"display name for per_dose");
+
         } else if (indexPath.section == NOTES_SECTION) {
+            if ([[self.tableView cellForRowAtIndexPath:indexPath].textLabel.text isEqualToString:@"Warnings"]) {
+                pillEditingViewController.editedFieldKey = @"warnings";
+                pillEditingViewController.editedFieldName = NSLocalizedString(@"Warnings", @"display name for name"); 
+            
+            } else if ([[self.tableView cellForRowAtIndexPath:indexPath].textLabel.text isEqualToString:@"Side effects"]) {
+                pillEditingViewController.editedFieldKey = @"side_effects";
+                pillEditingViewController.editedFieldName = NSLocalizedString(@"Side effects", @"display name for side effects");
+                
+            } else if ([[self.tableView cellForRowAtIndexPath:indexPath].textLabel.text isEqualToString:@"Storage"]) {
+                pillEditingViewController.editedFieldKey = @"storage";
+                pillEditingViewController.editedFieldName = NSLocalizedString(@"Storage", @"display name for storage");
+                
+            } else if ([[self.tableView cellForRowAtIndexPath:indexPath].textLabel.text isEqualToString:@"Extra"]) {
+                pillEditingViewController.editedFieldKey = @"extra";
+                pillEditingViewController.editedFieldName = NSLocalizedString(@"Extra", @"display name for extra");
+                
+            } else { }
+            
+            /*
             switch (indexPath.row) {
                 case 0: {
                     pillEditingViewController.editedFieldKey = @"warnings";
@@ -516,7 +558,8 @@
                     pillEditingViewController.editedFieldKey = @"extra";
                     pillEditingViewController.editedFieldName = NSLocalizedString(@"Extra", @"display name for extra");
                 } break;
-            } 
+            }
+            */
         }  
     
     } else if ([[segue identifier] isEqualToString:@"AddPillNote"]) {

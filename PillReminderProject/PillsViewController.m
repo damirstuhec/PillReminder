@@ -38,7 +38,7 @@
     dispatch_async(fetchQ, ^{
         [document.managedObjectContext performBlock:^{ // perform in the NSMOC's safe thread (main thread)
 
-            [Pill pillWithName:@"Lekadol" amount:[NSNumber numberWithUnsignedInteger:400] warnings:nil sideEffects:nil storage:nil extra:nil reminder:[NSNumber numberWithInteger:0] whoRemindFor:nil inManagedObjectContext:document.managedObjectContext];
+            [Pill pillWithName:@"Lekadol" strength:@"0 mg" perDose:[NSNumber numberWithInteger:0] warnings:@"" sideEffects:@"" storage:@"" extra:@"" reminder:[NSNumber numberWithInteger:0] whoRemindFor:nil inManagedObjectContext:document.managedObjectContext];
             
             [document saveToURL:document.fileURL forSaveOperation:UIDocumentSaveForOverwriting completionHandler:NULL];
         }];
@@ -51,7 +51,7 @@
 {
     if (![[NSFileManager defaultManager] fileExistsAtPath:[self.pillReminderDatabase.fileURL path]]) {
         
-        //NSLog(@"Dokument ne obstaja");
+        NSLog(@"Dokument ne obstaja");
         // does not exist on disk, so create it
         [self.pillReminderDatabase saveToURL:self.pillReminderDatabase.fileURL 
                             forSaveOperation:UIDocumentSaveForCreating 
@@ -62,7 +62,7 @@
         
     } else if (self.pillReminderDatabase.documentState == UIDocumentStateClosed) {
         
-        //NSLog(@"Obstaja ampak je zaprt");
+        NSLog(@"Obstaja ampak je zaprt");
         // exists on disk, but we need to open it
         [self.pillReminderDatabase openWithCompletionHandler:^(BOOL success) {
             [self setupFetchedResultsController];
@@ -70,7 +70,7 @@
         
     } else if (self.pillReminderDatabase.documentState == UIDocumentStateNormal) {
         
-        //NSLog(@"Obstaja in je odprt");
+        NSLog(@"Obstaja in je odprt");
         // already open and ready to use
         [self setupFetchedResultsController];
     }
@@ -121,7 +121,7 @@
     // Configure the cell...
     Pill *pill = [self.fetchedResultsController objectAtIndexPath:indexPath];
     cell.textLabel.text = pill.name;
-    cell.detailTextLabel.text = [NSString stringWithFormat:@"%d mg", [pill.amount integerValue]];
+    cell.detailTextLabel.text = pill.strength;
     
     return cell;
 }

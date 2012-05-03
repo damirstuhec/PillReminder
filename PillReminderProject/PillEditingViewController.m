@@ -11,39 +11,44 @@
 
 @interface PillEditingViewController ()
 @property (nonatomic, weak) IBOutlet UITextField *textField;
+@property (nonatomic, weak) IBOutlet UILabel *textFieldLabel;
 @property (nonatomic, weak) IBOutlet UITextView *textView;
-@property (nonatomic, strong) NSNumber *pillDosage;
-@property (nonatomic, strong) NSString *pillDosageUnit;
+@property (nonatomic, weak) IBOutlet UIPickerView *wheelPicker;
 
+@property (nonatomic, readonly, getter=isEditingPillStrength) BOOL editingPillStrength;
+@property (nonatomic, readonly, getter=isEditingPillsPerDose) BOOL editingPillsPerDose;
+@property (nonatomic, strong) NSString *pillStrength;
+@property (nonatomic, strong) NSNumber *pillsDosage;
 @property (nonatomic, retain) NSArray *wheelPickerItemsArray;
 @property (nonatomic, retain) NSArray *wheelPickerItemsArrayUnits;
-@property (nonatomic, weak) IBOutlet UIPickerView *wheelPicker;
-@property (nonatomic, readonly, getter=isEditingPillWeight) BOOL editingPillWeight;
 @property (nonatomic) BOOL editingTextField;
 @property (nonatomic) BOOL editingTextView;
-@property (nonatomic) BOOL isPillDosageChanged;
 @end
 
 
 @implementation PillEditingViewController
 {
-    BOOL hasDeterminedWhetherEditingPillWeight;
+    BOOL hasDeterminedWhetherEditingPillStrength;
+    BOOL hasDeterminedWhetherEditingPillsPerDose;
 }
 
-@synthesize textField = _textField;
 @synthesize editedPill = _editedPill;
 @synthesize editedFieldKey = _editedFieldKey;
 @synthesize editedFieldName = _editedFieldName;
+
+@synthesize textField = _textField;
+@synthesize textFieldLabel = _textFieldLabel;
+@synthesize textView = _textView;
 @synthesize wheelPicker = _wheelPicker;
+
+@synthesize editingPillStrength = _editingPillStrength;
+@synthesize editingPillsPerDose = _editingPillsPerDose;
+@synthesize pillStrength = _pillStrength;
+@synthesize pillsDosage = _pillsDosage;
 @synthesize wheelPickerItemsArray = _wheelPickerItemsArray;
 @synthesize wheelPickerItemsArrayUnits = _wheelPickerItemsArrayUnits;
-@synthesize editingPillWeight = _editingPillWeight;
-@synthesize textView = _textView;
 @synthesize editingTextField = _editingTextField;
 @synthesize editingTextView = _editingTextView;
-@synthesize pillDosage = _pillDosage;
-@synthesize pillDosageUnit = _pillDosageUnit;
-@synthesize isPillDosageChanged = _isPillDosageChanged;
 
 #pragma mark -
 #pragma mark View lifecycle
@@ -58,9 +63,9 @@
 - (void)viewWillAppear:(BOOL)animated
 {
     [super viewWillAppear:animated];
-    self.isPillDosageChanged = NO;
     
-    if (self.editingPillWeight) {
+    if (self.editingPillStrength) {
+        self.textFieldLabel.text = @"Pill strength";
         NSMutableArray *temp = [[NSMutableArray alloc] initWithCapacity:10];
         for (int i=0; i<10; i++) {
             [temp addObject:[NSString stringWithFormat:@"%d", i]];
@@ -78,15 +83,35 @@
         self.textView.hidden = YES;
         self.textField.hidden = NO;
         self.textField.enabled = NO;
+        self.textFieldLabel.hidden = NO;
         self.wheelPicker.delegate = self;
         self.wheelPicker.dataSource = self;
-        self.textField.text = [NSString stringWithFormat:@"%d mg", [self.editedPill valueForKey:self.editedFieldKey]];
+        self.textField.text = [NSString stringWithFormat:@"%@", [self.editedPill valueForKey:self.editedFieldKey]];
     
+    }else if (self.editingPillsPerDose) {
+        self.textFieldLabel.text = @"Pills per dose";
+        NSMutableArray *temp = [[NSMutableArray alloc] initWithCapacity:100];
+        for (int i=0; i<100; i++) {
+            [temp addObject:[NSString stringWithFormat:@"%d", i]];
+        }
+        
+        self.wheelPickerItemsArray = [temp copy];
+        self.wheelPicker.hidden = NO;
+        self.textView.hidden = YES;
+        self.textField.hidden = NO;
+        self.textField.enabled = NO;
+        self.textFieldLabel.hidden = NO;
+        self.wheelPicker.delegate = self;
+        self.wheelPicker.dataSource = self;
+        self.textField.text = [NSString stringWithFormat:@"%d", [[self.editedPill valueForKey:self.editedFieldKey] integerValue]];
+        
     }else if ([self.editedFieldKey isEqualToString:@"name"]) {
+        self.textFieldLabel.text = @"";
         self.wheelPicker.hidden = YES;
         self.textView.hidden = YES;
         self.textField.hidden = NO;
         self.textField.enabled = YES;
+        self.textFieldLabel.hidden = YES;
         self.textField.text = [NSString stringWithFormat:@"%@", [self.editedPill valueForKey:self.editedFieldKey]];
         self.textField.placeholder = self.title;
         [self.textView resignFirstResponder];
@@ -96,6 +121,7 @@
     }else if ([self.editedFieldKey isEqualToString:@"warnings"] || [self.editedFieldKey isEqualToString:@"side_effects"] || [self.editedFieldKey isEqualToString:@"storage"] || [self.editedFieldKey isEqualToString:@"extra"]) {
         self.wheelPicker.hidden = YES;
         self.textField.hidden = YES;
+        self.textFieldLabel.hidden = YES;
         self.textView.hidden = NO;
         self.textView.text = [NSString stringWithFormat:@"%@", [self.editedPill valueForKey:self.editedFieldKey]];
         self.textView.clipsToBounds = YES;
@@ -117,13 +143,16 @@
     NSUndoManager * undoManager = [[self.editedPill managedObjectContext] undoManager];
     [undoManager setActionName:[NSString stringWithFormat:@"%@", self.editedFieldName]];
     
-    if (self.editingPillWeight) {
-        [self.editedPill setValue:self.pillDosage forKey:self.editedFieldKey];
+    if (self.editingPillStrength) {
+        [self.editedPill setValue:self.pillStrength forKey:self.editedFieldKey];
     
-    }else if (self.editingTextField) {
+    } else if (self.editingPillsPerDose) {
+        [self.editedPill setValue:self.pillsDosage forKey:self.editedFieldKey];
+        
+    } else if (self.editingTextField) {
         [self.editedPill setValue:self.textField.text forKey:self.editedFieldKey];
     
-    }else if (self.editingTextView) {
+    } else if (self.editingTextView) {
         [self.editedPill setValue:self.textView.text forKey:self.editedFieldKey];
     }
     
@@ -141,6 +170,7 @@
 - (void)viewDidUnload {
     [self setWheelPicker:nil];
     [self setTextView:nil];
+    [self setTextFieldLabel:nil];
     [super viewDidUnload];
 }
 
@@ -151,7 +181,8 @@
 - (void)setEditedFieldKey:(NSString *)editedFieldKey
 {
     if (![_editedFieldKey isEqualToString:editedFieldKey]) {
-        hasDeterminedWhetherEditingPillWeight = NO;
+        hasDeterminedWhetherEditingPillStrength = NO;
+        hasDeterminedWhetherEditingPillsPerDose = NO;
         self.editingTextField = NO;
         self.editingTextView = NO;
         
@@ -160,26 +191,38 @@
 }
 
 
-- (BOOL)isEditingPillWeight
+- (BOOL)isEditingPillStrength
 {
-    if (hasDeterminedWhetherEditingPillWeight == YES) {
-        return _editingPillWeight;
+    if (hasDeterminedWhetherEditingPillStrength == YES) {
+        return _editingPillStrength;
     }
-    
-    NSEntityDescription *entity = [self.editedPill entity];
-    NSAttributeDescription *attribute = [[entity attributesByName] objectForKey:self.editedFieldKey];
-    NSString *attributeClassName = [attribute attributeValueClassName];
-    
-    NSLog(@"%@", attributeClassName);
-    if ([attributeClassName isEqualToString:@"NSNumber"]) {
-        _editingPillWeight = YES;
+
+    if ([self.editedFieldKey isEqualToString:@"strength"]) {
+        _editingPillStrength = YES;
     }
     else {
-        _editingPillWeight = NO;
+        _editingPillStrength = NO;
     }
     
-    hasDeterminedWhetherEditingPillWeight = YES;
-    return _editingPillWeight;
+    hasDeterminedWhetherEditingPillStrength = YES;
+    return _editingPillStrength;
+}
+
+- (BOOL)isEditingPillsPerDose
+{
+    if (hasDeterminedWhetherEditingPillsPerDose == YES) {
+        return _editingPillsPerDose;
+    }
+    
+    if ([self.editedFieldKey isEqualToString:@"per_dose"]) {
+        _editingPillsPerDose = YES;
+    }
+    else {
+        _editingPillsPerDose = NO;
+    }
+    
+    hasDeterminedWhetherEditingPillsPerDose = YES;
+    return _editingPillsPerDose;
 }
 
 
@@ -188,42 +231,54 @@
 
 - (void)pickerView:(UIPickerView *)pickerView didSelectRow:(NSInteger)row inComponent:(NSInteger)component
 {
-    float temp = ([[self.wheelPickerItemsArray objectAtIndex:[self.wheelPicker selectedRowInComponent:0]]
-                   integerValue] * 1000) + 
-                 ([[self.wheelPickerItemsArray objectAtIndex:[self.wheelPicker selectedRowInComponent:1]]
-                   integerValue] * 100) +
-                 ([[self.wheelPickerItemsArray objectAtIndex:[self.wheelPicker selectedRowInComponent:2]]
-                   integerValue] * 10) + 
-                 [[self.wheelPickerItemsArray objectAtIndex:[self.wheelPicker selectedRowInComponent:3]]
-                   integerValue] + 
-                 ([[self.wheelPickerItemsArray objectAtIndex:[self.wheelPicker selectedRowInComponent:5]] 
-                   integerValue] * 0.1) + 
-                 ([[self.wheelPickerItemsArray objectAtIndex:[self.wheelPicker selectedRowInComponent:6]] 
-                   integerValue] * 0.01);
+    if (self.editingPillStrength) {
+        float temp = 
+        ([[self.wheelPickerItemsArray objectAtIndex:[self.wheelPicker selectedRowInComponent:0]]
+          integerValue] * 1000) + 
+        ([[self.wheelPickerItemsArray objectAtIndex:[self.wheelPicker selectedRowInComponent:1]]
+          integerValue] * 100) +
+        ([[self.wheelPickerItemsArray objectAtIndex:[self.wheelPicker selectedRowInComponent:2]]
+          integerValue] * 10) + 
+        [[self.wheelPickerItemsArray objectAtIndex:[self.wheelPicker selectedRowInComponent:3]]
+         integerValue] + 
+        ([[self.wheelPickerItemsArray objectAtIndex:[self.wheelPicker selectedRowInComponent:5]] 
+          integerValue] * 0.1) + 
+        ([[self.wheelPickerItemsArray objectAtIndex:[self.wheelPicker selectedRowInComponent:6]] 
+          integerValue] * 0.01);
+        
+        self.pillStrength = [NSString stringWithFormat:@"%.2f %@", temp,
+                             [self.wheelPickerItemsArrayUnits objectAtIndex:[self.wheelPicker selectedRowInComponent:7]]];
+        
+        self.textField.text = self.pillStrength;
     
-    self.pillDosage = [NSNumber numberWithFloat:temp];
-    self.pillDosageUnit = [self.wheelPickerItemsArrayUnits objectAtIndex:[self.wheelPicker 
-                                                           selectedRowInComponent:7]];
-    
-    self.textField.text = [NSString stringWithFormat:@"%.2f %@", temp, self.pillDosageUnit];
+    } else if (self.editingPillsPerDose) {
+        self.pillsDosage = [NSNumber numberWithInteger:[[self.wheelPickerItemsArray objectAtIndex:[self.wheelPicker selectedRowInComponent:0]] integerValue]];
+        self.textField.text = [NSString stringWithFormat:@"%d", [self.pillsDosage integerValue]];
+    }
 }
 
 
 - (CGFloat)pickerView:(UIPickerView *)pickerView widthForComponent:(NSInteger)component
 {
-    if (component < 4 || component == 5 || component == 6) {
-        return 33.0;
-    
-    } else if (component == 4) {
-        return 19.0;
-    
-    } else {
-        return 50;
-    }
+    if (self.editingPillStrength) {
+        if (component < 4 || component == 5 || component == 6) {
+            return 33.0;
+            
+        } else if (component == 4) {
+            return 19.0;
+            
+        } else {
+            return 50;
+        }
+    } else { return 80; }
 }
 
 
-- (UIView *)pickerView:(UIPickerView *)pickerView viewForRow:(NSInteger)row forComponent:(NSInteger)component reusingView:(UIView *)view {
+- (UIView *)pickerView:(UIPickerView *)pickerView 
+            viewForRow:(NSInteger)row 
+          forComponent:(NSInteger)component 
+           reusingView:(UIView *)view {
+    
     UILabel *retval = (id)view;
     if (!retval) {
         retval= [[UILabel alloc] initWithFrame:CGRectMake(0.0f, 0.0f, [pickerView rowSizeForComponent:component].width,
@@ -233,17 +288,20 @@
     retval.textAlignment = UITextAlignmentCenter;
     retval.font = [UIFont boldSystemFontOfSize:18];
     
-    if (component < 4 || component == 5 || component == 6) {
-        retval.text = [self.wheelPickerItemsArray objectAtIndex:row];
-        
-    } else if (component == 4) {
-        retval.text = @" .";
-        
-    } else {
-        retval.text = [self.wheelPickerItemsArrayUnits objectAtIndex:row];
-        retval.textColor = [UIColor purpleColor];
-        retval.font = [UIFont boldSystemFontOfSize:14];
-    }
+    if (self.editingPillStrength) {
+        if (component < 4 || component == 5 || component == 6) {
+            retval.text = [self.wheelPickerItemsArray objectAtIndex:row];
+            
+        } else if (component == 4) {
+            retval.text = @" .";
+            
+        } else {
+            retval.text = [self.wheelPickerItemsArrayUnits objectAtIndex:row];
+            retval.textColor = [UIColor darkGrayColor];
+            retval.font = [UIFont boldSystemFontOfSize:14];
+        }
+    
+    } else if (self.editingPillsPerDose) { retval.text = [self.wheelPickerItemsArray objectAtIndex:row]; }
 
     return retval;
 }
@@ -272,20 +330,28 @@
 */
 - (NSInteger)pickerView:(UIPickerView *)pickerView numberOfRowsInComponent:(NSInteger)component
 {
-    if (component < 4 || component == 5 || component == 6) {
-        return [self.wheelPickerItemsArray count];
-        
-    } else if (component == 7) { 
-        return [self.wheelPickerItemsArrayUnits count];
+    if (self.editingPillStrength) {
+        if (component < 4 || component == 5 || component == 6) {
+            return [self.wheelPickerItemsArray count];
+            
+        } else if (component == 7) { 
+            return [self.wheelPickerItemsArrayUnits count];
+            
+        } else {
+            return 1;
+        }
     
     } else {
-        return 1;
+        return [self.wheelPickerItemsArray count];
     }
 }
 
 - (NSInteger)numberOfComponentsInPickerView:(UIPickerView *)pickerView
 {
-	return 8;
+    if (self.editingPillStrength) {
+        return 8;
+    
+    } else return 1;
 }
 
 @end

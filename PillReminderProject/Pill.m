@@ -1,8 +1,8 @@
 //
 //  Pill.m
-//  PillReminder
+//  PillReminderProject
 //
-//  Created by Damir Stuhec on 4/19/12.
+//  Created by Damir Stuhec on 5/3/12.
 //  Copyright (c) 2012 FERI Maribor, Slovenia. All rights reserved.
 //
 
@@ -12,7 +12,7 @@
 
 @implementation Pill
 
-@dynamic amount;
+@dynamic strength;
 @dynamic extra;
 @dynamic id;
 @dynamic name;
@@ -20,6 +20,7 @@
 @dynamic side_effects;
 @dynamic storage;
 @dynamic warnings;
+@dynamic per_dose;
 @dynamic whoRemindFor;
 
 @end

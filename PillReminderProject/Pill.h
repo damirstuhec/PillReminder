@@ -1,8 +1,8 @@
 //
 //  Pill.h
-//  PillReminder
+//  PillReminderProject
 //
-//  Created by Damir Stuhec on 4/19/12.
+//  Created by Damir Stuhec on 5/3/12.
 //  Copyright (c) 2012 FERI Maribor, Slovenia. All rights reserved.
 //
 
@@ -13,7 +13,7 @@
 
 @interface Pill : NSManagedObject
 
-@property (nonatomic, retain) NSNumber * amount;
+@property (nonatomic, retain) NSString * strength;
 @property (nonatomic, retain) NSString * extra;
 @property (nonatomic, retain) NSNumber * id;
 @property (nonatomic, retain) NSString * name;
@@ -21,6 +21,7 @@
 @property (nonatomic, retain) NSString * side_effects;
 @property (nonatomic, retain) NSString * storage;
 @property (nonatomic, retain) NSString * warnings;
+@property (nonatomic, retain) NSNumber * per_dose;
 @property (nonatomic, retain) Reminder *whoRemindFor;
 
 @end

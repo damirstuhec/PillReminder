@@ -7,6 +7,8 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		260D2A521552A70E003CD98D /* Pill.m in Sources */ = {isa = PBXBuildFile; fileRef = 260D2A511552A70E003CD98D /* Pill.m */; };
+		260D2A551552A70E003CD98D /* Reminder.m in Sources */ = {isa = PBXBuildFile; fileRef = 260D2A541552A70E003CD98D /* Reminder.m */; };
 		262179A9154C4D3800AAB715 /* PillNotesList.m in Sources */ = {isa = PBXBuildFile; fileRef = 262179A8154C4D3800AAB715 /* PillNotesList.m */; };
 		2621EE9215518DCD002399AF /* MainStoryboard.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 2621EE9115518DCD002399AF /* MainStoryboard.storyboard */; };
 		265C30BB154AA82D000C255E /* PillReminderModel.xcdatamodeld in Sources */ = {isa = PBXBuildFile; fileRef = 265C30B9154AA82D000C255E /* PillReminderModel.xcdatamodeld */; };
@@ -17,17 +19,19 @@
 		26DAFBFD152E28A90025B7CF /* main.m in Sources */ = {isa = PBXBuildFile; fileRef = 26DAFBFC152E28A90025B7CF /* main.m */; };
 		26DAFC01152E28A90025B7CF /* PRAppDelegate.m in Sources */ = {isa = PBXBuildFile; fileRef = 26DAFC00152E28A90025B7CF /* PRAppDelegate.m */; };
 		26EAB8CA15411DF2003BD336 /* CoreDataTableViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 26EAB8BD15411DF2003BD336 /* CoreDataTableViewController.m */; };
-		26EAB8CB15411DF2003BD336 /* Pill.m in Sources */ = {isa = PBXBuildFile; fileRef = 26EAB8BF15411DF2003BD336 /* Pill.m */; };
 		26EAB8CC15411DF2003BD336 /* Pill+Create.m in Sources */ = {isa = PBXBuildFile; fileRef = 26EAB8C115411DF2003BD336 /* Pill+Create.m */; };
 		26EAB8CD15411DF2003BD336 /* PillAddingViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 26EAB8C315411DF2003BD336 /* PillAddingViewController.m */; };
 		26EAB8CE15411DF2003BD336 /* PillDetailsViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 26EAB8C515411DF2003BD336 /* PillDetailsViewController.m */; };
 		26EAB8CF15411DF2003BD336 /* PillEditingViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 26EAB8C715411DF2003BD336 /* PillEditingViewController.m */; };
-		26EAB8D015411DF2003BD336 /* Reminder.m in Sources */ = {isa = PBXBuildFile; fileRef = 26EAB8C915411DF2003BD336 /* Reminder.m */; };
 		26EAB8D415411EB6003BD336 /* PillsViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 26EAB8D315411EB6003BD336 /* PillsViewController.m */; };
 		26EEA45415374F8900B38E6D /* CoreData.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 26EEA45315374F8900B38E6D /* CoreData.framework */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
+		260D2A501552A70E003CD98D /* Pill.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Pill.h; sourceTree = "<group>"; };
+		260D2A511552A70E003CD98D /* Pill.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = Pill.m; sourceTree = "<group>"; };
+		260D2A531552A70E003CD98D /* Reminder.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Reminder.h; sourceTree = "<group>"; };
+		260D2A541552A70E003CD98D /* Reminder.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = Reminder.m; sourceTree = "<group>"; };
 		262179A7154C4D3800AAB715 /* PillNotesList.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PillNotesList.h; sourceTree = "<group>"; };
 		262179A8154C4D3800AAB715 /* PillNotesList.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = PillNotesList.m; sourceTree = "<group>"; };
 		2621EE9115518DCD002399AF /* MainStoryboard.storyboard */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.storyboard; path = MainStoryboard.storyboard; sourceTree = "<group>"; };
@@ -44,8 +48,6 @@
 		26DAFC00152E28A90025B7CF /* PRAppDelegate.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = PRAppDelegate.m; sourceTree = "<group>"; };
 		26EAB8BC15411DF2003BD336 /* CoreDataTableViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CoreDataTableViewController.h; sourceTree = "<group>"; };
 		26EAB8BD15411DF2003BD336 /* CoreDataTableViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = CoreDataTableViewController.m; sourceTree = "<group>"; };
-		26EAB8BE15411DF2003BD336 /* Pill.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Pill.h; sourceTree = "<group>"; };
-		26EAB8BF15411DF2003BD336 /* Pill.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = Pill.m; sourceTree = "<group>"; };
 		26EAB8C015411DF2003BD336 /* Pill+Create.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "Pill+Create.h"; sourceTree = "<group>"; };
 		26EAB8C115411DF2003BD336 /* Pill+Create.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "Pill+Create.m"; sourceTree = "<group>"; };
 		26EAB8C215411DF2003BD336 /* PillAddingViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PillAddingViewController.h; sourceTree = "<group>"; };
@@ -54,8 +56,6 @@
 		26EAB8C515411DF2003BD336 /* PillDetailsViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = PillDetailsViewController.m; sourceTree = "<group>"; };
 		26EAB8C615411DF2003BD336 /* PillEditingViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PillEditingViewController.h; sourceTree = "<group>"; };
 		26EAB8C715411DF2003BD336 /* PillEditingViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = PillEditingViewController.m; sourceTree = "<group>"; };
-		26EAB8C815411DF2003BD336 /* Reminder.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Reminder.h; sourceTree = "<group>"; };
-		26EAB8C915411DF2003BD336 /* Reminder.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = Reminder.m; sourceTree = "<group>"; };
 		26EAB8D215411EB6003BD336 /* PillsViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PillsViewController.h; sourceTree = "<group>"; };
 		26EAB8D315411EB6003BD336 /* PillsViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = PillsViewController.m; sourceTree = "<group>"; };
 		26EEA45315374F8900B38E6D /* CoreData.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreData.framework; path = System/Library/Frameworks/CoreData.framework; sourceTree = SDKROOT; };
@@ -161,12 +161,12 @@
 		26E825A815411CD9007BA0C5 /* Model Classes */ = {
 			isa = PBXGroup;
 			children = (
-				26EAB8BE15411DF2003BD336 /* Pill.h */,
-				26EAB8BF15411DF2003BD336 /* Pill.m */,
+				260D2A531552A70E003CD98D /* Reminder.h */,
+				260D2A541552A70E003CD98D /* Reminder.m */,
+				260D2A501552A70E003CD98D /* Pill.h */,
+				260D2A511552A70E003CD98D /* Pill.m */,
 				26EAB8C015411DF2003BD336 /* Pill+Create.h */,
 				26EAB8C115411DF2003BD336 /* Pill+Create.m */,
-				26EAB8C815411DF2003BD336 /* Reminder.h */,
-				26EAB8C915411DF2003BD336 /* Reminder.m */,
 			);
 			name = "Model Classes";
 			sourceTree = "<group>";
@@ -237,15 +237,15 @@
 				26DAFBFD152E28A90025B7CF /* main.m in Sources */,
 				26DAFC01152E28A90025B7CF /* PRAppDelegate.m in Sources */,
 				26EAB8CA15411DF2003BD336 /* CoreDataTableViewController.m in Sources */,
-				26EAB8CB15411DF2003BD336 /* Pill.m in Sources */,
 				26EAB8CC15411DF2003BD336 /* Pill+Create.m in Sources */,
 				26EAB8CD15411DF2003BD336 /* PillAddingViewController.m in Sources */,
 				26EAB8CE15411DF2003BD336 /* PillDetailsViewController.m in Sources */,
 				26EAB8CF15411DF2003BD336 /* PillEditingViewController.m in Sources */,
-				26EAB8D015411DF2003BD336 /* Reminder.m in Sources */,
 				26EAB8D415411EB6003BD336 /* PillsViewController.m in Sources */,
 				265C30BB154AA82D000C255E /* PillReminderModel.xcdatamodeld in Sources */,
 				262179A9154C4D3800AAB715 /* PillNotesList.m in Sources */,
+				260D2A521552A70E003CD98D /* Pill.m in Sources */,
+				260D2A551552A70E003CD98D /* Reminder.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

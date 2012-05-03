@@ -48,7 +48,7 @@
                             <outlet property="delegate" destination="UNy-mS-EsR" id="q9p-UB-eLu"/>
                         </connections>
                     </tableView>
-                    <navigationItem key="navigationItem" title="Drugs" id="jMO-YE-3Lm">
+                    <navigationItem key="navigationItem" title="Pills" id="jMO-YE-3Lm">
                         <barButtonItem key="rightBarButtonItem" systemItem="add" id="6Ss-ZS-yQt">
                             <connections>
                                 <segue destination="MC2-CK-UAG" kind="modal" identifier="AddPill" id="W84-ec-erN"/>
@@ -75,7 +75,7 @@
                                     <rect key="frame" x="10" y="1" width="300" height="43"/>
                                     <autoresizingMask key="autoresizingMask"/>
                                     <subviews>
-                                        <label opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" text="Title" textAlignment="right" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" id="WvJ-K0-GUe">
+                                        <label opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" text="Title" textAlignment="right" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" minimumFontSize="10" id="WvJ-K0-GUe">
                                             <rect key="frame" x="10" y="15" width="67" height="15"/>
                                             <autoresizingMask key="autoresizingMask"/>
                                             <fontDescription key="fontDescription" type="boldSystem" pointSize="12"/>
@@ -286,7 +286,7 @@
                         <rect key="frame" x="0.0" y="64" width="320" height="416"/>
                         <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                         <subviews>
-                            <textField opaque="NO" clipsSubviews="YES" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="center" borderStyle="roundedRect" minimumFontSize="10" id="ztn-iz-eCi">
+                            <textField opaque="NO" clipsSubviews="YES" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="center" borderStyle="roundedRect" textAlignment="right" minimumFontSize="10" id="ztn-iz-eCi">
                                 <rect key="frame" x="20" y="20" width="280" height="31"/>
                                 <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                                 <color key="textColor" red="0.40000000596046448" green="0.40000000596046448" blue="0.40000000596046448" alpha="1" colorSpace="calibratedRGB"/>
@@ -305,6 +305,13 @@
                                 <fontDescription key="fontDescription" name="HelveticaNeue" family="Helvetica Neue" pointSize="14"/>
                                 <textInputTraits key="textInputTraits" autocapitalizationType="sentences"/>
                             </textView>
+                            <label opaque="NO" clipsSubviews="YES" userInteractionEnabled="NO" contentMode="left" text="Label" lineBreakMode="tailTruncation" minimumFontSize="10" id="GBV-jI-Odm">
+                                <rect key="frame" x="30" y="25" width="152" height="21"/>
+                                <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                                <fontDescription key="fontDescription" type="boldSystem" pointSize="15"/>
+                                <color key="textColor" cocoaTouchSystemColor="darkTextColor"/>
+                                <nil key="highlightedColor"/>
+                            </label>
                         </subviews>
                         <color key="backgroundColor" cocoaTouchSystemColor="groupTableViewBackgroundColor"/>
                     </view>
@@ -322,6 +329,7 @@
                     </navigationItem>
                     <connections>
                         <outlet property="textField" destination="ztn-iz-eCi" id="qdj-28-NFg"/>
+                        <outlet property="textFieldLabel" destination="GBV-jI-Odm" id="aA8-PF-Zpd"/>
                         <outlet property="textView" destination="Wl4-dw-LlD" id="yLi-Wh-bCc"/>
                         <outlet property="wheelPicker" destination="oQ6-ij-8mv" id="qdS-lf-lwq"/>
                     </connections>
@@ -379,7 +387,7 @@
                     <navigationBar key="navigationBar" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" id="YZt-gh-cMw">
                         <rect key="frame" x="0.0" y="0.0" width="320" height="44"/>
                         <autoresizingMask key="autoresizingMask"/>
-                        <color key="tintColor" red="0.49854560449358065" green="0.38792574161767307" blue="0.39307454749681348" alpha="1" colorSpace="calibratedRGB"/>
+                        <color key="tintColor" red="0.16862745098039217" green="0.30588235294117649" blue="0.41176470588235292" alpha="1" colorSpace="calibratedRGB"/>
                     </navigationBar>
                     <nil name="viewControllers"/>
                     <connections>
@@ -425,6 +433,7 @@
             <source key="sourceIdentifier" type="project" relativePath="./Classes/PillEditingViewController.h"/>
             <relationships>
                 <relationship kind="outlet" name="textField" candidateClass="UITextField"/>
+                <relationship kind="outlet" name="textFieldLabel" candidateClass="UILabel"/>
                 <relationship kind="outlet" name="textView" candidateClass="UITextView"/>
                 <relationship kind="outlet" name="wheelPicker" candidateClass="UIPickerView"/>
             </relationships>
