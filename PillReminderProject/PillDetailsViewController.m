@@ -205,7 +205,7 @@
     
     switch (section) {
         case PILL_SECTION:
-            title = @"Pill";
+            title = @"Drug";
             break;
         case NOTES_SECTION:
             title = @"Notes";
@@ -241,7 +241,7 @@
 {
     NSUInteger numberOfNonNilProperties = [self calculateNumberOfNonNilProperties];
     
-    if (self.editing && indexPath.section == NOTES_SECTION && indexPath.row < numberOfNonNilProperties) {
+    if ((self.editing && indexPath.section == PILL_SECTION) || (self.editing && indexPath.section == NOTES_SECTION && indexPath.row < numberOfNonNilProperties)) {
         [self performSegueWithIdentifier:@"EditPillData" sender:self];
         
     } else if (self.editing && indexPath.section == NOTES_SECTION) {
@@ -271,7 +271,7 @@
             cell.detailTextLabel.text = self.pill.name;
             
         } else if (indexPath.row == 1) {
-            cell.textLabel.text = @"Amount";
+            cell.textLabel.text = @"Strength";
             cell.detailTextLabel.text = [NSString stringWithFormat:@"%d mg", [self.pill.amount integerValue]];
         }
     
