@@ -178,6 +178,7 @@
         [addingContext setParentContext:[self.fetchedResultsController managedObjectContext]];
         
         Pill *newPill = (Pill *)[NSEntityDescription insertNewObjectForEntityForName:@"Pill" inManagedObjectContext:addingContext];
+        newPill.warnings = @"", newPill.side_effects = @"", newPill.storage = @"", newPill.extra = @"";
         pillAddingViewController.pill = newPill;
         pillAddingViewController.managedObjectContext = addingContext;
     }

@@ -13,6 +13,8 @@
 
 @interface PillDetailsViewController()
 
+@property (nonatomic) BOOL hasInsertedAddNoteRow;
+
 @property (nonatomic, strong) NSUndoManager *undoManager;
 @property (nonatomic, strong) NSArray *pillNotes;
 
@@ -23,9 +25,12 @@
 
 @implementation PillDetailsViewController
 
-@synthesize pill = _pill;
+@synthesize hasInsertedAddNoteRow = _hasInsertedAddNoteRow;
+
 @synthesize undoManager = _undoManager;
 @synthesize pillNotes = _pillNotes;
+
+@synthesize pill = _pill;
 
 #define PILL_SECTION 0
 #define DOSAGE_SECTION 1
@@ -90,6 +95,8 @@
 {
     [super viewDidLoad];
     
+    self.hasInsertedAddNoteRow = NO;
+    
     if ([self class] == [PillDetailsViewController class]) {
         self.title = [NSString stringWithFormat:@"%@", self.pill.name];
         self.navigationItem.rightBarButtonItem = self.editButtonItem;
@@ -145,9 +152,10 @@
     if (self.editing) { [self setUpUndoManager]; }
     
     [self.tableView beginUpdates];
-
+    
     if (self.editing && numberOfNonNilProperties < 4) {
         [self.tableView insertRowsAtIndexPaths:pillPropertiesInsertIndexPath withRowAnimation:UITableViewRowAnimationTop];    
+        self.hasInsertedAddNoteRow = YES;
         
     } else if (numberOfNonNilProperties < 4){
         [self.tableView deleteRowsAtIndexPaths:pillPropertiesInsertIndexPath withRowAnimation:UITableViewRowAnimationTop];
@@ -160,7 +168,6 @@
         
         // Save the changes.
         NSError *error;
-        NSLog(@"SAVING!!!");
         if (![self.pill.managedObjectContext save:&error]) {
  
             NSLog(@"Unresolved error %@, %@", error, [error userInfo]);
@@ -191,7 +198,8 @@
             break;
         case NOTES_SECTION:
             rows = [self calculateNumberOfNonNilProperties];
-            if (self.editing && rows < 4) rows++;
+            if (self.hasInsertedAddNoteRow && self.editing && rows < 4)
+                rows++;
             break;
 		default:
             break;
@@ -270,8 +278,9 @@
         if (cell == nil) {
             // Create a cell to display pill property.
             cell = [[UITableViewCell alloc] initWithStyle:UITableViewCellStyleSubtitle reuseIdentifier:PillDetailsCellIdentifier];
-            cell.accessoryType = UITableViewCellAccessoryNone;
         }
+        cell.accessoryType = UITableViewCellAccessoryNone;
+        cell.editingAccessoryType = UITableViewCellAccessoryDisclosureIndicator;
         
         if (indexPath.row == 0) {
             cell.textLabel.text = @"Name";
@@ -288,8 +297,9 @@
         if (cell == nil) {
             // Create a cell to display pill property.
             cell = [[UITableViewCell alloc] initWithStyle:UITableViewCellStyleSubtitle reuseIdentifier:PillDetailsCellIdentifier];
-            cell.accessoryType = UITableViewCellAccessoryNone;
         }
+        cell.accessoryType = UITableViewCellAccessoryNone;
+        cell.editingAccessoryType = UITableViewCellAccessoryDisclosureIndicator;
         
         cell.textLabel.text = @"Pills per dose";
         cell.detailTextLabel.text = [NSString stringWithFormat:@"%d", [self.pill.per_dose integerValue]];
@@ -302,6 +312,8 @@
             if (cell == nil) {
 				cell = [[UITableViewCell alloc] initWithStyle:UITableViewCellStyleSubtitle reuseIdentifier:PillDetailsCellIdentifier];
 			}
+            cell.accessoryType = UITableViewCellAccessoryDisclosureIndicator;
+            cell.editingAccessoryType = UITableViewCellAccessoryDisclosureIndicator;
             
             int j=-1, i=0;
             while (j != indexPath.row) {
@@ -315,22 +327,18 @@
             if (i == 0) {
                 cell.textLabel.text = @"Warnings";
                 cell.detailTextLabel.text = self.pill.warnings;
-                cell.accessoryType = UITableViewCellAccessoryDisclosureIndicator;
                 
             } else if (i == 1) {
                 cell.textLabel.text = @"Side effects";
                 cell.detailTextLabel.text = self.pill.side_effects;
-                cell.accessoryType = UITableViewCellAccessoryDisclosureIndicator;
                 
             } else if (i == 2) {
                 cell.textLabel.text = @"Storage";
                 cell.detailTextLabel.text = self.pill.storage;
-                cell.accessoryType = UITableViewCellAccessoryDisclosureIndicator;
                 
             } else if (i == 3) {
                 cell.textLabel.text = @"Extra";
                 cell.detailTextLabel.text = self.pill.extra;
-                cell.accessoryType = UITableViewCellAccessoryDisclosureIndicator;
             }
             
             if ([cell.detailTextLabel.text isEqualToString:@"Empty .."]) {
@@ -346,8 +354,10 @@
 			if (cell == nil) {
                 // Create a cell to display "Add note".
 				cell = [[UITableViewCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:AddPillPropertyCellIdentifier];
-				cell.accessoryType = UITableViewCellAccessoryDisclosureIndicator;
 			}
+            cell.accessoryType = UITableViewCellAccessoryDisclosureIndicator;
+            cell.editingAccessoryType = UITableViewCellAccessoryDisclosureIndicator;
+            
             cell.textLabel.text = @"Add note";
         }
     }
@@ -362,7 +372,7 @@
 {
 	UITableViewCellEditingStyle style = UITableViewCellEditingStyleNone;
     NSUInteger numberOfNonNilProperties = [self calculateNumberOfNonNilProperties];
- 
+    
     if (indexPath.section == NOTES_SECTION) {
         // If this is the last item, it's the insertion row.
         if (indexPath.row == numberOfNonNilProperties) {
