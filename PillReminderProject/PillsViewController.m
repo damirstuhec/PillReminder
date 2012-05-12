@@ -38,7 +38,7 @@
     dispatch_async(fetchQ, ^{
         [document.managedObjectContext performBlock:^{ // perform in the NSMOC's safe thread (main thread)
 
-            [Pill pillWithName:@"Lekadol" strength:@"0 mg" perDose:[NSNumber numberWithInteger:0] warnings:@"" sideEffects:@"" storage:@"" extra:@"" reminder:[NSNumber numberWithInteger:0] whoRemindFor:nil inManagedObjectContext:document.managedObjectContext];
+            [Pill pillWithName:@"Lekadol" strength:@"0 mg" perDose:[NSNumber numberWithInteger:0] warnings:@"" sideEffects:@"" storage:@"" extra:@"" reminder:[NSNumber numberWithInteger:0] inManagedObjectContext:document.managedObjectContext];
             
             [document saveToURL:document.fileURL forSaveOperation:UIDocumentSaveForOverwriting completionHandler:NULL];
         }];
@@ -177,10 +177,11 @@
         NSManagedObjectContext *addingContext = [[NSManagedObjectContext alloc] initWithConcurrencyType:NSMainQueueConcurrencyType];
         [addingContext setParentContext:[self.fetchedResultsController managedObjectContext]];
         
-        Pill *newPill = (Pill *)[NSEntityDescription insertNewObjectForEntityForName:@"Pill" inManagedObjectContext:addingContext];
-        newPill.warnings = @"", newPill.side_effects = @"", newPill.storage = @"", newPill.extra = @"";
+        Pill *newPill = [Pill pillWithName:@"" strength:@"0 mg" perDose:[NSNumber numberWithInteger:0] warnings:@"" sideEffects:@"" storage:@"" extra:@"" reminder:[NSNumber numberWithInteger:0] inManagedObjectContext:addingContext];
+    
         pillAddingViewController.pill = newPill;
         pillAddingViewController.managedObjectContext = addingContext;
+        pillAddingViewController.parentManagedObjectContext = [self.fetchedResultsController managedObjectContext];
     }
     
     if ([[segue identifier] isEqualToString:@"ShowPillDetails"]) {
@@ -203,9 +204,12 @@
         /*
          The new book is associated with the add controller's managed object context.
          This means that any edits that are made don't affect the application's main managed object context -- it's a way of keeping disjoint edits in a separate scratchpad. Saving changes to that context, though, only push changes to the fetched results controller's context. To save the changes to the persistent store, you have to save the fetch results controller's context as well.
-         */        
+         */
+        
+        
         NSError *error;
         NSManagedObjectContext *addingManagedObjectContext = [controller managedObjectContext];
+        
         if (![addingManagedObjectContext save:&error]) {
             /*
              Replace this implementation with code to handle the error appropriately.

@@ -18,8 +18,12 @@
            sideEffects:(NSString *)sideEffects 
                storage:(NSString *)storage 
                  extra:(NSString *)extra 
-              reminder:(NSNumber *)reminder 
-          whoRemindFor:(Reminder *)whoRemindFor
+              reminder:(NSNumber *)reminder
 inManagedObjectContext:(NSManagedObjectContext *)context;
-                                                
+    
+
++ (BOOL)isTherePillWithName:(NSString *)name 
+                   strength:(NSString *)strength
+     inManagedObjectContext:(NSManagedObjectContext *)context;
+
 @end

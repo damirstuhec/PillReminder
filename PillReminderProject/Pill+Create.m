@@ -7,9 +7,34 @@
 //
 
 #import "Pill+Create.h"
-//#import "Reminder+Create.h"
+#import "Reminder+Create.h"
 
 @implementation Pill (Create)
+
+
++ (BOOL)isTherePillWithName:(NSString *)name 
+                   strength:(NSString *)strength
+     inManagedObjectContext:(NSManagedObjectContext *)context
+{
+    NSFetchRequest *request = [NSFetchRequest fetchRequestWithEntityName:@"Pill"];
+    
+    NSPredicate *predicate1 = [NSPredicate predicateWithFormat:@"name = %@", name];
+    NSPredicate *predicate2 = [NSPredicate predicateWithFormat:@"strength = %@", strength];
+    NSArray *arrayOfPredicates = [NSArray arrayWithObjects:predicate1, predicate2, nil];
+    request.predicate = [NSCompoundPredicate andPredicateWithSubpredicates:arrayOfPredicates];
+    
+    NSSortDescriptor *sortDescriptor = [NSSortDescriptor sortDescriptorWithKey:@"name" ascending:YES];
+    request.sortDescriptors = [NSArray arrayWithObject:sortDescriptor];
+    
+    NSError *error = nil;
+    NSArray *pills = [context executeFetchRequest:request error:&error];
+    
+    if ([pills count] == 1) {
+        
+        return YES;
+    
+    } else return NO;
+}
 
 + (Pill *)pillWithName:(NSString *)name 
               strength:(NSString *)strength
@@ -18,8 +43,7 @@
            sideEffects:(NSString *)sideEffects 
                storage:(NSString *)storage 
                  extra:(NSString *)extra 
-              reminder:(NSNumber *)reminder 
-          whoRemindFor:(Reminder *)whoRemindFor
+              reminder:(NSNumber *)reminder
 inManagedObjectContext:(NSManagedObjectContext *)context
 {
     Pill *pill = nil;
@@ -55,7 +79,7 @@ inManagedObjectContext:(NSManagedObjectContext *)context
         pill.storage = storage;
         pill.extra = extra;
         pill.reminder = reminder;
-        pill.whoRemindFor = nil;    //[Reminder reminderWithPeriodicity ...
+        pill.whoRemindFor = [Reminder reminderWithStartDate:nil endDate:nil interval:nil weekdays:nil periodicity:nil periodicitySpecial:nil hours:nil alarmSound:nil reminderType:nil remindMe:0 inManagedObjectContext:context];
 
     } else {
         
@@ -63,6 +87,7 @@ inManagedObjectContext:(NSManagedObjectContext *)context
         
         pill = [pills lastObject];
     }
+    NSLog(@"%@", pill.objectID);
     
     return pill;
 }

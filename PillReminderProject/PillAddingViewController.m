@@ -7,7 +7,7 @@
 //
 
 #import "PillAddingViewController.h"
-#import "Pill.h"
+#import "Pill+Create.h"
 
 @interface PillAddingViewController ()
 
@@ -19,7 +19,7 @@
 
 @implementation PillAddingViewController
 
-@synthesize delegate=_delegate, managedObjectContext=_managedObjectContext;
+@synthesize delegate=_delegate, managedObjectContext=_managedObjectContext, parentManagedObjectContext = _parentManagedObjectContext;
 
 
 #pragma mark -
@@ -52,9 +52,22 @@
 
 
 - (IBAction)save:(id)sender
-{    
-    [self.delegate pillAddingViewController:self didFinishWithSave:YES];
-}
+{
+    NSSet *set = self.managedObjectContext.insertedObjects;
+    Pill *newPill = [set anyObject];
 
+    if ([Pill isTherePillWithName:newPill.name strength:newPill.strength inManagedObjectContext:self.parentManagedObjectContext]) {
+        NSLog(@"Tableta obstaja");
+        // open a dialog with just an OK button
+        UIActionSheet *actionSheet = [[UIActionSheet alloc] initWithTitle:@"Pill with given name and strength already exists.\nPlease choose different values."
+                                                                 delegate:self cancelButtonTitle:nil destructiveButtonTitle:@"OK" otherButtonTitles:nil];
+        actionSheet.actionSheetStyle = UIActionSheetStyleDefault;
+        [actionSheet showInView:self.view];	// show from our table view (pops up in the middle of the table)
+        
+    } else {
+         NSLog(@"Tableta ne obstaja");
+        [self.delegate pillAddingViewController:self didFinishWithSave:YES];
+    }
+}
 
 @end

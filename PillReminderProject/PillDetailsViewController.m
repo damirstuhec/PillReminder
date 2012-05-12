@@ -9,11 +9,13 @@
 #import "PillDetailsViewController.h"
 #import "PillEditingViewController.h"
 #import "PillNotesList.h"
+#import "ReminderDateViewController.h"
 
 
 @interface PillDetailsViewController()
 
 @property (nonatomic) BOOL hasInsertedAddNoteRow;
+@property (nonatomic) BOOL hasInsertedDeletePillSection;
 
 @property (nonatomic, strong) NSUndoManager *undoManager;
 @property (nonatomic, strong) NSArray *pillNotes;
@@ -26,6 +28,7 @@
 @implementation PillDetailsViewController
 
 @synthesize hasInsertedAddNoteRow = _hasInsertedAddNoteRow;
+@synthesize hasInsertedDeletePillSection = hasInsertedDeletePillSection;
 
 @synthesize undoManager = _undoManager;
 @synthesize pillNotes = _pillNotes;
@@ -36,6 +39,8 @@
 #define DOSAGE_SECTION 1
 #define NOTES_SECTION 2
 #define REMINDER_SECTION 3
+#define REMIND_ME_SECTION 4
+#define DELETE_PILL_SECTION 5
 
 
 #pragma mark -
@@ -96,6 +101,7 @@
     [super viewDidLoad];
     
     self.hasInsertedAddNoteRow = NO;
+    self.hasInsertedDeletePillSection = NO;
     
     if ([self class] == [PillDetailsViewController class]) {
         self.title = [NSString stringWithFormat:@"%@", self.pill.name];
@@ -149,16 +155,25 @@
     NSUInteger numberOfNonNilProperties = [self calculateNumberOfNonNilProperties];
     NSArray *pillPropertiesInsertIndexPath = [NSArray arrayWithObject:[NSIndexPath indexPathForRow:numberOfNonNilProperties inSection:NOTES_SECTION]];
     
-    if (self.editing) { [self setUpUndoManager]; }
+    NSIndexSet *deletePillSectionIndex = [[NSIndexSet alloc] initWithIndex:DELETE_PILL_SECTION];
     
     [self.tableView beginUpdates];
     
+    if (self.editing) {
+        [self setUpUndoManager];
+        [self.tableView insertSections:deletePillSectionIndex withRowAnimation:UITableViewRowAnimationFade];
+        self.hasInsertedDeletePillSection = YES;
+    } else {
+        [self.tableView deleteSections:deletePillSectionIndex withRowAnimation:UITableViewRowAnimationFade];
+        self.hasInsertedDeletePillSection = NO;
+    }
+    
     if (self.editing && numberOfNonNilProperties < 4) {
-        [self.tableView insertRowsAtIndexPaths:pillPropertiesInsertIndexPath withRowAnimation:UITableViewRowAnimationTop];    
+        [self.tableView insertRowsAtIndexPaths:pillPropertiesInsertIndexPath withRowAnimation:UITableViewRowAnimationLeft];    
         self.hasInsertedAddNoteRow = YES;
         
     } else if (numberOfNonNilProperties < 4){
-        [self.tableView deleteRowsAtIndexPaths:pillPropertiesInsertIndexPath withRowAnimation:UITableViewRowAnimationTop];
+        [self.tableView deleteRowsAtIndexPaths:pillPropertiesInsertIndexPath withRowAnimation:UITableViewRowAnimationRight];
     }
     
     [self.tableView endUpdates];
@@ -181,7 +196,8 @@
 
 - (NSInteger)numberOfSectionsInTableView:(UITableView *)tableView
 {
-	return 3;
+    if (self.hasInsertedDeletePillSection) return 6;
+    else return 5;
 }
 
 
@@ -200,6 +216,15 @@
             rows = [self calculateNumberOfNonNilProperties];
             if (self.hasInsertedAddNoteRow && self.editing && rows < 4)
                 rows++;
+            break;
+        case REMINDER_SECTION:
+            rows = 5;
+            break;
+        case REMIND_ME_SECTION:
+            rows = 1;
+            break;
+        case DELETE_PILL_SECTION:
+            rows = 1;
             break;
 		default:
             break;
@@ -222,6 +247,9 @@
         case NOTES_SECTION:
             title = @"Notes";
             break;
+        case REMINDER_SECTION:
+            title = @"Reminder";
+            break;
         default:
             break;
     }
@@ -234,8 +262,12 @@
     NSString *footer = nil;
     
     if (!self.editing && section == NOTES_SECTION) {
-        footer = @"To add more notes tap the Edit button in the upper right corner.";
+        footer = @"To add more notes, touch the Edit button in the upper right corner.";
+    
+    } else if (!self.editing && self.pill.reminder.integerValue == 0 && section == REMINDER_SECTION) {
+        footer = @"To set up the reminder, touch the Edit button in the upper right corner.";
     }
+    
     return footer;
 }
 
@@ -261,6 +293,10 @@
         
     } else if (self.editing && indexPath.section == NOTES_SECTION) {
         [self performSegueWithIdentifier:@"AddPillNote" sender:self];
+    
+    } else if (self.editing && indexPath.section == REMINDER_SECTION && (indexPath.row == 1 || indexPath.row == 2)) {
+        [self performSegueWithIdentifier:@"SetReminderDate" sender:self];
+    
     }
 }
 
@@ -355,12 +391,64 @@
                 // Create a cell to display "Add note".
 				cell = [[UITableViewCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:AddPillPropertyCellIdentifier];
 			}
-            cell.accessoryType = UITableViewCellAccessoryDisclosureIndicator;
-            cell.editingAccessoryType = UITableViewCellAccessoryDisclosureIndicator;
-            
-            cell.textLabel.text = @"Add note";
         }
+    
+    } else if (indexPath.section == REMINDER_SECTION) {
+        cell = [tableView dequeueReusableCellWithIdentifier:PillDetailsCellIdentifier];
+        
+        if (cell == nil) {
+            // Create a cell to display pill property.
+            cell = [[UITableViewCell alloc] initWithStyle:UITableViewCellStyleSubtitle reuseIdentifier:PillDetailsCellIdentifier];
+        }
+        cell.accessoryType = UITableViewCellAccessoryNone;
+        cell.editingAccessoryType = UITableViewCellAccessoryDisclosureIndicator;
+        
+        if (indexPath.row == 0) {
+            cell.textLabel.text = @"Frequency";
+            //cell.detailTextLabel.text = self.pill.name;
+            
+        } else if (indexPath.row == 1) {
+            cell.textLabel.text = @"Start date";
+            //cell.detailTextLabel.text = [NSString stringWithFormat:@"%@", self.pill.strength];
+        
+        } else if (indexPath.row == 2) {
+            cell.textLabel.text = @"End date";
+            //cell.detailTextLabel.text = [NSString stringWithFormat:@"%@", self.pill.strength];
+            
+        } else if (indexPath.row == 3) {
+            cell.textLabel.text = @"Time of Day";
+            //cell.detailTextLabel.text = [NSString stringWithFormat:@"%@", self.pill.strength];
+        
+        } else if (indexPath.row == 4) {
+            cell.textLabel.text = @"Type";
+            //cell.detailTextLabel.text = [NSString stringWithFormat:@"%@", self.pill.strength];
+        }
+    
+    } else if (indexPath.section == REMIND_ME_SECTION) {
+        cell = [tableView dequeueReusableCellWithIdentifier:@"Remind Me Cell"];
+        
+        if (cell == nil) {
+            // Create a cell to display pill property.
+            cell = [[UITableViewCell alloc] initWithStyle:UITableViewCellStyleSubtitle reuseIdentifier:@"Remind Me Cell"];
+            cell.accessoryType = UITableViewCellAccessoryNone;
+        }
+    
+    } else if (indexPath.section == DELETE_PILL_SECTION) {
+        cell = [tableView dequeueReusableCellWithIdentifier:@"Delete Pill Cell"];
+        
+        if (cell == nil) {
+            // Create a cell to display pill property.
+            cell = [[UITableViewCell alloc] initWithStyle:UITableViewCellStyleSubtitle reuseIdentifier:@"Delete Pill Cell"];
+            cell.accessoryType = UITableViewCellAccessoryNone;
+        }
+        UIButton *sampleButton = [UIButton buttonWithType:UIButtonTypeCustom];
+        [sampleButton setFrame:[cell.contentView frame]];
+        [sampleButton setTitle:@"Delete Pill" forState:UIControlStateNormal];
+        [sampleButton setFrame:CGRectMake(10, 0, cell.bounds.size.width-20, 44)];
+        [sampleButton setBackgroundImage:[UIImage imageNamed:@"redButton.png"] forState:UIControlStateNormal];
+        [cell addSubview:sampleButton];
     }
+    
     return cell;
 }
 
@@ -368,14 +456,16 @@
 #pragma mark -
 #pragma mark Editing rows
 
+- (BOOL)tableView:(UITableView *)tableView shouldIndentWhileEditingRowAtIndexPath:(NSIndexPath *)indexPath {
+    return NO;
+}
+
 - (UITableViewCellEditingStyle)tableView:(UITableView *)tableView editingStyleForRowAtIndexPath:(NSIndexPath *)indexPath
 {
 	UITableViewCellEditingStyle style = UITableViewCellEditingStyleNone;
-    NSUInteger numberOfNonNilProperties = [self calculateNumberOfNonNilProperties];
     
     if (indexPath.section == NOTES_SECTION) {
-        // If this is the last item, it's the insertion row.
-        if (indexPath.row == numberOfNonNilProperties) {
+        if (indexPath.row == [self calculateNumberOfNonNilProperties]) {
             style = UITableViewCellEditingStyleInsert;
         
         } else {
@@ -423,10 +513,10 @@
         NSArray *pillPropertiesInsertIndexPath = [NSArray arrayWithObject:[NSIndexPath indexPathForRow:numberOfNonNilProperties inSection:NOTES_SECTION]];
         
         [self.tableView beginUpdates];
-        [self.tableView deleteRowsAtIndexPaths:[NSArray arrayWithObject:indexPath] withRowAnimation:UITableViewRowAnimationTop];
+        [self.tableView deleteRowsAtIndexPaths:[NSArray arrayWithObject:indexPath] withRowAnimation:UITableViewRowAnimationRight];
         
         if (numberOfNonNilProperties < 4 && ([self.tableView numberOfRowsInSection:NOTES_SECTION]-1) == numberOfNonNilProperties) {
-            [self.tableView insertRowsAtIndexPaths:pillPropertiesInsertIndexPath withRowAnimation:UITableViewRowAnimationTop];
+            [self.tableView insertRowsAtIndexPaths:pillPropertiesInsertIndexPath withRowAnimation:UITableViewRowAnimationLeft];
         }
         [self.tableView endUpdates];
         
@@ -508,11 +598,11 @@
 
 - (void)prepareForSegue:(UIStoryboardSegue *)segue sender:(id)sender
 {
+     NSIndexPath *indexPath = [self.tableView indexPathForSelectedRow];
+    
     if ([[segue identifier] isEqualToString:@"EditPillData"]) {
         
         PillEditingViewController *pillEditingViewController = (PillEditingViewController *)[segue destinationViewController];
-        NSIndexPath *indexPath = [self.tableView indexPathForSelectedRow];
-        
         pillEditingViewController.editedPill = self.pill;
         
         if (indexPath.section == PILL_SECTION) {
@@ -549,34 +639,26 @@
                 pillEditingViewController.editedFieldName = NSLocalizedString(@"Extra", @"display name for extra");
                 
             } else { }
-            
-            /*
-            switch (indexPath.row) {
-                case 0: {
-                    pillEditingViewController.editedFieldKey = @"warnings";
-                    pillEditingViewController.editedFieldName = NSLocalizedString(@"Warnings", @"display name for name");
-                } break;
-                case 1: {
-                    pillEditingViewController.editedFieldKey = @"side_effects";
-                    pillEditingViewController.editedFieldName = NSLocalizedString(@"Side effects", @"display name for side effects");
-                } break;
-                case 2: {
-                    pillEditingViewController.editedFieldKey = @"storage";
-                    pillEditingViewController.editedFieldName = NSLocalizedString(@"Storage", @"display name for storage");
-                } break;
-                case 3: {
-                    pillEditingViewController.editedFieldKey = @"extra";
-                    pillEditingViewController.editedFieldName = NSLocalizedString(@"Extra", @"display name for extra");
-                } break;
-            }
-            */
         }  
     
     } else if ([[segue identifier] isEqualToString:@"AddPillNote"]) {
-        
         PillNotesList *pillNotesList = (PillNotesList *)[segue destinationViewController];
         pillNotesList.pillNotes = self.pillNotes;
         pillNotesList.editedPill = self.pill;
+    
+    } else if ([[segue identifier] isEqualToString:@"SetReminderDate"]) {
+        ReminderDateViewController *reminderDateViewController = (ReminderDateViewController *)[segue destinationViewController];
+        reminderDateViewController.reminder = self.pill.whoRemindFor;
+        
+        if (indexPath.row == 1) {
+            reminderDateViewController.editedFieldKey = @"start_date";  
+            reminderDateViewController.editedFieldName = NSLocalizedString(@"Start date", @"display name for start date");
+        
+        } else if (indexPath.row == 2) {
+            reminderDateViewController.editedFieldKey = @"end_date";  
+            reminderDateViewController.editedFieldName = NSLocalizedString(@"End date", @"display name for end date");
+            
+        } else { }
     }
 }
 
