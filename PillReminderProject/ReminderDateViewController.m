@@ -27,6 +27,31 @@
 @synthesize datePicker = _datePicker;
 
 
+- (NSDateFormatter *)dateFormatter
+{
+    static NSDateFormatter *dateFormatter = nil;
+    if (dateFormatter == nil) {
+        dateFormatter = [[NSDateFormatter alloc] init];
+        [dateFormatter setDateStyle:NSDateFormatterMediumStyle];
+        [dateFormatter setTimeStyle:NSDateFormatterNoStyle];
+    }
+    return dateFormatter;
+}
+
+- (void)viewWillAppear:(BOOL)animated {
+    [super viewWillAppear:animated];
+    
+    if ([self.editedFieldKey isEqualToString:@"start_date"]) {
+        self.textFieldLabel.text = @"Set start date";
+    
+    } else {
+        self.textFieldLabel.text = @"Set end date";
+    }
+    
+    self.textField.text = [self.dateFormatter stringFromDate:self.datePicker.date];
+}
+
+
 #pragma mark -
 #pragma mark Save and cancel operations
 
@@ -55,4 +80,9 @@
     [self setTextFieldLabel:nil];
     [super viewDidUnload];
 }
+
+- (IBAction)dateValueChanged:(id)sender {
+    self.textField.text = [self.dateFormatter stringFromDate:self.datePicker.date];
+}
+
 @end

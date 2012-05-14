@@ -7,11 +7,11 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
-		260D2A521552A70E003CD98D /* Pill.m in Sources */ = {isa = PBXBuildFile; fileRef = 260D2A511552A70E003CD98D /* Pill.m */; };
 		262179A9154C4D3800AAB715 /* PillNotesList.m in Sources */ = {isa = PBXBuildFile; fileRef = 262179A8154C4D3800AAB715 /* PillNotesList.m */; };
 		2621EE9215518DCD002399AF /* MainStoryboard.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 2621EE9115518DCD002399AF /* MainStoryboard.storyboard */; };
+		2637C661155F8E4200D324C0 /* Reminder.m in Sources */ = {isa = PBXBuildFile; fileRef = 2637C660155F8E4200D324C0 /* Reminder.m */; };
+		2637C66C155FB95400D324C0 /* Pill.m in Sources */ = {isa = PBXBuildFile; fileRef = 2637C66B155FB95400D324C0 /* Pill.m */; };
 		263A0BF8155E56C90027C799 /* Reminder+Create.m in Sources */ = {isa = PBXBuildFile; fileRef = 263A0BF7155E56C90027C799 /* Reminder+Create.m */; };
-		263A0C0E155E7C420027C799 /* Reminder.m in Sources */ = {isa = PBXBuildFile; fileRef = 263A0C0D155E7C420027C799 /* Reminder.m */; };
 		265C30BB154AA82D000C255E /* PillReminderModel.xcdatamodeld in Sources */ = {isa = PBXBuildFile; fileRef = 265C30B9154AA82D000C255E /* PillReminderModel.xcdatamodeld */; };
 		265DE5BF15567FC9004C9303 /* redButton.png in Resources */ = {isa = PBXBuildFile; fileRef = 265DE5BE15567FC9004C9303 /* redButton.png */; };
 		26DAFBF1152E28A90025B7CF /* UIKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 26DAFBF0152E28A90025B7CF /* UIKit.framework */; };
@@ -31,15 +31,16 @@
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
-		260D2A501552A70E003CD98D /* Pill.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Pill.h; sourceTree = "<group>"; };
-		260D2A511552A70E003CD98D /* Pill.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = Pill.m; sourceTree = "<group>"; };
 		262179A7154C4D3800AAB715 /* PillNotesList.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PillNotesList.h; sourceTree = "<group>"; };
 		262179A8154C4D3800AAB715 /* PillNotesList.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = PillNotesList.m; sourceTree = "<group>"; };
 		2621EE9115518DCD002399AF /* MainStoryboard.storyboard */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.storyboard; path = MainStoryboard.storyboard; sourceTree = "<group>"; };
+		2637C65F155F8E4200D324C0 /* Reminder.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Reminder.h; sourceTree = "<group>"; };
+		2637C660155F8E4200D324C0 /* Reminder.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = Reminder.m; sourceTree = "<group>"; };
+		2637C66A155FB95400D324C0 /* Pill.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Pill.h; sourceTree = "<group>"; };
+		2637C66B155FB95400D324C0 /* Pill.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = Pill.m; sourceTree = "<group>"; };
+		2637C66D155FF9A800D324C0 /* PillReminderProject.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.xml; path = PillReminderProject.entitlements; sourceTree = "<group>"; };
 		263A0BF6155E56C90027C799 /* Reminder+Create.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "Reminder+Create.h"; sourceTree = "<group>"; };
 		263A0BF7155E56C90027C799 /* Reminder+Create.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "Reminder+Create.m"; sourceTree = "<group>"; };
-		263A0C0C155E7C420027C799 /* Reminder.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Reminder.h; sourceTree = "<group>"; };
-		263A0C0D155E7C420027C799 /* Reminder.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = Reminder.m; sourceTree = "<group>"; };
 		265C30BA154AA82D000C255E /* PillReminderModel.xcdatamodel */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcdatamodel; path = PillReminderModel.xcdatamodel; sourceTree = "<group>"; };
 		265DE5BE15567FC9004C9303 /* redButton.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = redButton.png; sourceTree = "<group>"; };
 		26DAFBEC152E28A90025B7CF /* PillReminderProject.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = PillReminderProject.app; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -168,6 +169,7 @@
 		26DAFBF7152E28A90025B7CF /* Supporting Files */ = {
 			isa = PBXGroup;
 			children = (
+				2637C66D155FF9A800D324C0 /* PillReminderProject.entitlements */,
 				26DAFBF8152E28A90025B7CF /* PillReminderProject-Info.plist */,
 				26DAFBF9152E28A90025B7CF /* InfoPlist.strings */,
 				26DAFBFC152E28A90025B7CF /* main.m */,
@@ -180,12 +182,12 @@
 		26E825A815411CD9007BA0C5 /* Model Classes */ = {
 			isa = PBXGroup;
 			children = (
-				263A0C0C155E7C420027C799 /* Reminder.h */,
-				263A0C0D155E7C420027C799 /* Reminder.m */,
+				2637C66A155FB95400D324C0 /* Pill.h */,
+				2637C66B155FB95400D324C0 /* Pill.m */,
+				2637C65F155F8E4200D324C0 /* Reminder.h */,
+				2637C660155F8E4200D324C0 /* Reminder.m */,
 				263A0BF6155E56C90027C799 /* Reminder+Create.h */,
 				263A0BF7155E56C90027C799 /* Reminder+Create.m */,
-				260D2A501552A70E003CD98D /* Pill.h */,
-				260D2A511552A70E003CD98D /* Pill.m */,
 				26EAB8C015411DF2003BD336 /* Pill+Create.h */,
 				26EAB8C115411DF2003BD336 /* Pill+Create.m */,
 			);
@@ -218,7 +220,7 @@
 		26DAFBE3152E28A90025B7CF /* Project object */ = {
 			isa = PBXProject;
 			attributes = {
-				LastUpgradeCheck = 0420;
+				LastUpgradeCheck = 0430;
 				ORGANIZATIONNAME = "FERI Maribor, Slovenia";
 			};
 			buildConfigurationList = 26DAFBE6152E28A90025B7CF /* Build configuration list for PBXProject "PillReminderProject" */;
@@ -266,10 +268,10 @@
 				26EAB8D415411EB6003BD336 /* PillsViewController.m in Sources */,
 				265C30BB154AA82D000C255E /* PillReminderModel.xcdatamodeld in Sources */,
 				262179A9154C4D3800AAB715 /* PillNotesList.m in Sources */,
-				260D2A521552A70E003CD98D /* Pill.m in Sources */,
 				26E9B7F4155D3D6700CDF370 /* ReminderDateViewController.m in Sources */,
 				263A0BF8155E56C90027C799 /* Reminder+Create.m in Sources */,
-				263A0C0E155E7C420027C799 /* Reminder.m in Sources */,
+				2637C661155F8E4200D324C0 /* Reminder.m in Sources */,
+				2637C66C155FB95400D324C0 /* Pill.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -335,6 +337,7 @@
 		26DAFC0B152E28A90025B7CF /* Debug */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
+				CODE_SIGN_ENTITLEMENTS = PillReminderProject/PillReminderProject.entitlements;
 				GCC_PRECOMPILE_PREFIX_HEADER = YES;
 				GCC_PREFIX_HEADER = "PillReminderProject/PillReminderProject-Prefix.pch";
 				INFOPLIST_FILE = "PillReminderProject/PillReminderProject-Info.plist";
@@ -346,6 +349,7 @@
 		26DAFC0C152E28A90025B7CF /* Release */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
+				CODE_SIGN_ENTITLEMENTS = PillReminderProject/PillReminderProject.entitlements;
 				GCC_PRECOMPILE_PREFIX_HEADER = YES;
 				GCC_PREFIX_HEADER = "PillReminderProject/PillReminderProject-Prefix.pch";
 				INFOPLIST_FILE = "PillReminderProject/PillReminderProject-Info.plist";

@@ -11,7 +11,7 @@
 
 @implementation Pill (Create)
 
-
+/*
 + (BOOL)isTherePillWithName:(NSString *)name 
                    strength:(NSString *)strength
      inManagedObjectContext:(NSManagedObjectContext *)context
@@ -35,6 +35,7 @@
     
     } else return NO;
 }
+*/
 
 + (Pill *)pillWithName:(NSString *)name 
               strength:(NSString *)strength
@@ -42,8 +43,7 @@
               warnings:(NSString *)warnings 
            sideEffects:(NSString *)sideEffects 
                storage:(NSString *)storage 
-                 extra:(NSString *)extra 
-              reminder:(NSNumber *)reminder
+                 extra:(NSString *)extra
 inManagedObjectContext:(NSManagedObjectContext *)context
 {
     Pill *pill = nil;
@@ -78,7 +78,6 @@ inManagedObjectContext:(NSManagedObjectContext *)context
         pill.side_effects = sideEffects;
         pill.storage = storage;
         pill.extra = extra;
-        pill.reminder = reminder;
         pill.whoRemindFor = [Reminder reminderWithStartDate:nil endDate:nil interval:nil weekdays:nil periodicity:nil periodicitySpecial:nil hours:nil alarmSound:nil reminderType:nil remindMe:0 inManagedObjectContext:context];
 
     } else {

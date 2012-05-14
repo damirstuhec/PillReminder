@@ -38,7 +38,7 @@
     dispatch_async(fetchQ, ^{
         [document.managedObjectContext performBlock:^{ // perform in the NSMOC's safe thread (main thread)
 
-            [Pill pillWithName:@"Lekadol" strength:@"0 mg" perDose:[NSNumber numberWithInteger:0] warnings:@"" sideEffects:@"" storage:@"" extra:@"" reminder:[NSNumber numberWithInteger:0] inManagedObjectContext:document.managedObjectContext];
+            [Pill pillWithName:@"Lekadol" strength:@"0 mg" perDose:[NSNumber numberWithInteger:1] warnings:@"" sideEffects:@"" storage:@"" extra:@"" inManagedObjectContext:document.managedObjectContext];
             
             [document saveToURL:document.fileURL forSaveOperation:UIDocumentSaveForOverwriting completionHandler:NULL];
         }];
@@ -80,10 +80,61 @@
 - (void)setPillReminderDatabase:(UIManagedDocument *)pillReminderDatabase
 {
     if (_pillReminderDatabase != pillReminderDatabase) {
+        /*
+        [[NSNotificationCenter defaultCenter] removeObserver:self  // remove observing of old document (if any)
+                                                        name:NSPersistentStoreDidImportUbiquitousContentChangesNotification
+                                                      object:_pillReminderDatabase.managedObjectContext.persistentStoreCoordinator];
+        [[NSNotificationCenter defaultCenter] removeObserver:self  // remove observing of old document (if any)
+                                                        name:UIDocumentStateChangedNotification
+                                                      object:_pillReminderDatabase];
+        
+        */
         _pillReminderDatabase = pillReminderDatabase;
+        /*
+        [[NSNotificationCenter defaultCenter] addObserver:self
+                                                 selector:@selector(documentContentsChanged:)
+                                                     name:NSPersistentStoreDidImportUbiquitousContentChangesNotification
+                                                   object:_pillReminderDatabase.managedObjectContext.persistentStoreCoordinator];
+        [[NSNotificationCenter defaultCenter] addObserver:self
+                                                 selector:@selector(documentStateChanged:)
+                                                     name:UIDocumentStateChangedNotification
+                                                   object:_pillReminderDatabase];
+        */
         [self useDocument];
     }
 }
+/*
+- (void)documentContentsChanged:(NSNotification *)notification
+{
+    [self.pillReminderDatabase.managedObjectContext mergeChangesFromContextDidSaveNotification:notification];
+}
+
+
+- (void)documentStateChanged:(NSNotification *)notification
+{
+    if (self.pillReminderDatabase.documentState & UIDocumentStateInConflict) {
+        // look at the changes in notification's userInfo and resolve conflicts
+        //   or just take the latest version (by doing nothing)
+        // in any case (even if you do nothing and take latest version),
+        //   mark all old versions resolved ...
+        NSArray *conflictingVersions = [NSFileVersion unresolvedConflictVersionsOfItemAtURL:self.pillReminderDatabase.fileURL];
+        for (NSFileVersion *version in conflictingVersions) {
+            version.resolved = YES;
+        }
+        // ... and remove the old version files in a separate thread
+        dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), ^{
+            NSFileCoordinator *coordinator = [[NSFileCoordinator alloc] initWithFilePresenter:nil];
+            NSError *error;
+            [coordinator coordinateWritingItemAtURL:self.pillReminderDatabase.fileURL options:NSFileCoordinatorWritingForDeleting error:&error byAccessor:^(NSURL *newURL) {
+                [NSFileVersion removeOtherVersionsOfItemAtURL:self.pillReminderDatabase.fileURL error:NULL];
+            }];
+            if (error) NSLog(@"[%@ %@] %@ (%@)", NSStringFromClass([self class]), NSStringFromSelector(_cmd), error.localizedDescription, error.localizedFailureReason);
+        });
+    } else if (self.pillReminderDatabase.documentState & UIDocumentStateSavingError) {
+        // try again?
+    }
+}
+*/
 
 
 - (void)viewWillAppear:(BOOL)animated
@@ -135,16 +186,12 @@
         NSManagedObjectContext *context = [self.fetchedResultsController managedObjectContext];
         [context deleteObject:[self.fetchedResultsController objectAtIndexPath:indexPath]];
         
-        NSError *error;
+        NSLog(@"SAVING!");
+        /*NSError *error;
         if (![context save:&error]) {
-            /*
-             Replace this implementation with code to handle the error appropriately.
-             
-             abort() causes the application to generate a crash log and terminate. You should not use this function in a shipping application, although it may be useful during development. 
-             */
             NSLog(@"Unresolved error %@, %@", error, [error userInfo]);
             abort();
-        }
+        }*/
     }   
 }
 
@@ -174,14 +221,13 @@
         pillAddingViewController.delegate = self;
         
         // Create a new managed object context for the new book; set its parent to the fetched results controller's context.
-        NSManagedObjectContext *addingContext = [[NSManagedObjectContext alloc] initWithConcurrencyType:NSMainQueueConcurrencyType];
-        [addingContext setParentContext:[self.fetchedResultsController managedObjectContext]];
+        //NSManagedObjectContext *addingContext = [[NSManagedObjectContext alloc] initWithConcurrencyType:NSMainQueueConcurrencyType];
+        //[addingContext setParentContext:[self.fetchedResultsController managedObjectContext]];
         
-        Pill *newPill = [Pill pillWithName:@"" strength:@"0 mg" perDose:[NSNumber numberWithInteger:0] warnings:@"" sideEffects:@"" storage:@"" extra:@"" reminder:[NSNumber numberWithInteger:0] inManagedObjectContext:addingContext];
+        Pill *newPill = [Pill pillWithName:@"" strength:@"0 mg" perDose:[NSNumber numberWithInteger:1] warnings:@"" sideEffects:@"" storage:@"" extra:@"" inManagedObjectContext:[self.fetchedResultsController managedObjectContext]];//addingContext];
     
         pillAddingViewController.pill = newPill;
-        pillAddingViewController.managedObjectContext = addingContext;
-        pillAddingViewController.parentManagedObjectContext = [self.fetchedResultsController managedObjectContext];
+        pillAddingViewController.managedObjectContext = [self.fetchedResultsController managedObjectContext]; //addingContext;
     }
     
     if ([[segue identifier] isEqualToString:@"ShowPillDetails"]) {
@@ -206,28 +252,24 @@
          This means that any edits that are made don't affect the application's main managed object context -- it's a way of keeping disjoint edits in a separate scratchpad. Saving changes to that context, though, only push changes to the fetched results controller's context. To save the changes to the persistent store, you have to save the fetch results controller's context as well.
          */
         
+        //NSError *error;
+        //NSManagedObjectContext *addingManagedObjectContext = [controller managedObjectContext];
         
-        NSError *error;
-        NSManagedObjectContext *addingManagedObjectContext = [controller managedObjectContext];
-        
+        /*NSLog(@"SAVING!");
         if (![addingManagedObjectContext save:&error]) {
-            /*
-             Replace this implementation with code to handle the error appropriately.
-             
-             abort() causes the application to generate a crash log and terminate. You should not use this function in a shipping application, although it may be useful during development.
-             */
+            NSLog(@"Unresolved error %@, %@", error, [error userInfo]);
+            abort();
+        }*/
+        
+        NSLog(@"SAVING!");
+        /*if (![[self.fetchedResultsController managedObjectContext] save:&error]) {
             NSLog(@"Unresolved error %@, %@", error, [error userInfo]);
             abort();
         }
-        if (![[self.fetchedResultsController managedObjectContext] save:&error]) {
-            /*
-             Replace this implementation with code to handle the error appropriately.
-             
-             abort() causes the application to generate a crash log and terminate. You should not use this function in a shipping application, although it may be useful during development. 
-             */
-            NSLog(@"Unresolved error %@, %@", error, [error userInfo]);
-            abort();
-        }
+        */
+        [self.pillReminderDatabase saveToURL:self.pillReminderDatabase.fileURL forSaveOperation:UIDocumentSaveForOverwriting completionHandler:^(BOOL success) {
+            if (!success) NSLog(@"Failed to save document %@", self.pillReminderDatabase.localizedName);
+        }];
     }
     
     // Dismiss the modal view to return to the main list

@@ -43,6 +43,17 @@
 #define DELETE_PILL_SECTION 5
 
 
+- (NSDateFormatter *)dateFormatter
+{
+    static NSDateFormatter *dateFormatter = nil;
+    if (dateFormatter == nil) {
+        dateFormatter = [[NSDateFormatter alloc] init];
+        [dateFormatter setDateStyle:NSDateFormatterMediumStyle];
+        [dateFormatter setTimeStyle:NSDateFormatterNoStyle];
+    }
+    return dateFormatter;
+}
+
 #pragma mark -
 #pragma mark Getters and setters
 
@@ -125,6 +136,7 @@
     
 	// Update pill on return.
     [self.tableView reloadData];
+    [self updateRightBarButtonItemState];
 }
 
 
@@ -161,8 +173,10 @@
     
     if (self.editing) {
         [self setUpUndoManager];
+        
         [self.tableView insertSections:deletePillSectionIndex withRowAnimation:UITableViewRowAnimationFade];
         self.hasInsertedDeletePillSection = YES;
+        
     } else {
         [self.tableView deleteSections:deletePillSectionIndex withRowAnimation:UITableViewRowAnimationFade];
         self.hasInsertedDeletePillSection = NO;
@@ -182,12 +196,13 @@
         [self cleanUpUndoManager];
         
         // Save the changes.
+        /*NSLog(@"SAVING!");
         NSError *error;
         if (![self.pill.managedObjectContext save:&error]) {
  
             NSLog(@"Unresolved error %@, %@", error, [error userInfo]);
             abort();
-        }
+        }*/
     }
 }
 
@@ -263,9 +278,6 @@
     
     if (!self.editing && section == NOTES_SECTION) {
         footer = @"To add more notes, touch the Edit button in the upper right corner.";
-    
-    } else if (!self.editing && self.pill.reminder.integerValue == 0 && section == REMINDER_SECTION) {
-        footer = @"To set up the reminder, touch the Edit button in the upper right corner.";
     }
     
     return footer;
@@ -409,11 +421,11 @@
             
         } else if (indexPath.row == 1) {
             cell.textLabel.text = @"Start date";
-            //cell.detailTextLabel.text = [NSString stringWithFormat:@"%@", self.pill.strength];
+            cell.detailTextLabel.text = [self.dateFormatter stringFromDate:self.pill.whoRemindFor.start_date];
         
         } else if (indexPath.row == 2) {
             cell.textLabel.text = @"End date";
-            //cell.detailTextLabel.text = [NSString stringWithFormat:@"%@", self.pill.strength];
+            cell.detailTextLabel.text = [self.dateFormatter stringFromDate:self.pill.whoRemindFor.end_date];
             
         } else if (indexPath.row == 3) {
             cell.textLabel.text = @"Time of Day";
@@ -521,12 +533,13 @@
         [self.tableView endUpdates];
         
         // Saving deletion and possible insertion changes
-        NSError *error;
+        NSLog(@"SAVING!");
+        /*NSError *error;
         if (![self.pill.managedObjectContext save:&error])
         {
             NSLog(@"Unresolved error %@, %@", error, [error userInfo]);
             abort();
-        }
+        }*/
     }
 }
 

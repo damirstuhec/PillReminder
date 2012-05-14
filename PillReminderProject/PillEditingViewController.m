@@ -90,8 +90,8 @@
     
     }else if (self.editingPillsPerDose) {
         self.textFieldLabel.text = @"Pills per dose";
-        NSMutableArray *temp = [[NSMutableArray alloc] initWithCapacity:100];
-        for (int i=0; i<100; i++) {
+        NSMutableArray *temp = [[NSMutableArray alloc] initWithCapacity:99];
+        for (int i=1; i<100; i++) {
             [temp addObject:[NSString stringWithFormat:@"%d", i]];
         }
         

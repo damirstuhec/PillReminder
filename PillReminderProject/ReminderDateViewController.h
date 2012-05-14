@@ -16,4 +16,6 @@
 @property (nonatomic, strong) NSString *editedFieldKey;
 @property (nonatomic, strong) NSString *editedFieldName;
 
+- (IBAction)dateValueChanged:(id)sender;
+
 @end

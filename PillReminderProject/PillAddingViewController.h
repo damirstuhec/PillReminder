@@ -11,11 +11,10 @@
 
 @protocol PillAddingViewControllerDelegate;
 
-@interface PillAddingViewController : PillDetailsViewController <UIActionSheetDelegate>
+@interface PillAddingViewController : PillDetailsViewController
 
 @property (nonatomic, weak) id <PillAddingViewControllerDelegate> delegate;
 @property (nonatomic, strong) NSManagedObjectContext *managedObjectContext;
-@property (nonatomic, strong) NSManagedObjectContext *parentManagedObjectContext;
 
 @end
 
