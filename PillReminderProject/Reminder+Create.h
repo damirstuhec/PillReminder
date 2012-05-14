@@ -16,7 +16,7 @@
                            weekdays:(NSString *)weekdays
                         periodicity:(NSNumber *)periodicity 
                  periodicitySpecial:(NSString *)periodicitySpecial 
-                              hours:(NSString *)hours 
+                              hours:(NSMutableOrderedSet *)hours 
                          alarmSound:(NSString *)alarmSound 
                        reminderType:(NSNumber *)reminderType
                            remindMe:(NSNumber *)remindMe

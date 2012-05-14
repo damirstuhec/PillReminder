@@ -15,11 +15,11 @@
                            interval:(NSString *)interval 
                            weekdays:(NSString *)weekdays 
                         periodicity:(NSNumber *)periodicity 
-                periodicitySpecial:(NSString *)periodicitySpecial 
-                              hours:(NSString *)hours 
-                        alarmSound:(NSString *)alarmSound 
-                      reminderType:(NSNumber *)reminderType
-                          remindMe:(NSNumber *)remindMe
+                 periodicitySpecial:(NSString *)periodicitySpecial 
+                              hours:(NSMutableOrderedSet *)hours 
+                         alarmSound:(NSString *)alarmSound 
+                       reminderType:(NSNumber *)reminderType
+                           remindMe:(NSNumber *)remindMe
              inManagedObjectContext:(NSManagedObjectContext *)context
 {
     Reminder *reminder = nil;

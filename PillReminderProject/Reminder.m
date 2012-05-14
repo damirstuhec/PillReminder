@@ -2,7 +2,7 @@
 //  Reminder.m
 //  PillReminderProject
 //
-//  Created by Damir Stuhec on 5/13/12.
+//  Created by Damir Stuhec on 5/14/12.
 //  Copyright (c) 2012 FERI Maribor, Slovenia. All rights reserved.
 //
 

@@ -46,10 +46,23 @@
 - (NSDateFormatter *)dateFormatter
 {
     static NSDateFormatter *dateFormatter = nil;
+    
     if (dateFormatter == nil) {
         dateFormatter = [[NSDateFormatter alloc] init];
         [dateFormatter setDateStyle:NSDateFormatterMediumStyle];
         [dateFormatter setTimeStyle:NSDateFormatterNoStyle];
+    }
+    return dateFormatter;
+}
+
+- (NSDateFormatter *)timeFormatter
+{
+    static NSDateFormatter *dateFormatter = nil;
+    
+    if (dateFormatter == nil) {
+        dateFormatter = [[NSDateFormatter alloc] init];
+        [dateFormatter setDateStyle:NSDateFormatterNoStyle];
+        [dateFormatter setTimeStyle:NSDateFormatterMediumStyle];
     }
     return dateFormatter;
 }
@@ -306,7 +319,7 @@
     } else if (self.editing && indexPath.section == NOTES_SECTION) {
         [self performSegueWithIdentifier:@"AddPillNote" sender:self];
     
-    } else if (self.editing && indexPath.section == REMINDER_SECTION && (indexPath.row == 1 || indexPath.row == 2)) {
+    } else if (self.editing && indexPath.section == REMINDER_SECTION && (indexPath.row == 1 || indexPath.row == 2 || indexPath.row == 3)) {
         [self performSegueWithIdentifier:@"SetReminderDate" sender:self];
     
     }
@@ -417,19 +430,46 @@
         
         if (indexPath.row == 0) {
             cell.textLabel.text = @"Frequency";
+            if (!self.pill.whoRemindFor.interval) {
+                cell.detailTextLabel.text = @"Not set yet";
+            } else {
+                cell.detailTextLabel.text = self.pill.whoRemindFor.interval;
+            }
             //cell.detailTextLabel.text = self.pill.name;
             
         } else if (indexPath.row == 1) {
             cell.textLabel.text = @"Start date";
-            cell.detailTextLabel.text = [self.dateFormatter stringFromDate:self.pill.whoRemindFor.start_date];
+            if (!self.pill.whoRemindFor.start_date) {
+                cell.detailTextLabel.text = @"Not set yet";
+            } else {
+                cell.detailTextLabel.text = [self.dateFormatter stringFromDate:self.pill.whoRemindFor.start_date];
+            }
         
         } else if (indexPath.row == 2) {
             cell.textLabel.text = @"End date";
-            cell.detailTextLabel.text = [self.dateFormatter stringFromDate:self.pill.whoRemindFor.end_date];
+            if (!self.pill.whoRemindFor.end_date) {
+                cell.detailTextLabel.text = @"Not set yet";
+            } else {
+                cell.detailTextLabel.text = [self.dateFormatter stringFromDate:self.pill.whoRemindFor.end_date];
+            }
             
         } else if (indexPath.row == 3) {
             cell.textLabel.text = @"Time of Day";
-            //cell.detailTextLabel.text = [NSString stringWithFormat:@"%@", self.pill.strength];
+            if (!self.pill.whoRemindFor.hours) {
+                self.pill.whoRemindFor.hours = [[NSMutableOrderedSet alloc] init];
+                cell.detailTextLabel.text = @"Not set yet";
+            
+            } else if ([self.pill.whoRemindFor.hours count] == 0) {
+                cell.detailTextLabel.text = @"Not set yet";
+            
+            } else {
+                NSString *reminderHours = [[NSString alloc] init];
+                for (NSDate *date in self.pill.whoRemindFor.hours) {
+                    reminderHours = [reminderHours stringByAppendingString:[self.timeFormatter stringFromDate:date]];
+                    reminderHours = [reminderHours stringByAppendingString:@", "];
+                }
+                cell.detailTextLabel.text = reminderHours;
+            }
         
         } else if (indexPath.row == 4) {
             cell.textLabel.text = @"Type";
@@ -670,6 +710,10 @@
         } else if (indexPath.row == 2) {
             reminderDateViewController.editedFieldKey = @"end_date";  
             reminderDateViewController.editedFieldName = NSLocalizedString(@"End date", @"display name for end date");
+            
+        } else if (indexPath.row == 3) {
+            reminderDateViewController.editedFieldKey = @"hours";
+            reminderDateViewController.editedFieldName = NSLocalizedString(@"Hours", @"display name for hours");
             
         } else { }
     }
