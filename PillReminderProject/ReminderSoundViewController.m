@@ -51,6 +51,11 @@
     [self stopSound];
 }
 
+- (void)viewWillDisappear:(BOOL)animated {
+    [super viewWillDisappear:animated];
+    [self stopSound];
+}
+
 - (NSArray *)sounds {
     if (_sounds == nil) _sounds = [[NSArray alloc] initWithObjects:@"tap", @"morning", nil];
     return _sounds;
