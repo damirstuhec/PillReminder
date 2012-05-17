@@ -9,13 +9,16 @@
 #import <UIKit/UIKit.h>
 #import "Reminder.h"
 
-@interface ReminderDateViewController : UIViewController
+@interface ReminderDateViewController : UIViewController <UITableViewDataSource, UITableViewDelegate>
 
 @property (nonatomic, strong) Reminder *reminder;
 
 @property (nonatomic, strong) NSString *editedFieldKey;
 @property (nonatomic, strong) NSString *editedFieldName;
 
+@property (weak, nonatomic) IBOutlet UITableView *mainTableView;
 - (IBAction)datePickerValueChanged:(id)sender;
+
+- (void)sortArray;
 
 @end

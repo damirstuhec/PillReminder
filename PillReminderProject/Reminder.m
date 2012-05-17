@@ -2,7 +2,7 @@
 //  Reminder.m
 //  PillReminderProject
 //
-//  Created by Damir Stuhec on 5/14/12.
+//  Created by Damir Stuhec on 5/17/12.
 //  Copyright (c) 2012 FERI Maribor, Slovenia. All rights reserved.
 //
 
@@ -16,12 +16,13 @@
 @dynamic end_date;
 @dynamic hours;
 @dynamic interval;
+@dynamic frequency;
 @dynamic periodicity;
-@dynamic periodicity_special;
 @dynamic remind_me;
 @dynamic reminder_type;
 @dynamic start_date;
 @dynamic weekdays;
+@dynamic special_monthday;
 @dynamic pills;
 
 @end

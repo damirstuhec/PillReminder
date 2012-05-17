@@ -10,9 +10,8 @@
 #import "Pill.h"
 
 @interface PillDetailsViewController : UITableViewController
-
 @property (nonatomic, strong) Pill* pill;
-
+- (IBAction)remindMeSwitched:(id)sender;
 @end
 
 @interface PillDetailsViewController (Private)

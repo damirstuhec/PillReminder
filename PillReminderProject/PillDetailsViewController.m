@@ -9,7 +9,11 @@
 #import "PillDetailsViewController.h"
 #import "PillEditingViewController.h"
 #import "PillNotesList.h"
+#import "RemindMeCell.h"
 #import "ReminderDateViewController.h"
+#import "ReminderTypeViewController.h"
+#import "ReminderSoundViewController.h"
+#import "ReminderFrequencyViewController.h"
 
 
 @interface PillDetailsViewController()
@@ -19,6 +23,8 @@
 
 @property (nonatomic, strong) NSUndoManager *undoManager;
 @property (nonatomic, strong) NSArray *pillNotes;
+
+- (IBAction)remindMeSwitched:(id)sender;
 
 - (void)updateRightBarButtonItemState;
 
@@ -62,7 +68,7 @@
     if (dateFormatter == nil) {
         dateFormatter = [[NSDateFormatter alloc] init];
         [dateFormatter setDateStyle:NSDateFormatterNoStyle];
-        [dateFormatter setTimeStyle:NSDateFormatterMediumStyle];
+        [dateFormatter setTimeStyle:NSDateFormatterShortStyle];
     }
     return dateFormatter;
 }
@@ -97,6 +103,11 @@
     _pillNotes = pillNotes;
 }
 
+
+- (IBAction)remindMeSwitched:(id)sender {
+    UISwitch *rmSwitch = (UISwitch *) sender;
+    self.pill.whoRemindFor.remind_me = rmSwitch.on;
+}
 
 - (void)updateRightBarButtonItemState
 {
@@ -133,6 +144,8 @@
     }
     self.tableView.allowsSelection = NO;
     self.tableView.allowsSelectionDuringEditing = YES;
+    
+    //self.remindMeSwitch.onTintColor = [UIColor colorWithRed:(43./255.) green:(78./255.) blue:(105./255.) alpha:1.0];
 }
 
 
@@ -146,6 +159,9 @@
     [temp replaceObjectAtIndex:2 withObject:self.pill.storage];
     [temp replaceObjectAtIndex:3 withObject:self.pill.extra];
     self.pillNotes = [temp copy];
+    
+    
+    //[self.remindMeSwitch setOn:self.pill.whoRemindFor.remind_me];
     
 	// Update pill on return.
     [self.tableView reloadData];
@@ -187,35 +203,26 @@
     if (self.editing) {
         [self setUpUndoManager];
         
-        [self.tableView insertSections:deletePillSectionIndex withRowAnimation:UITableViewRowAnimationFade];
+        [self.tableView insertSections:deletePillSectionIndex withRowAnimation:UITableViewRowAnimationAutomatic];
         self.hasInsertedDeletePillSection = YES;
         
     } else {
-        [self.tableView deleteSections:deletePillSectionIndex withRowAnimation:UITableViewRowAnimationFade];
+        [self.tableView deleteSections:deletePillSectionIndex withRowAnimation:UITableViewRowAnimationAutomatic];
         self.hasInsertedDeletePillSection = NO;
     }
     
     if (self.editing && numberOfNonNilProperties < 4) {
-        [self.tableView insertRowsAtIndexPaths:pillPropertiesInsertIndexPath withRowAnimation:UITableViewRowAnimationLeft];    
+        [self.tableView insertRowsAtIndexPaths:pillPropertiesInsertIndexPath withRowAnimation:UITableViewRowAnimationAutomatic];    
         self.hasInsertedAddNoteRow = YES;
         
     } else if (numberOfNonNilProperties < 4){
-        [self.tableView deleteRowsAtIndexPaths:pillPropertiesInsertIndexPath withRowAnimation:UITableViewRowAnimationRight];
+        [self.tableView deleteRowsAtIndexPaths:pillPropertiesInsertIndexPath withRowAnimation:UITableViewRowAnimationAutomatic];
     }
     
     [self.tableView endUpdates];
     
     if (!self.editing) {
         [self cleanUpUndoManager];
-        
-        // Save the changes.
-        /*NSLog(@"SAVING!");
-        NSError *error;
-        if (![self.pill.managedObjectContext save:&error]) {
- 
-            NSLog(@"Unresolved error %@, %@", error, [error userInfo]);
-            abort();
-        }*/
     }
 }
 
@@ -246,7 +253,7 @@
                 rows++;
             break;
         case REMINDER_SECTION:
-            rows = 5;
+            rows = 6;
             break;
         case REMIND_ME_SECTION:
             rows = 1;
@@ -319,9 +326,18 @@
     } else if (self.editing && indexPath.section == NOTES_SECTION) {
         [self performSegueWithIdentifier:@"AddPillNote" sender:self];
     
+    } else if (self.editing && indexPath.section == REMINDER_SECTION && indexPath.row == 0) {
+        [self performSegueWithIdentifier:@"SetReminderFrequency" sender:self];
+    
     } else if (self.editing && indexPath.section == REMINDER_SECTION && (indexPath.row == 1 || indexPath.row == 2 || indexPath.row == 3)) {
         [self performSegueWithIdentifier:@"SetReminderDate" sender:self];
     
+    } else if (self.editing && indexPath.section == REMINDER_SECTION && indexPath.row == 4) {
+        [self performSegueWithIdentifier:@"SetReminderType" sender:self];
+    
+    } else if (self.editing && indexPath.section == REMINDER_SECTION && indexPath.row == 5) {
+        [self performSegueWithIdentifier:@"SetReminderSound" sender:self];
+        
     }
 }
 
@@ -332,6 +348,7 @@
     
     NSUInteger numberOfNonNilProperties = [self calculateNumberOfNonNilProperties];
     static NSString *PillDetailsCellIdentifier = @"Details Cell";
+    static NSString *DosageNotesReminderCellIdentifier = @"DosageNotesReminder Cell";
     
     if (indexPath.section == PILL_SECTION) {
         cell = [tableView dequeueReusableCellWithIdentifier:PillDetailsCellIdentifier];
@@ -353,11 +370,11 @@
         }
     
     } else if (indexPath.section == DOSAGE_SECTION) {
-        cell = [tableView dequeueReusableCellWithIdentifier:PillDetailsCellIdentifier];
+        cell = [tableView dequeueReusableCellWithIdentifier:DosageNotesReminderCellIdentifier];
         
         if (cell == nil) {
             // Create a cell to display pill property.
-            cell = [[UITableViewCell alloc] initWithStyle:UITableViewCellStyleSubtitle reuseIdentifier:PillDetailsCellIdentifier];
+            cell = [[UITableViewCell alloc] initWithStyle:UITableViewCellStyleSubtitle reuseIdentifier:DosageNotesReminderCellIdentifier];
         }
         cell.accessoryType = UITableViewCellAccessoryNone;
         cell.editingAccessoryType = UITableViewCellAccessoryDisclosureIndicator;
@@ -368,10 +385,10 @@
     } else if (indexPath.section == NOTES_SECTION) {
         
         if (indexPath.row < numberOfNonNilProperties) {
-            cell = [tableView dequeueReusableCellWithIdentifier:PillDetailsCellIdentifier];
+            cell = [tableView dequeueReusableCellWithIdentifier:DosageNotesReminderCellIdentifier];
             
             if (cell == nil) {
-				cell = [[UITableViewCell alloc] initWithStyle:UITableViewCellStyleSubtitle reuseIdentifier:PillDetailsCellIdentifier];
+				cell = [[UITableViewCell alloc] initWithStyle:UITableViewCellStyleSubtitle reuseIdentifier:DosageNotesReminderCellIdentifier];
 			}
             cell.accessoryType = UITableViewCellAccessoryDisclosureIndicator;
             cell.editingAccessoryType = UITableViewCellAccessoryDisclosureIndicator;
@@ -402,11 +419,6 @@
                 cell.detailTextLabel.text = self.pill.extra;
             }
             
-            if ([cell.detailTextLabel.text isEqualToString:@"Empty .."]) {
-                [cell.detailTextLabel setTextColor:[UIColor lightGrayColor]];
-                
-            } else { [cell.detailTextLabel setTextColor:[UIColor blackColor]]; }
-            
         } else {
             // If the row is outside the range, it's the row that was added to allow insertion (see tableView:numberOfRowsInSection:) so give it an appropriate label.
 			static NSString *AddPillPropertyCellIdentifier = @"Add Pill Property Cell";
@@ -419,28 +431,55 @@
         }
     
     } else if (indexPath.section == REMINDER_SECTION) {
-        cell = [tableView dequeueReusableCellWithIdentifier:PillDetailsCellIdentifier];
+        cell = [tableView dequeueReusableCellWithIdentifier:DosageNotesReminderCellIdentifier];
         
         if (cell == nil) {
             // Create a cell to display pill property.
-            cell = [[UITableViewCell alloc] initWithStyle:UITableViewCellStyleSubtitle reuseIdentifier:PillDetailsCellIdentifier];
+            cell = [[UITableViewCell alloc] initWithStyle:UITableViewCellStyleSubtitle reuseIdentifier:DosageNotesReminderCellIdentifier];
         }
         cell.accessoryType = UITableViewCellAccessoryNone;
         cell.editingAccessoryType = UITableViewCellAccessoryDisclosureIndicator;
         
         if (indexPath.row == 0) {
             cell.textLabel.text = @"Frequency";
-            if (!self.pill.whoRemindFor.interval) {
-                cell.detailTextLabel.text = @"Not set yet";
-            } else {
-                cell.detailTextLabel.text = self.pill.whoRemindFor.interval;
+            
+            if (self.pill.whoRemindFor.frequency != nil) {
+                switch ([self.pill.whoRemindFor.frequency integerValue]) {
+                    case 0:
+                        cell.detailTextLabel.text = @"Once";
+                        break;
+                    case 1:
+                        cell.detailTextLabel.text = @"Daily";
+                        break;
+                    case 2:
+                        cell.detailTextLabel.text = @"Weekly";
+                        break;
+                    case 3:
+                        cell.detailTextLabel.text = @"Monthly";
+                        break;
+                    case 4:
+                        cell.detailTextLabel.text = @"Yearly";
+                        break;
+                }
+            
+            } else if (self.pill.whoRemindFor.weekdays != nil) {
+                // TODO
+            
+            } else if (self.pill.whoRemindFor.special_monthday != nil) {
+                // TODO
+            
+            } else if (self.pill.whoRemindFor.interval != nil) {
+                // TODO
+            
+            } else if (self.pill.whoRemindFor.periodicity != nil) {
+                // TODO
+                
             }
-            //cell.detailTextLabel.text = self.pill.name;
             
         } else if (indexPath.row == 1) {
             cell.textLabel.text = @"Start date";
             if (!self.pill.whoRemindFor.start_date) {
-                cell.detailTextLabel.text = @"Not set yet";
+                cell.detailTextLabel.text = @"- please set -";
             } else {
                 cell.detailTextLabel.text = [self.dateFormatter stringFromDate:self.pill.whoRemindFor.start_date];
             }
@@ -448,7 +487,7 @@
         } else if (indexPath.row == 2) {
             cell.textLabel.text = @"End date";
             if (!self.pill.whoRemindFor.end_date) {
-                cell.detailTextLabel.text = @"Not set yet";
+                cell.detailTextLabel.text = @"- please set -";
             } else {
                 cell.detailTextLabel.text = [self.dateFormatter stringFromDate:self.pill.whoRemindFor.end_date];
             }
@@ -456,11 +495,11 @@
         } else if (indexPath.row == 3) {
             cell.textLabel.text = @"Time of Day";
             if (!self.pill.whoRemindFor.hours) {
-                self.pill.whoRemindFor.hours = [[NSMutableOrderedSet alloc] init];
-                cell.detailTextLabel.text = @"Not set yet";
+                self.pill.whoRemindFor.hours = [[NSArray alloc] init];
+                cell.detailTextLabel.text = @"- please set -";
             
             } else if ([self.pill.whoRemindFor.hours count] == 0) {
-                cell.detailTextLabel.text = @"Not set yet";
+                cell.detailTextLabel.text = @"- please set -";
             
             } else {
                 NSString *reminderHours = [[NSString alloc] init];
@@ -472,18 +511,37 @@
             }
         
         } else if (indexPath.row == 4) {
-            cell.textLabel.text = @"Type";
-            //cell.detailTextLabel.text = [NSString stringWithFormat:@"%@", self.pill.strength];
+            cell.textLabel.text = @"Reminder Type";
+            if (self.pill.whoRemindFor.reminder_type == nil) {
+                cell.detailTextLabel.text = @"- please set -";
+                
+            } else {
+                if ([self.pill.whoRemindFor.reminder_type integerValue] == 0) {
+                    cell.detailTextLabel.text = @"Text";
+                } else cell.detailTextLabel.text = @"Text + Sound";
+            }
+            
+        } else if (indexPath.row == 5) {
+            cell.textLabel.text = @"Sound";
+            if (self.pill.whoRemindFor.alarm_sound == nil) {
+                cell.detailTextLabel.text = @"- please set -";
+            
+            } else {
+                cell.detailTextLabel.text = [self.pill.whoRemindFor.alarm_sound capitalizedString];
+            }
         }
+        
     
     } else if (indexPath.section == REMIND_ME_SECTION) {
-        cell = [tableView dequeueReusableCellWithIdentifier:@"Remind Me Cell"];
+        RemindMeCell *remindMeCell = [tableView dequeueReusableCellWithIdentifier:@"Remind Me Cell"];
         
-        if (cell == nil) {
+        if (remindMeCell == nil) {
             // Create a cell to display pill property.
-            cell = [[UITableViewCell alloc] initWithStyle:UITableViewCellStyleSubtitle reuseIdentifier:@"Remind Me Cell"];
-            cell.accessoryType = UITableViewCellAccessoryNone;
+            remindMeCell = [[RemindMeCell alloc] initWithStyle:UITableViewCellStyleSubtitle reuseIdentifier:@"Remind Me Cell"];
+            remindMeCell.accessoryType = UITableViewCellAccessoryNone;
         }
+        remindMeCell.remindMeSwitch.on = self.pill.whoRemindFor.remind_me;
+        return remindMeCell;
     
     } else if (indexPath.section == DELETE_PILL_SECTION) {
         cell = [tableView dequeueReusableCellWithIdentifier:@"Delete Pill Cell"];
@@ -500,6 +558,11 @@
         [sampleButton setBackgroundImage:[UIImage imageNamed:@"redButton.png"] forState:UIControlStateNormal];
         [cell addSubview:sampleButton];
     }
+    
+    if ([cell.detailTextLabel.text isEqualToString:@"- please set -"]) {
+        [cell.detailTextLabel setTextColor:[UIColor lightGrayColor]];
+        
+    } else { [cell.detailTextLabel setTextColor:[UIColor blackColor]]; }
     
     return cell;
 }
@@ -565,10 +628,10 @@
         NSArray *pillPropertiesInsertIndexPath = [NSArray arrayWithObject:[NSIndexPath indexPathForRow:numberOfNonNilProperties inSection:NOTES_SECTION]];
         
         [self.tableView beginUpdates];
-        [self.tableView deleteRowsAtIndexPaths:[NSArray arrayWithObject:indexPath] withRowAnimation:UITableViewRowAnimationRight];
+        [self.tableView deleteRowsAtIndexPaths:[NSArray arrayWithObject:indexPath] withRowAnimation:UITableViewRowAnimationAutomatic];
         
         if (numberOfNonNilProperties < 4 && ([self.tableView numberOfRowsInSection:NOTES_SECTION]-1) == numberOfNonNilProperties) {
-            [self.tableView insertRowsAtIndexPaths:pillPropertiesInsertIndexPath withRowAnimation:UITableViewRowAnimationLeft];
+            [self.tableView insertRowsAtIndexPaths:pillPropertiesInsertIndexPath withRowAnimation:UITableViewRowAnimationAutomatic];
         }
         [self.tableView endUpdates];
         
@@ -699,6 +762,10 @@
         pillNotesList.pillNotes = self.pillNotes;
         pillNotesList.editedPill = self.pill;
     
+    } else if ([[segue identifier] isEqualToString:@"SetReminderFrequency"]) {
+        ReminderFrequencyViewController *reminderFrequencyViewController = (ReminderFrequencyViewController *)[segue destinationViewController];
+        reminderFrequencyViewController.reminder = self.pill.whoRemindFor;
+    
     } else if ([[segue identifier] isEqualToString:@"SetReminderDate"]) {
         ReminderDateViewController *reminderDateViewController = (ReminderDateViewController *)[segue destinationViewController];
         reminderDateViewController.reminder = self.pill.whoRemindFor;
@@ -716,7 +783,24 @@
             reminderDateViewController.editedFieldName = NSLocalizedString(@"Hours", @"display name for hours");
             
         } else { }
+    
+    } else if ([[segue identifier] isEqualToString:@"SetReminderType"]) {
+        ReminderTypeViewController *reminderTypeViewController = (ReminderTypeViewController *)[segue destinationViewController];
+        reminderTypeViewController.reminder = self.pill.whoRemindFor;
+        reminderTypeViewController.editedFieldKey = @"reminder_type";  
+        reminderTypeViewController.editedFieldName = NSLocalizedString(@"Reminder type", @"display name for reminder type");
+    
+    } else if ([[segue identifier] isEqualToString:@"SetReminderSound"]) {
+        ReminderSoundViewController *reminderSoundViewController = (ReminderSoundViewController *)[segue destinationViewController];
+        reminderSoundViewController.reminder = self.pill.whoRemindFor;
+        reminderSoundViewController.editedFieldKey = @"alarm_sound";  
+        reminderSoundViewController.editedFieldName = NSLocalizedString(@"Alarm sound", @"display name for alarm sound");
+        
     }
+}
+
+- (void)viewDidUnload {
+    [super viewDidUnload];
 }
 
 @end

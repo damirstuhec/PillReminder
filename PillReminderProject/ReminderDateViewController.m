@@ -10,7 +10,7 @@
 
 @interface ReminderDateViewController()
 @property (weak, nonatomic) IBOutlet UIDatePicker *datePicker;
-
+@property (weak, nonatomic) NSDate *selectedDate;
 @end
 
 
@@ -18,9 +18,11 @@
 
 @synthesize reminder = _reminder;
 @synthesize editedFieldName = _editedFieldName;
+@synthesize mainTableView = _mainTableView;
 @synthesize editedFieldKey = _editedFieldKey;
 
 @synthesize datePicker = _datePicker;
+@synthesize selectedDate = _selectedDate;
 
 
 - (NSDateFormatter *)dateFormatter
@@ -46,6 +48,14 @@
     return dateFormatter;
 }
 
+- (void)sortArray {
+    self.reminder.hours = [self.reminder.hours sortedArrayUsingComparator:^NSComparisonResult(id obj1, id obj2) {
+        NSDate *first = obj1;
+        NSDate *second = obj2;
+        return [first compare:second];
+    }];
+}
+
 - (void)viewWillAppear:(BOOL)animated {
     [super viewWillAppear:animated];
     
@@ -61,8 +71,29 @@
         self.title = @"Time";
         [self.datePicker setDatePickerMode:UIDatePickerModeTime];
     }
+    
+    if ([self.reminder.hours count] != 0) {
+        NSIndexPath *firstCellIndexPath = [NSIndexPath indexPathForRow:0 inSection:0];
+        [self.mainTableView selectRowAtIndexPath:firstCellIndexPath animated:NO scrollPosition:UITableViewScrollPositionNone];
+    }
+    
+    [self sortArray];
 }
 
+- (void)viewWillDisappear:(BOOL)animated {
+    [super viewWillDisappear:animated];
+    
+    [self sortArray];
+}
+
+- (void)viewDidLoad
+{    
+    [super viewDidLoad];
+    
+    if ([self.editedFieldKey isEqualToString:@"hours"]) {
+        self.mainTableView.editing = YES;
+    }
+}
 
 #pragma mark -
 #pragma mark Save and cancel operations
@@ -73,10 +104,7 @@
     NSUndoManager * undoManager = [[self.reminder managedObjectContext] undoManager];
     [undoManager setActionName:[NSString stringWithFormat:@"Setting reminder date and hours"]];
     
-    if ([self.editedFieldKey isEqualToString:@"hours"]) {
-        [self.reminder.hours addObject:self.datePicker.date];
-    
-    } else {
+    if ([self.editedFieldKey isEqualToString:@"start_date"] || [self.editedFieldKey isEqualToString:@"end_date"]) {
         [self.reminder setValue:self.datePicker.date forKey:self.editedFieldKey];
     }
     
@@ -93,20 +121,23 @@
 
 - (void)viewDidUnload {
     [self setDatePicker:nil];
+    [self setMainTableView:nil];
     [super viewDidUnload];
 }
 
 - (IBAction)datePickerValueChanged:(id)sender
 {
-    /*
-    if ([self.editedFieldKey isEqualToString:@"start_date"] || [self.editedFieldKey isEqualToString:@"end_date"]) {
-        self.textField.text = [self.dateFormatter stringFromDate:self.datePicker.date];
+    NSIndexPath *selectedPath = [self.mainTableView indexPathForSelectedRow];
     
-    } else if ([self.editedFieldKey isEqualToString:@"hours"]) {
-        self.textField.text = [self.timeFormatter stringFromDate:self.datePicker.date];
+    if ([self.reminder.hours count] != 0 && selectedPath.row != [self.reminder.hours count]) {
+        NSMutableArray *mutHours = [self.reminder.hours mutableCopy];
+        [mutHours replaceObjectAtIndex:selectedPath.row withObject:self.datePicker.date];
+        self.reminder.hours = [mutHours copy];
     }
-    */
+    [self.mainTableView reloadData];
+    [self.mainTableView selectRowAtIndexPath:selectedPath animated:NO scrollPosition:UITableViewScrollPositionNone];
 }
+
 
 #pragma mark - Table view data source
 
@@ -118,7 +149,7 @@
 - (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section
 {
     if ([self.editedFieldKey isEqualToString:@"hours"]) {
-        return [self.reminder.hours count];
+        return ([self.reminder.hours count]+1);
     
     } else return 1;
 }
@@ -126,6 +157,7 @@
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath
 {
     static NSString *CellIdentifier = @"Reminder Date or Time Cell";
+    static NSString *AddHourCellIdentifier = @"Add Reminder Hour Cell";
     
     UITableViewCell *cell = nil;
     cell = [tableView dequeueReusableCellWithIdentifier:CellIdentifier];
@@ -143,12 +175,70 @@
         cell.detailTextLabel.text = [self.dateFormatter stringFromDate:self.datePicker.date];
         
     } else {
-        NSDate *date = [self.reminder.hours objectAtIndex:[indexPath row]];
+        if ([self.reminder.hours count] == 0 || indexPath.row == [self.reminder.hours count]) {
+            cell = [tableView dequeueReusableCellWithIdentifier:AddHourCellIdentifier];
+            
+            if (cell == nil) {
+                cell = [[UITableViewCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:AddHourCellIdentifier];
+            }
         
-        cell.textLabel.text = [NSString stringWithFormat:@"%d. Time", ([indexPath row]+1)];
-        cell.detailTextLabel.text = [self.timeFormatter stringFromDate:date];
+        } else {
+            NSDate *date = [self.reminder.hours objectAtIndex:[indexPath row]];
+        
+            cell.textLabel.text = [NSString stringWithFormat:@"%d. Time", ([indexPath row]+1)];
+            cell.detailTextLabel.text = [self.timeFormatter stringFromDate:date];
+        }
     }
     return cell;
+}
+
+- (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath
+{
+    if ([self.reminder.hours count] == 0 || indexPath.row == [self.reminder.hours count]) {
+        NSArray *newHourInsertionIndex = [NSArray arrayWithObject:[NSIndexPath indexPathForRow:indexPath.row inSection:0]];
+        
+        NSMutableArray *mutHours = [self.reminder.hours mutableCopy];
+        [mutHours addObject:[NSDate date]];
+        self.reminder.hours = [mutHours copy];
+        [self.datePicker setDate:[NSDate date] animated:YES];
+         
+        [self.mainTableView insertRowsAtIndexPaths:newHourInsertionIndex withRowAnimation:UITableViewRowAnimationAutomatic];
+        [self.mainTableView reloadData];
+        [self.mainTableView selectRowAtIndexPath:indexPath animated:YES scrollPosition:UITableViewScrollPositionNone];
+    
+    } else {
+        NSDate *chosenHour = [self.reminder.hours objectAtIndex:[indexPath row]];
+        [self.datePicker setDate:chosenHour animated:YES];
+    }
+}
+
+
+#pragma mark -
+#pragma mark Editing rows
+
+- (BOOL)tableView:(UITableView *)tableView shouldIndentWhileEditingRowAtIndexPath:(NSIndexPath *)indexPath {
+    return YES;
+}
+
+- (UITableViewCellEditingStyle)tableView:(UITableView *)tableView editingStyleForRowAtIndexPath:(NSIndexPath *)indexPath
+{
+    if ([self.reminder.hours count] == 0 || indexPath.row == [self.reminder.hours count]) {
+        return UITableViewCellEditingStyleInsert;
+    
+    } else {
+        return UITableViewCellEditingStyleDelete;
+    }
+}
+
+- (void)tableView:(UITableView *)tableView commitEditingStyle:(UITableViewCellEditingStyle)editingStyle forRowAtIndexPath:(NSIndexPath *)indexPath 
+{
+    if (editingStyle == UITableViewCellEditingStyleDelete) {
+        NSMutableArray *mutHours = [self.reminder.hours mutableCopy];
+        [mutHours removeObjectAtIndex:[indexPath row]];
+        self.reminder.hours = [mutHours copy];
+    
+        [self.mainTableView deleteRowsAtIndexPaths:[NSArray arrayWithObject:indexPath] withRowAnimation:UITableViewRowAnimationAutomatic];
+    }
 }
 
 @end

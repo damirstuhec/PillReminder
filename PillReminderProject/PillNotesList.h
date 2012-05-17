@@ -11,7 +11,7 @@
 
 @interface PillNotesList : UITableViewController
 
-@property (nonatomic, strong) NSArray *pillNotes;
 @property (nonatomic, strong) Pill *editedPill;
+@property (nonatomic, strong) NSArray *pillNotes;
 
 @end

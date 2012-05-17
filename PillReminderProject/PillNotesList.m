@@ -165,16 +165,16 @@
         cell = [self.tableView cellForRowAtIndexPath:indexPath];
         if (cell.accessoryType == UITableViewCellAccessoryCheckmark) {
             if ([cell.textLabel.text isEqualToString:@"Warnings"]) {
-                [self.editedPill setValue:@"Empty .." forKey:@"warnings"];
+                [self.editedPill setValue:@"- please set -" forKey:@"warnings"];
                 
             } else if ([cell.textLabel.text isEqualToString:@"Side effects"]) {
-                [self.editedPill setValue:@"Empty .." forKey:@"side_effects"];
+                [self.editedPill setValue:@"- please set -" forKey:@"side_effects"];
                 
             } else if ([cell.textLabel.text isEqualToString:@"Storage"]) {
-                [self.editedPill setValue:@"Empty .." forKey:@"storage"];
+                [self.editedPill setValue:@"- please set -" forKey:@"storage"];
                 
             } else if ([cell.textLabel.text isEqualToString:@"Extra"]) {
-                [self.editedPill setValue:@"Empty .." forKey:@"extra"];
+                [self.editedPill setValue:@"- please set -" forKey:@"extra"];
                 
             }
         }
@@ -207,8 +207,9 @@
 
 - (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath
 {
+    [tableView deselectRowAtIndexPath:indexPath animated:NO];
+    
     UITableViewCell *cell = [tableView cellForRowAtIndexPath:indexPath];
-    NSLog(@"choosen note: %@", cell.textLabel.text);
     
     if (cell.accessoryType == UITableViewCellAccessoryNone) {
         cell.accessoryType = UITableViewCellAccessoryCheckmark; self.numberOfSelectedNotes++;

@@ -11,9 +11,18 @@
 		2621EE9215518DCD002399AF /* MainStoryboard.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 2621EE9115518DCD002399AF /* MainStoryboard.storyboard */; };
 		2637C66C155FB95400D324C0 /* Pill.m in Sources */ = {isa = PBXBuildFile; fileRef = 2637C66B155FB95400D324C0 /* Pill.m */; };
 		263A0BF8155E56C90027C799 /* Reminder+Create.m in Sources */ = {isa = PBXBuildFile; fileRef = 263A0BF7155E56C90027C799 /* Reminder+Create.m */; };
+		2642E8191563A09500E31911 /* ReminderTypeViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 2642E8181563A09500E31911 /* ReminderTypeViewController.m */; };
+		2642E81D1563A3CF00E31911 /* ReminderSoundViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 2642E81C1563A3CF00E31911 /* ReminderSoundViewController.m */; };
 		265C30BB154AA82D000C255E /* PillReminderModel.xcdatamodeld in Sources */ = {isa = PBXBuildFile; fileRef = 265C30B9154AA82D000C255E /* PillReminderModel.xcdatamodeld */; };
 		265DE5BF15567FC9004C9303 /* redButton.png in Resources */ = {isa = PBXBuildFile; fileRef = 265DE5BE15567FC9004C9303 /* redButton.png */; };
-		266016D415613F8800F57786 /* Reminder.m in Sources */ = {isa = PBXBuildFile; fileRef = 266016D315613F8800F57786 /* Reminder.m */; };
+		2667C99B1562E373002A50D6 /* RemindMeCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 2667C99A1562E373002A50D6 /* RemindMeCell.m */; };
+		2686F4391565053C0026AE56 /* morning.aif in Resources */ = {isa = PBXBuildFile; fileRef = 2686F4381565053C0026AE56 /* morning.aif */; };
+		2686F43B1565057C0026AE56 /* tap.aif in Resources */ = {isa = PBXBuildFile; fileRef = 2686F43A1565057C0026AE56 /* tap.aif */; };
+		2686F43D156507AE0026AE56 /* AudioToolbox.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 2686F43C156507AE0026AE56 /* AudioToolbox.framework */; };
+		2686F444156532620026AE56 /* Reminder.m in Sources */ = {isa = PBXBuildFile; fileRef = 2686F443156532620026AE56 /* Reminder.m */; };
+		2686F447156538E80026AE56 /* ReminderFrequencyViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 2686F446156538E80026AE56 /* ReminderFrequencyViewController.m */; };
+		2686F44A156539150026AE56 /* WeekdaysViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 2686F449156539150026AE56 /* WeekdaysViewController.m */; };
+		2686F44D1565395B0026AE56 /* SpecialRemindersViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 2686F44C1565395B0026AE56 /* SpecialRemindersViewController.m */; };
 		26DAFBF1152E28A90025B7CF /* UIKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 26DAFBF0152E28A90025B7CF /* UIKit.framework */; };
 		26DAFBF3152E28A90025B7CF /* Foundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 26DAFBF2152E28A90025B7CF /* Foundation.framework */; };
 		26DAFBF5152E28A90025B7CF /* CoreGraphics.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 26DAFBF4152E28A90025B7CF /* CoreGraphics.framework */; };
@@ -39,10 +48,25 @@
 		2637C66D155FF9A800D324C0 /* PillReminderProject.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.xml; path = PillReminderProject.entitlements; sourceTree = "<group>"; };
 		263A0BF6155E56C90027C799 /* Reminder+Create.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "Reminder+Create.h"; sourceTree = "<group>"; };
 		263A0BF7155E56C90027C799 /* Reminder+Create.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "Reminder+Create.m"; sourceTree = "<group>"; };
+		2642E8171563A09500E31911 /* ReminderTypeViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ReminderTypeViewController.h; sourceTree = "<group>"; };
+		2642E8181563A09500E31911 /* ReminderTypeViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ReminderTypeViewController.m; sourceTree = "<group>"; };
+		2642E81B1563A3CF00E31911 /* ReminderSoundViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ReminderSoundViewController.h; sourceTree = "<group>"; };
+		2642E81C1563A3CF00E31911 /* ReminderSoundViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ReminderSoundViewController.m; sourceTree = "<group>"; };
 		265C30BA154AA82D000C255E /* PillReminderModel.xcdatamodel */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcdatamodel; path = PillReminderModel.xcdatamodel; sourceTree = "<group>"; };
 		265DE5BE15567FC9004C9303 /* redButton.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = redButton.png; sourceTree = "<group>"; };
-		266016D215613F8800F57786 /* Reminder.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Reminder.h; sourceTree = "<group>"; };
-		266016D315613F8800F57786 /* Reminder.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = Reminder.m; sourceTree = "<group>"; };
+		2667C9991562E372002A50D6 /* RemindMeCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = RemindMeCell.h; sourceTree = "<group>"; };
+		2667C99A1562E373002A50D6 /* RemindMeCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = RemindMeCell.m; sourceTree = "<group>"; };
+		2686F4381565053C0026AE56 /* morning.aif */ = {isa = PBXFileReference; lastKnownFileType = file; path = morning.aif; sourceTree = "<group>"; };
+		2686F43A1565057C0026AE56 /* tap.aif */ = {isa = PBXFileReference; lastKnownFileType = file; path = tap.aif; sourceTree = "<group>"; };
+		2686F43C156507AE0026AE56 /* AudioToolbox.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = AudioToolbox.framework; path = System/Library/Frameworks/AudioToolbox.framework; sourceTree = SDKROOT; };
+		2686F442156532620026AE56 /* Reminder.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Reminder.h; sourceTree = "<group>"; };
+		2686F443156532620026AE56 /* Reminder.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = Reminder.m; sourceTree = "<group>"; };
+		2686F445156538E80026AE56 /* ReminderFrequencyViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ReminderFrequencyViewController.h; sourceTree = "<group>"; };
+		2686F446156538E80026AE56 /* ReminderFrequencyViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ReminderFrequencyViewController.m; sourceTree = "<group>"; };
+		2686F448156539150026AE56 /* WeekdaysViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = WeekdaysViewController.h; sourceTree = "<group>"; };
+		2686F449156539150026AE56 /* WeekdaysViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = WeekdaysViewController.m; sourceTree = "<group>"; };
+		2686F44B1565395B0026AE56 /* SpecialRemindersViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SpecialRemindersViewController.h; sourceTree = "<group>"; };
+		2686F44C1565395B0026AE56 /* SpecialRemindersViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SpecialRemindersViewController.m; sourceTree = "<group>"; };
 		26DAFBEC152E28A90025B7CF /* PillReminderProject.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = PillReminderProject.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		26DAFBF0152E28A90025B7CF /* UIKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = UIKit.framework; path = System/Library/Frameworks/UIKit.framework; sourceTree = SDKROOT; };
 		26DAFBF2152E28A90025B7CF /* Foundation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Foundation.framework; path = System/Library/Frameworks/Foundation.framework; sourceTree = SDKROOT; };
@@ -75,6 +99,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				2686F43D156507AE0026AE56 /* AudioToolbox.framework in Frameworks */,
 				26EEA45415374F8900B38E6D /* CoreData.framework in Frameworks */,
 				26DAFBF1152E28A90025B7CF /* UIKit.framework in Frameworks */,
 				26DAFBF3152E28A90025B7CF /* Foundation.framework in Frameworks */,
@@ -88,8 +113,20 @@
 		263D553F154AA285002C65B6 /* View Controllers */ = {
 			isa = PBXGroup;
 			children = (
+				2686F44B1565395B0026AE56 /* SpecialRemindersViewController.h */,
+				2686F44C1565395B0026AE56 /* SpecialRemindersViewController.m */,
+				2686F448156539150026AE56 /* WeekdaysViewController.h */,
+				2686F449156539150026AE56 /* WeekdaysViewController.m */,
+				2686F445156538E80026AE56 /* ReminderFrequencyViewController.h */,
+				2686F446156538E80026AE56 /* ReminderFrequencyViewController.m */,
+				2642E81B1563A3CF00E31911 /* ReminderSoundViewController.h */,
+				2642E81C1563A3CF00E31911 /* ReminderSoundViewController.m */,
+				2642E8171563A09500E31911 /* ReminderTypeViewController.h */,
+				2642E8181563A09500E31911 /* ReminderTypeViewController.m */,
 				26E9B7F2155D3D6700CDF370 /* ReminderDateViewController.h */,
 				26E9B7F3155D3D6700CDF370 /* ReminderDateViewController.m */,
+				2667C9991562E372002A50D6 /* RemindMeCell.h */,
+				2667C99A1562E373002A50D6 /* RemindMeCell.m */,
 				262179A7154C4D3800AAB715 /* PillNotesList.h */,
 				262179A8154C4D3800AAB715 /* PillNotesList.m */,
 				26EAB8D215411EB6003BD336 /* PillsViewController.h */,
@@ -109,6 +146,7 @@
 		263D5540154AA324002C65B6 /* Resources */ = {
 			isa = PBXGroup;
 			children = (
+				2686F4301564F1000026AE56 /* Sounds */,
 				2621EE9115518DCD002399AF /* MainStoryboard.storyboard */,
 				265C30B9154AA82D000C255E /* PillReminderModel.xcdatamodeld */,
 			);
@@ -121,6 +159,15 @@
 				265DE5BE15567FC9004C9303 /* redButton.png */,
 			);
 			name = Images;
+			sourceTree = "<group>";
+		};
+		2686F4301564F1000026AE56 /* Sounds */ = {
+			isa = PBXGroup;
+			children = (
+				2686F43A1565057C0026AE56 /* tap.aif */,
+				2686F4381565053C0026AE56 /* morning.aif */,
+			);
+			name = Sounds;
 			sourceTree = "<group>";
 		};
 		26DAFBE1152E28A90025B7CF = {
@@ -148,6 +195,7 @@
 		26DAFBEF152E28A90025B7CF /* Frameworks */ = {
 			isa = PBXGroup;
 			children = (
+				2686F43C156507AE0026AE56 /* AudioToolbox.framework */,
 				26EEA45315374F8900B38E6D /* CoreData.framework */,
 				26DAFBF0152E28A90025B7CF /* UIKit.framework */,
 				26DAFBF2152E28A90025B7CF /* Foundation.framework */,
@@ -182,8 +230,8 @@
 		26E825A815411CD9007BA0C5 /* Model Classes */ = {
 			isa = PBXGroup;
 			children = (
-				266016D215613F8800F57786 /* Reminder.h */,
-				266016D315613F8800F57786 /* Reminder.m */,
+				2686F442156532620026AE56 /* Reminder.h */,
+				2686F443156532620026AE56 /* Reminder.m */,
 				2637C66A155FB95400D324C0 /* Pill.h */,
 				2637C66B155FB95400D324C0 /* Pill.m */,
 				263A0BF6155E56C90027C799 /* Reminder+Create.h */,
@@ -248,6 +296,8 @@
 				26DAFBFB152E28A90025B7CF /* InfoPlist.strings in Resources */,
 				2621EE9215518DCD002399AF /* MainStoryboard.storyboard in Resources */,
 				265DE5BF15567FC9004C9303 /* redButton.png in Resources */,
+				2686F4391565053C0026AE56 /* morning.aif in Resources */,
+				2686F43B1565057C0026AE56 /* tap.aif in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -271,7 +321,13 @@
 				26E9B7F4155D3D6700CDF370 /* ReminderDateViewController.m in Sources */,
 				263A0BF8155E56C90027C799 /* Reminder+Create.m in Sources */,
 				2637C66C155FB95400D324C0 /* Pill.m in Sources */,
-				266016D415613F8800F57786 /* Reminder.m in Sources */,
+				2667C99B1562E373002A50D6 /* RemindMeCell.m in Sources */,
+				2642E8191563A09500E31911 /* ReminderTypeViewController.m in Sources */,
+				2642E81D1563A3CF00E31911 /* ReminderSoundViewController.m in Sources */,
+				2686F444156532620026AE56 /* Reminder.m in Sources */,
+				2686F447156538E80026AE56 /* ReminderFrequencyViewController.m in Sources */,
+				2686F44A156539150026AE56 /* WeekdaysViewController.m in Sources */,
+				2686F44D1565395B0026AE56 /* SpecialRemindersViewController.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -338,10 +394,12 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				CODE_SIGN_ENTITLEMENTS = PillReminderProject/PillReminderProject.entitlements;
+				CODE_SIGN_IDENTITY = "iPhone Developer: Damir Stuhec (W297YNM36H)";
 				GCC_PRECOMPILE_PREFIX_HEADER = YES;
 				GCC_PREFIX_HEADER = "PillReminderProject/PillReminderProject-Prefix.pch";
 				INFOPLIST_FILE = "PillReminderProject/PillReminderProject-Info.plist";
 				PRODUCT_NAME = "$(TARGET_NAME)";
+				PROVISIONING_PROFILE = "FD09D9ED-5EAF-4B63-A54D-F6EA9BF378A2";
 				WRAPPER_EXTENSION = app;
 			};
 			name = Debug;
@@ -350,10 +408,12 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				CODE_SIGN_ENTITLEMENTS = PillReminderProject/PillReminderProject.entitlements;
+				CODE_SIGN_IDENTITY = "iPhone Developer: Damir Stuhec (W297YNM36H)";
 				GCC_PRECOMPILE_PREFIX_HEADER = YES;
 				GCC_PREFIX_HEADER = "PillReminderProject/PillReminderProject-Prefix.pch";
 				INFOPLIST_FILE = "PillReminderProject/PillReminderProject-Info.plist";
 				PRODUCT_NAME = "$(TARGET_NAME)";
+				PROVISIONING_PROFILE = "FD09D9ED-5EAF-4B63-A54D-F6EA9BF378A2";
 				WRAPPER_EXTENSION = app;
 			};
 			name = Release;

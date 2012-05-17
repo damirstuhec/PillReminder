@@ -12,14 +12,15 @@
 
 + (Reminder *)reminderWithStartDate:(NSDate *)startDate
                             endDate:(NSDate *)endDate
-                           interval:(NSString *)interval 
-                           weekdays:(NSString *)weekdays 
-                        periodicity:(NSNumber *)periodicity 
-                 periodicitySpecial:(NSString *)periodicitySpecial 
-                              hours:(NSMutableOrderedSet *)hours 
+                           interval:(NSArray *)interval
+                           weekdays:(NSArray *)weekdays
+                          frequency:(NSNumber *)frequency 
+                        periodicity:(NSArray *)periodicity
+                    specialMonthday:(NSArray *)specialMonthday
+                              hours:(NSArray *)hours 
                          alarmSound:(NSString *)alarmSound 
                        reminderType:(NSNumber *)reminderType
-                           remindMe:(NSNumber *)remindMe
+                           remindMe:(BOOL)remindMe
              inManagedObjectContext:(NSManagedObjectContext *)context
 {
     Reminder *reminder = nil;
@@ -30,8 +31,9 @@
     reminder.end_date = endDate;
     reminder.interval = interval;
     reminder.weekdays = weekdays;
+    reminder.frequency = frequency;
     reminder.periodicity = periodicity;
-    reminder.periodicity_special = periodicitySpecial;
+    reminder.special_monthday = specialMonthday;
     reminder.hours = hours;
     reminder.alarm_sound = alarmSound;
     reminder.reminder_type = reminderType;

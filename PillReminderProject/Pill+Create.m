@@ -48,7 +48,7 @@ inManagedObjectContext:(NSManagedObjectContext *)context
 {
     Pill *pill = nil;
 
-    NSFetchRequest *request = [NSFetchRequest fetchRequestWithEntityName:@"Pill"];
+    /*NSFetchRequest *request = [NSFetchRequest fetchRequestWithEntityName:@"Pill"];
     
     NSPredicate *predicate1 = [NSPredicate predicateWithFormat:@"name = %@", name];
     NSPredicate *predicate2 = [NSPredicate predicateWithFormat:@"strength = %@", strength];
@@ -65,8 +65,8 @@ inManagedObjectContext:(NSManagedObjectContext *)context
         // error
         NSLog(@"Error");
         
-    } else if (![pills count]) {
-        
+    } else if ([pills count] == 0) {
+        */
         NSLog(@"Kreiranje nove tablete");
         
         pill = [NSEntityDescription insertNewObjectForEntityForName:@"Pill"
@@ -78,15 +78,26 @@ inManagedObjectContext:(NSManagedObjectContext *)context
         pill.side_effects = sideEffects;
         pill.storage = storage;
         pill.extra = extra;
-        pill.whoRemindFor = [Reminder reminderWithStartDate:nil endDate:nil interval:nil weekdays:nil periodicity:nil periodicitySpecial:nil hours:nil alarmSound:nil reminderType:nil remindMe:0 inManagedObjectContext:context];
+        pill.whoRemindFor = [Reminder reminderWithStartDate:nil
+                                                endDate:nil
+                                               interval:nil
+                                               weekdays:nil
+                                              frequency:nil 
+                                            periodicity:nil
+                                        specialMonthday:nil
+                                                  hours:nil 
+                                             alarmSound:nil 
+                                           reminderType:[NSNumber numberWithInt:0]
+                                               remindMe:NO
+                                 inManagedObjectContext:context];
 
-    } else {
-        
-        NSLog(@"Error - tableta ze obstaja");
-        
-        pill = [pills lastObject];
-    }
-    NSLog(@"%@", pill.objectID);
+    //} else {
+    //    
+    //    NSLog(@"Error - tableta ze obstaja");
+    //    
+    //    pill = [pills lastObject];
+    //}
+    //NSLog(@"%@", pill.objectID);
     
     return pill;
 }
