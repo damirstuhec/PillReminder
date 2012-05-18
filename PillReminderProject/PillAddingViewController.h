@@ -11,7 +11,7 @@
 
 @protocol PillAddingViewControllerDelegate;
 
-@interface PillAddingViewController : PillDetailsViewController
+@interface PillAddingViewController : PillDetailsViewController <UIAlertViewDelegate>
 
 @property (nonatomic, weak) id <PillAddingViewControllerDelegate> delegate;
 @property (nonatomic, strong) NSManagedObjectContext *managedObjectContext;

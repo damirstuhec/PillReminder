@@ -17,6 +17,9 @@
 
 @synthesize reminder = _reminder;
 @synthesize weekdays = _weekdays;
+@synthesize monthday = _monthday;
+@synthesize interval = _interval;
+@synthesize periodicity = _periodicity;
 
 @synthesize selectedSimpleFrequency = _selectedSimpleFrequency;
 
@@ -33,6 +36,9 @@
     return self;
 }
 
+/*
+#pragma mark - Getters and Setters
+
 - (NSArray *)weekdays {
     if (_weekdays == nil) {
         _weekdays = [[NSArray alloc] initWithObjects:[NSNumber numberWithInt:0],
@@ -48,6 +54,41 @@
 - (void)setWeekdays:(NSArray *)weekdays {
     _weekdays = weekdays;
 }
+
+- (NSArray *)monthday {
+    if (_monthday == nil) {
+        _monthday = [[NSArray alloc] initWithObjects:[NSNumber numberWithInt:0],
+                                                     [NSNumber numberWithInt:0], nil];
+    }
+    return _monthday;
+}
+- (void)setMonthday:(NSArray *)monthday {
+    _monthday = monthday;
+}
+
+- (NSArray *)interval {
+    if (_interval == nil) {
+        _interval = [[NSArray alloc] initWithObjects:[NSNumber numberWithInt:0],
+                                                     [NSNumber numberWithInt:0], nil];
+    }
+    return _interval;
+}
+- (void)setInterval:(NSArray *)interval {
+    _interval = interval;
+}
+
+- (NSArray *)periodicity {
+    if (_periodicity == nil) {
+        _periodicity = [[NSArray alloc] initWithObjects:[NSNumber numberWithInt:0],
+                                                        [NSNumber numberWithInt:0], nil];
+    }
+    return _periodicity;
+}
+- (void)setPeriodicity:(NSArray *)periodicity {
+    _periodicity = periodicity;
+}
+*/
+
 
 - (void)viewDidLoad
 {
@@ -74,6 +115,7 @@
     
     } else if (self.reminder.special_monthday != nil) {
         // TODO
+        self.monthday = self.reminder.special_monthday;
         indexPath = [NSIndexPath indexPathForRow:1 inSection:SPECIAL_SECTION];
         [self.tableView selectRowAtIndexPath:indexPath animated:NO scrollPosition:UITableViewScrollPositionNone];
         cell = [self.tableView cellForRowAtIndexPath:indexPath];
@@ -81,6 +123,7 @@
     
     } else if (self.reminder.interval != nil) {
         // TODO
+        self.interval = self.reminder.interval;
         indexPath = [NSIndexPath indexPathForRow:2 inSection:SPECIAL_SECTION];
         cell = [self.tableView cellForRowAtIndexPath:indexPath];
         [self.tableView selectRowAtIndexPath:indexPath animated:NO scrollPosition:UITableViewScrollPositionNone];
@@ -89,6 +132,7 @@
     
     } else if (self.reminder.periodicity != nil) {
         // TODO
+        self.periodicity = self.reminder.periodicity;
         indexPath = [NSIndexPath indexPathForRow:3 inSection:SPECIAL_SECTION];
         [self.tableView selectRowAtIndexPath:indexPath animated:NO scrollPosition:UITableViewScrollPositionNone];
         cell = [self.tableView cellForRowAtIndexPath:indexPath];
@@ -120,9 +164,28 @@
         self.reminder.interval = nil;
         self.reminder.periodicity = nil;
     
-    } else {
-        // TODO ostale izbire
+    } else if (self.monthday != nil) {
+        self.reminder.frequency = nil;
+        self.reminder.weekdays = nil;
+        self.reminder.special_monthday = self.monthday;
+        self.reminder.interval = nil;
+        self.reminder.periodicity = nil;
+        
+    } else if (self.interval != nil) {
+        self.reminder.frequency = nil;
+        self.reminder.weekdays = nil;
+        self.reminder.special_monthday = nil;
+        self.reminder.interval = self.interval;
+        self.reminder.periodicity = nil;
+        
+    } else if (self.periodicity != nil) {
+        self.reminder.frequency = nil;
+        self.reminder.weekdays = nil;
+        self.reminder.special_monthday = nil;
+        self.reminder.interval = nil;
+        self.reminder.periodicity = self.periodicity;
     }
+    
     [self.navigationController popViewControllerAnimated:YES];
 }
 
@@ -150,10 +213,10 @@
             oldCell.accessoryType = UITableViewCellAccessoryNone;
         }
         
-        self.reminder.weekdays = nil;
-        self.reminder.special_monthday = nil;
-        self.reminder.interval = nil;
-        self.reminder.periodicity = nil;
+        self.weekdays = nil;
+        self.monthday = nil;
+        self.interval = nil;
+        self.periodicity = nil;
     
     } else if (indexPath.section == SPECIAL_SECTION) {
         if (indexPath.row == 0) {
@@ -175,11 +238,21 @@
         WeekdaysViewController *weekdaysViewController = (WeekdaysViewController *)[segue destinationViewController];
         
         weekdaysViewController.delegate = self;
+        if (!self.weekdays) {
+        self.weekdays = [[NSArray alloc] initWithObjects:[NSNumber numberWithInt:0],
+                                                         [NSNumber numberWithInt:0], 
+                                                         [NSNumber numberWithInt:0],
+                                                         [NSNumber numberWithInt:0],
+                                                         [NSNumber numberWithInt:0],
+                                                         [NSNumber numberWithInt:0], 
+                                                         [NSNumber numberWithInt:0], nil];
+        }
         weekdaysViewController.weekdays = self.weekdays;
     
     } else if ([[segue identifier] isEqualToString:@"SetSpecialReminder"]) {
         SpecialRemindersViewController *specialRemindersViewController = (SpecialRemindersViewController *)[segue destinationViewController];
         
+        specialRemindersViewController.delegate = self;
         if (indexPath.row == 1) {
             // TODO
         
@@ -188,21 +261,61 @@
             
         } else if (indexPath.row == 3) {
             // TODO
+            if (!self.periodicity) {
+                self.periodicity = [[NSArray alloc] initWithObjects:[NSNumber numberWithInt:0],
+                                                                [NSNumber numberWithInt:0], nil];
+            }
+            specialRemindersViewController.periodicity = self.periodicity;
+            specialRemindersViewController.editedFieldKey = @"periodicity";
         }
     }
 }
 
-- (void)weekdaysViewController:(WeekdaysViewController *)controller didFinishSelectingWeekdays:(NSArray *)weekdays
+- (void)weekdaysViewController:(WeekdaysViewController *)controller 
+    didFinishSelectingWeekdays:(NSArray *)weekdays
 {
     self.selectedSimpleFrequency = -1;
     self.reminder.frequency = nil;
-    
     self.weekdays = weekdays;
-    self.reminder.special_monthday = nil;
-    self.reminder.interval = nil;
-    self.reminder.periodicity = nil;
-    
-    [self.tableView reloadData];
+    self.monthday = nil;
+    self.interval = nil;
+    self.periodicity = nil;
+}
+
+- (void)specialRemindersViewControllerDelegate:(SpecialRemindersViewController *)controller 
+                    didFinishSelectingMonthday:(NSArray *)monthday
+{
+    // TODO
+    self.selectedSimpleFrequency = -1;
+    self.reminder.frequency = nil;
+    self.weekdays = nil;
+    self.monthday = monthday;
+    self.interval = nil;
+    self.periodicity = nil;
+}
+
+- (void)specialRemindersViewControllerDelegate:(SpecialRemindersViewController *)controller 
+                    didFinishSelectingInterval:(NSArray *)interval
+{
+    // TODO
+    self.selectedSimpleFrequency = -1;
+    self.reminder.frequency = nil;
+    self.weekdays = nil;
+    self.monthday = nil;
+    self.interval = interval;
+    self.periodicity = nil;
+}
+
+- (void)specialRemindersViewControllerDelegate:(SpecialRemindersViewController *)controller 
+                 didFinishSelectingPeriodicity:(NSArray *)periodicity
+{
+    // TODO
+    self.selectedSimpleFrequency = -1;
+    self.reminder.frequency = nil;
+    self.weekdays = nil;
+    self.monthday = nil;
+    self.interval = nil;
+    self.periodicity = periodicity;
 }
 
 @end

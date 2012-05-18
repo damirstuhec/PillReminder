@@ -57,4 +57,13 @@
      */
 }
 
+- (void)initializeiCloudAccess {
+    dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), ^{
+        if ([[NSFileManager defaultManager] URLForUbiquityContainerIdentifier:nil] != nil)
+            NSLog(@"iCloud is available\n");
+        else
+            NSLog(@"This tutorial requires iCloud, but it is not available.\n");
+    });
+}
+
 @end

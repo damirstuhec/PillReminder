@@ -57,7 +57,7 @@
                             forSaveOperation:UIDocumentSaveForCreating 
                            completionHandler:^(BOOL success) {
             [self setupFetchedResultsController];
-            [self prepopulateDataIntoDocument:self.pillReminderDatabase];
+            //[self prepopulateDataIntoDocument:self.pillReminderDatabase];
         }];
         
     } else if (self.pillReminderDatabase.documentState == UIDocumentStateClosed) {

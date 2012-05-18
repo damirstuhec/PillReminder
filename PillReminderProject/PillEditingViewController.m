@@ -123,7 +123,9 @@
         self.textField.hidden = YES;
         self.textFieldLabel.hidden = YES;
         self.textView.hidden = NO;
-        self.textView.text = [NSString stringWithFormat:@"%@", [self.editedPill valueForKey:self.editedFieldKey]];
+        if ([[self.editedPill valueForKey:self.editedFieldKey] isEqualToString:@"- please set -"]) {
+            self.textView.text = @"";
+        } else self.textView.text = [NSString stringWithFormat:@"%@", [self.editedPill valueForKey:self.editedFieldKey]];
         self.textView.clipsToBounds = YES;
         self.textView.layer.cornerRadius = 8.0f;
         self.textView.layer.borderColor = [[UIColor grayColor] CGColor];

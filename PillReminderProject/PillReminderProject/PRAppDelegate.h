@@ -11,5 +11,6 @@
 @interface PRAppDelegate : UIResponder <UIApplicationDelegate>
 
 @property (strong, nonatomic) UIWindow *window;
+- (void)initializeiCloudAccess;
 
 @end

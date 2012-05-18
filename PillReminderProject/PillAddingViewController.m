@@ -53,7 +53,12 @@
 
 - (IBAction)save:(id)sender
 {
-    [self.delegate pillAddingViewController:self didFinishWithSave:YES];
+    if ([self.pill.name isEqualToString:@""]) {
+        UIAlertView *alert = [[UIAlertView alloc] initWithTitle:@"Warning" message:@"Please enter Pill Name"
+                                                       delegate:self cancelButtonTitle:@"OK" otherButtonTitles: nil];
+        [alert show];
+    
+    } else [self.delegate pillAddingViewController:self didFinishWithSave:YES];
 }
 
 @end

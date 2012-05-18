@@ -199,6 +199,8 @@
     NSIndexSet *deletePillSectionIndex = [[NSIndexSet alloc] initWithIndex:DELETE_PILL_SECTION];
     
     [self.tableView beginUpdates];
+    NSIndexSet *notesSection = [[NSIndexSet alloc] initWithIndex:NOTES_SECTION];
+    [self.tableView reloadSections:notesSection withRowAnimation:UITableViewRowAnimationAutomatic];
     
     if (self.editing) {
         [self setUpUndoManager];
@@ -294,7 +296,7 @@
 
 - (NSString *)tableView:(UITableView *)tableView titleForFooterInSection:(NSInteger)section
 {
-    NSString *footer = nil;
+    NSString *footer = @"";
     
     if (!self.editing && section == NOTES_SECTION) {
         footer = @"To add more notes, touch the Edit button in the upper right corner.";
@@ -463,7 +465,35 @@
                 }
             
             } else if (self.pill.whoRemindFor.weekdays != nil) {
-                // TODO
+                NSString *weekdaysString = @"";
+                for (int i=0; i<7; i++) {
+                    if ([[self.pill.whoRemindFor.weekdays objectAtIndex:i] isEqualToNumber:[NSNumber numberWithInt:i]]) {
+                        switch (i) {
+                            case 0:
+                                weekdaysString = [weekdaysString stringByAppendingString:@"Mon/"];
+                                break;
+                            case 1:
+                                weekdaysString = [weekdaysString stringByAppendingString:@"Tue/"];
+                                break;
+                            case 2:
+                                weekdaysString = [weekdaysString stringByAppendingString:@"Wed/"];
+                                break;
+                            case 3:
+                                weekdaysString = [weekdaysString stringByAppendingString:@"Thu/"];
+                                break;
+                            case 4:
+                                weekdaysString = [weekdaysString stringByAppendingString:@"Fri/"];
+                                break;
+                            case 5:
+                                weekdaysString = [weekdaysString stringByAppendingString:@"Sat/"];
+                                break;
+                            case 6:
+                                weekdaysString = [weekdaysString stringByAppendingString:@"Sun/"];
+                                break;
+                        }
+                    }
+                }
+                cell.detailTextLabel.text = weekdaysString;
             
             } else if (self.pill.whoRemindFor.special_monthday != nil) {
                 // TODO
@@ -472,9 +502,9 @@
                 // TODO
             
             } else if (self.pill.whoRemindFor.periodicity != nil) {
-                // TODO
+                cell.detailTextLabel.text = [NSString stringWithFormat:@"%d days ON, %d days OFF", [[self.pill.whoRemindFor.periodicity objectAtIndex:0] integerValue], [[self.pill.whoRemindFor.periodicity objectAtIndex:1] integerValue]];
                 
-            }
+            } else cell.detailTextLabel.text = @"- please set -";
             
         } else if (indexPath.row == 1) {
             cell.textLabel.text = @"Start date";

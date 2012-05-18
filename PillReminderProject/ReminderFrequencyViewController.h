@@ -12,9 +12,13 @@
 #import "SpecialRemindersViewController.h"
 
 
-@interface ReminderFrequencyViewController : UITableViewController <WeekdaysViewControllerDelegate>
+@interface ReminderFrequencyViewController : UITableViewController <WeekdaysViewControllerDelegate, SpecialRemindersViewControllerDelegate>
 
 @property (nonatomic, strong) Reminder *reminder;
+
 @property (nonatomic, strong) NSArray *weekdays;
+@property (nonatomic, strong) NSArray *monthday;
+@property (nonatomic, strong) NSArray *interval;
+@property (nonatomic, strong) NSArray *periodicity;
 
 @end

@@ -12,7 +12,6 @@
 
 @interface WeekdaysViewController : UITableViewController
 @property (nonatomic, strong) NSArray *weekdays;
-
 @property (nonatomic, weak) id <WeekdaysViewControllerDelegate> delegate;
 @end
 
