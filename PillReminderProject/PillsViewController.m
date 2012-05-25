@@ -141,6 +141,35 @@
 {
     [super viewWillAppear:animated];
     
+    /*
+    NSCalendar *gregorian = [[NSCalendar alloc] initWithCalendarIdentifier:NSGregorianCalendar];
+    NSTimeZone *UTC = [NSTimeZone defaultTimeZone]; //timeZoneWithName:@"UTC"];
+    
+    NSDateComponents *startComponents = [gregorian components:NSHourCalendarUnit | NSMinuteCalendarUnit | NSSecondCalendarUnit fromDate:[NSDate date]];
+    [startComponents setTimeZone:UTC];
+    [startComponents setDay:29];
+    [startComponents setMonth:5];
+    [startComponents setYear:2012];
+
+    NSDate *start = [gregorian dateFromComponents:startComponents];
+    NSLog(@"DATUM start: %@", start);
+    
+    NSDateComponents *fireComponents = [gregorian components:NSHourCalendarUnit | NSMinuteCalendarUnit | NSSecondCalendarUnit | NSMonthCalendarUnit | NSYearCalendarUnit fromDate:start];
+    [fireComponents setTimeZone:UTC];
+    [fireComponents setWeekday:2]; // Monday
+    int weekdayOrdinal = 1;
+    [fireComponents setWeekdayOrdinal:weekdayOrdinal];
+    
+    NSDate *fire = [gregorian dateFromComponents:fireComponents];
+
+    while ([fire compare:start] == NSOrderedAscending) {
+        weekdayOrdinal++;
+        [fireComponents setWeekdayOrdinal:weekdayOrdinal];
+        fire = [gregorian dateFromComponents:fireComponents];
+    }
+    NSLog(@"DATUM fire: %@", fire);
+    */
+    
     if (!self.pillReminderDatabase) {
         NSURL *url = [[[NSFileManager defaultManager] URLsForDirectory:NSDocumentDirectory 
                                                              inDomains:NSUserDomainMask] lastObject];

@@ -79,17 +79,18 @@ inManagedObjectContext:(NSManagedObjectContext *)context
         pill.storage = storage;
         pill.extra = extra;
         pill.whoRemindFor = [Reminder reminderWithStartDate:nil
-                                                endDate:nil
-                                               interval:nil
-                                               weekdays:nil
-                                              frequency:nil 
-                                            periodicity:nil
-                                        specialMonthday:nil
-                                                  hours:nil 
-                                             alarmSound:nil 
-                                           reminderType:[NSNumber numberWithInt:0]
-                                               remindMe:NO
-                                 inManagedObjectContext:context];
+                                                    endDate:nil
+                                                   interval:nil
+                                                   weekdays:nil
+                                                  frequency:nil 
+                                                periodicity:nil
+                                            specialMonthday:nil
+                                                      hours:nil 
+                                                 alarmSound:nil 
+                                               reminderType:[NSNumber numberWithInt:0]
+                                              notifications:nil
+                                                   remindMe:NO
+                                     inManagedObjectContext:context];
 
     //} else {
     //    

@@ -20,6 +20,7 @@
                               hours:(NSArray *)hours 
                          alarmSound:(NSString *)alarmSound 
                        reminderType:(NSNumber *)reminderType
+                      notifications:(NSArray *)notifications
                            remindMe:(BOOL)remindMe
              inManagedObjectContext:(NSManagedObjectContext *)context;
 

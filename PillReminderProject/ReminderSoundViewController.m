@@ -56,7 +56,7 @@
 }
 
 - (NSArray *)sounds {
-    if (_sounds == nil) _sounds = [[NSArray alloc] initWithObjects:@"tap", @"morning", nil];
+    if (_sounds == nil) _sounds = [[NSArray alloc] initWithObjects:@"reminding", @"morning", nil];
     return _sounds;
 }
 
@@ -74,7 +74,7 @@
 
 - (void)createAndPlaySound:(NSString *)soundName {
     NSString *soundPath=[[NSBundle mainBundle] pathForResource:soundName 
-                                                        ofType:@"aif"];
+                                                        ofType:@"caf"];
     SystemSoundID sound;
     AudioServicesCreateSystemSoundID((__bridge_retained CFURLRef)[NSURL fileURLWithPath:soundPath],&sound);
     self.sound = sound;

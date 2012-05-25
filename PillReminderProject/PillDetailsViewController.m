@@ -49,6 +49,254 @@
 #define DELETE_PILL_SECTION 5
 
 
+- (void)deleteAllNotificationsForThatPill
+{
+    self.pill.whoRemindFor.notifications = nil;
+}
+
+- (void)cancellAllNotificationsForThatPill
+{
+    UILocalNotification *localNotif = nil;
+    
+    for (int i=0; i<self.pill.whoRemindFor.notifications.count; i++) {
+        localNotif = [self.pill.whoRemindFor.notifications objectAtIndex:i];
+        [[UIApplication sharedApplication] cancelLocalNotification:localNotif];
+    }
+}
+
+- (UILocalNotification *)setLocalNotification:(UILocalNotification *)localNotification withFireDate:(NSDate *)fireDate andEndDate:(NSDate *)endDate
+{
+    localNotification = [[UILocalNotification alloc] init];
+    localNotification.fireDate = fireDate;
+    
+    localNotification.timeZone = [NSTimeZone defaultTimeZone];
+    
+    localNotification.alertBody = [NSString stringWithFormat:NSLocalizedString(@"- Take pill(s) -\nName: %@\nStrength: %@\nIntake: %d pill(s)", nil), 
+                                   self.pill.name, self.pill.strength, [self.pill.per_dose integerValue]];
+    localNotification.alertAction = NSLocalizedString(@"TAKE", nil);
+    localNotification.soundName = [NSString stringWithFormat:@"%@.caf", self.pill.whoRemindFor.alarm_sound];
+    localNotification.applicationIconBadgeNumber = 1;
+    NSDictionary *userInfoDictionary = [NSDictionary dictionaryWithObjectsAndKeys:self.pill.name, @"pill.name", self.pill.strength, @"pill.strength", [NSString stringWithFormat:@"%d", [self.pill.per_dose integerValue]], @"pill.per_dose", endDate, @"pill.end_date", nil];
+    localNotification.userInfo = userInfoDictionary;
+    
+    return localNotification;
+}
+
+- (void)scheduleNotifications
+{
+    [self cancellAllNotificationsForThatPill];
+    [self deleteAllNotificationsForThatPill];
+    
+    UILocalNotification *localNotification = nil;
+
+    if (self.pill.whoRemindFor.notifications != nil || self.pill.whoRemindFor.notifications.count != 0) {
+        for (int i=0; i<self.pill.whoRemindFor.notifications.count; i++) {
+            localNotification = [self.pill.whoRemindFor.notifications objectAtIndex:i];
+            [[UIApplication sharedApplication] scheduleLocalNotification:localNotification];
+        }
+        
+    } else {
+        NSDate *notificationFireDate = nil;
+        NSDate *notificationEndDate = nil;
+        
+        NSCalendar *calendar = [NSCalendar currentCalendar];
+        
+        NSDateComponents *components = [[NSDateComponents alloc] init];
+        [components setTimeZone:[NSTimeZone defaultTimeZone]];
+        
+        NSDateComponents *dateComponents = [calendar components:NSDayCalendarUnit | NSMonthCalendarUnit | NSYearCalendarUnit 
+                                                       fromDate:self.pill.whoRemindFor.start_date];
+        [dateComponents setTimeZone:[NSTimeZone defaultTimeZone]];
+        
+        NSDateComponents *endDateComponents = [calendar components:NSDayCalendarUnit | NSMonthCalendarUnit | NSYearCalendarUnit 
+                                                       fromDate:self.pill.whoRemindFor.end_date];
+        [endDateComponents setTimeZone:[NSTimeZone defaultTimeZone]];
+        
+        NSDateComponents *timeComponents = nil;
+        [timeComponents setTimeZone:[NSTimeZone defaultTimeZone]];
+        
+        [components setDay:[dateComponents day]];
+        [components setMonth:[dateComponents month]];
+        [components setYear:[dateComponents year]];
+        
+        if (self.pill.whoRemindFor.frequency != nil) {
+            
+            for (int i=0; i<self.pill.whoRemindFor.hours.count; i++) {
+                timeComponents = [calendar components:NSMinuteCalendarUnit | NSHourCalendarUnit fromDate:[self.pill.whoRemindFor.hours objectAtIndex:i]];
+                [components setHour:[timeComponents hour]];
+                [components setMinute:[timeComponents minute]];
+                
+                [endDateComponents setHour:[timeComponents hour]];
+                [endDateComponents setMinute:[timeComponents minute]];
+                
+                notificationFireDate = [calendar dateFromComponents:components];
+                notificationEndDate = [calendar dateFromComponents:endDateComponents];
+                
+                localNotification = [self setLocalNotification:localNotification withFireDate:notificationFireDate andEndDate:notificationEndDate];
+                                
+                switch ([self.pill.whoRemindFor.frequency integerValue]) {
+                    case 0:
+                        NSLog(@"Just once");
+                        break;
+                    case 1:
+                        NSLog(@"Daily");
+                        localNotification.repeatInterval = NSDayCalendarUnit;
+                        break;
+                    case 2:
+                        NSLog(@"Weekly");
+                        localNotification.repeatInterval = NSWeekCalendarUnit;
+                        break;
+                    case 3:
+                        NSLog(@"Monthly");
+                        localNotification.repeatInterval = NSMonthCalendarUnit;
+                        break;
+                }
+                
+                localNotification.repeatCalendar = calendar;
+                [[UIApplication sharedApplication] scheduleLocalNotification:localNotification];
+            }
+        
+        } else if (self.pill.whoRemindFor.weekdays != nil) {
+            int weekday = 0;
+            int weekdayOrdinal = 1;
+            
+            NSDate *start = [calendar dateFromComponents:components];
+            NSDateComponents *fireComponents = [[NSDateComponents alloc] init];
+            
+            for (int i=0; i<7; i++) {
+                
+                if ([[self.pill.whoRemindFor.weekdays objectAtIndex:i] isEqualToNumber:[NSNumber numberWithInt:1]]) {
+                    if (i<6) weekday = i+2;
+                    else weekday = 1;
+                    weekdayOrdinal = 1;
+                    
+                    fireComponents = [calendar components:NSMonthCalendarUnit | NSYearCalendarUnit fromDate:start];
+                    [fireComponents setTimeZone:[NSTimeZone defaultTimeZone]];
+                    [fireComponents setWeekday:weekday];
+                    [fireComponents setWeekdayOrdinal:weekdayOrdinal];
+                    
+                    NSDate *fire = [calendar dateFromComponents:fireComponents];
+                    
+                    while ([fire compare:start] == NSOrderedAscending) {
+                        weekdayOrdinal++;
+                        [fireComponents setWeekdayOrdinal:weekdayOrdinal];
+                        fire = [calendar dateFromComponents:fireComponents];
+                    }
+                    
+                    for (int j=0; j<self.pill.whoRemindFor.hours.count; j++) {
+                        timeComponents = [calendar components:NSMinuteCalendarUnit | NSHourCalendarUnit fromDate:[self.pill.whoRemindFor.hours objectAtIndex:j]];
+                        
+                        [fireComponents setHour:[timeComponents hour]];
+                        [fireComponents setMinute:[timeComponents minute]];
+                        
+                        [endDateComponents setHour:[timeComponents hour]];
+                        [endDateComponents setMinute:[timeComponents minute]];
+                        
+                        notificationFireDate = [calendar dateFromComponents:fireComponents];
+                        notificationEndDate = [calendar dateFromComponents:endDateComponents];
+                        
+                        localNotification = [self setLocalNotification:localNotification withFireDate:notificationFireDate andEndDate:notificationEndDate];
+                        
+                        localNotification.repeatInterval = NSWeekCalendarUnit;
+                        localNotification.repeatCalendar = calendar;
+                        
+                        [[UIApplication sharedApplication] scheduleLocalNotification:localNotification];
+                    }
+                }
+            }
+        
+        } else if (self.pill.whoRemindFor.periodicity != nil) {
+            
+            
+        }
+        
+        
+        /*
+         NSCalendar *gregorian = [[NSCalendar alloc] initWithCalendarIdentifier:NSGregorianCalendar];
+         NSTimeZone *UTC = [NSTimeZone defaultTimeZone]; //timeZoneWithName:@"UTC"];
+         
+         NSDateComponents *startComponents = [gregorian components:NSHourCalendarUnit | NSMinuteCalendarUnit | NSSecondCalendarUnit fromDate:[NSDate date]];
+         [startComponents setTimeZone:UTC];
+         [startComponents setDay:29];
+         [startComponents setMonth:5];
+         [startComponents setYear:2012];
+         
+         NSDate *start = [gregorian dateFromComponents:startComponents];
+         NSLog(@"DATUM start: %@", start);
+         
+         NSDateComponents *fireComponents = [gregorian components:NSHourCalendarUnit | NSMinuteCalendarUnit | NSSecondCalendarUnit | NSMonthCalendarUnit | NSYearCalendarUnit fromDate:start];
+         [fireComponents setTimeZone:UTC];
+         [fireComponents setWeekday:2]; // Monday
+         int weekdayOrdinal = 1;
+         [fireComponents setWeekdayOrdinal:weekdayOrdinal];
+         
+         NSDate *fire = [gregorian dateFromComponents:fireComponents];
+         
+         while ([fire compare:start] == NSOrderedAscending) {
+         weekdayOrdinal++;
+         [fireComponents setWeekdayOrdinal:weekdayOrdinal];
+         fire = [gregorian dateFromComponents:fireComponents];
+         }
+         NSLog(@"DATUM fire: %@", fire);
+         */
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        /*
+        NSCalendar *calendar = [NSCalendar autoupdatingCurrentCalendar];
+        NSDateComponents *dateComps = [[NSDateComponents alloc] init];
+        NSDateComponents *components = [[NSCalendar currentCalendar] components:NSDayCalendarUnit | NSMonthCalendarUnit | NSYearCalendarUnit fromDate:[NSDate date]];
+        NSDateComponents *hours = [[NSCalendar currentCalendar] components:NSMinuteCalendarUnit | NSHourCalendarUnit fromDate:[self.pill.whoRemindFor.hours objectAtIndex:0]];
+        
+        [dateComps setDay:[components day]];
+        [dateComps setMonth:[components month]];
+        [dateComps setYear:[components year]];
+        [dateComps setHour:[hours hour]];
+        [dateComps setMinute:[hours minute]];
+        NSDate *itemDate = [calendar dateFromComponents:dateComps];
+        
+        UILocalNotification *localNotif = [[UILocalNotification alloc] init];
+        if (localNotif == nil)
+            return;
+        localNotif.fireDate = itemDate;
+        localNotif.
+        localNotif.timeZone = [NSTimeZone defaultTimeZone];
+        
+        localNotif.alertBody = [NSString stringWithFormat:NSLocalizedString(@"Take pill(s)\nName: %@\nStrength: %@\nIntake: %d pill(s)", nil),
+                                self.pill.name, self.pill.strength, [self.pill.per_dose integerValue]];
+        localNotif.alertAction = NSLocalizedString(@"TAKE", nil);
+        
+        localNotif.soundName = [NSString stringWithFormat:@"%@.caf", self.pill.whoRemindFor.alarm_sound]; //UILocalNotificationDefaultSoundName;
+        localNotif.applicationIconBadgeNumber = 1;
+        
+        //NSDictionary *infoDict = [NSDictionary dictionaryWithObject:item.eventName forKey:ToDoItemKey];
+        //localNotif.userInfo = infoDict;
+        
+        [[UIApplication sharedApplication] scheduleLocalNotification:localNotif];*/
+    }
+}
+
 - (NSDateFormatter *)dateFormatter
 {
     static NSDateFormatter *dateFormatter = nil;
@@ -106,7 +354,19 @@
 
 - (IBAction)remindMeSwitched:(id)sender {
     UISwitch *rmSwitch = (UISwitch *) sender;
-    self.pill.whoRemindFor.remind_me = rmSwitch.on;
+    
+    if (rmSwitch.on && (self.pill.whoRemindFor.hours == nil || self.pill.whoRemindFor.hours.count == 0)) {
+        UIAlertView *alert = [[UIAlertView alloc] initWithTitle:@"Warning" message:@"Please set Time of day"
+                                                       delegate:self cancelButtonTitle:@"OK" otherButtonTitles: nil];
+        [alert show];
+        [self.tableView reloadData];
+    } else {
+        self.pill.whoRemindFor.remind_me = rmSwitch.on;
+    
+        if (self.pill.whoRemindFor.remind_me == YES) {
+            [self scheduleNotifications];
+        }
+    }
 }
 
 - (void)updateRightBarButtonItemState
@@ -144,8 +404,6 @@
     }
     self.tableView.allowsSelection = NO;
     self.tableView.allowsSelectionDuringEditing = YES;
-    
-    //self.remindMeSwitch.onTintColor = [UIColor colorWithRed:(43./255.) green:(78./255.) blue:(105./255.) alpha:1.0];
 }
 
 
@@ -159,9 +417,6 @@
     [temp replaceObjectAtIndex:2 withObject:self.pill.storage];
     [temp replaceObjectAtIndex:3 withObject:self.pill.extra];
     self.pillNotes = [temp copy];
-    
-    
-    //[self.remindMeSwitch setOn:self.pill.whoRemindFor.remind_me];
     
 	// Update pill on return.
     [self.tableView reloadData];
@@ -381,7 +636,7 @@
         cell.accessoryType = UITableViewCellAccessoryNone;
         cell.editingAccessoryType = UITableViewCellAccessoryDisclosureIndicator;
         
-        cell.textLabel.text = @"Pills per dose";
+        cell.textLabel.text = @"Pills per intake";
         cell.detailTextLabel.text = [NSString stringWithFormat:@"%d", [self.pill.per_dose integerValue]];
     
     } else if (indexPath.section == NOTES_SECTION) {
@@ -459,9 +714,6 @@
                     case 3:
                         cell.detailTextLabel.text = @"Monthly";
                         break;
-                    case 4:
-                        cell.detailTextLabel.text = @"Yearly";
-                        break;
                 }
             
             } else if (self.pill.whoRemindFor.weekdays != nil) {
@@ -496,7 +748,10 @@
                 cell.detailTextLabel.text = weekdaysString;
             
             } else if (self.pill.whoRemindFor.special_monthday != nil) {
-                // TODO
+                NSString *monthdayString = @"";
+                monthdayString = [monthdayString stringByAppendingFormat:@"%@ ", [self.pill.whoRemindFor.special_monthday objectAtIndex:0]];
+                monthdayString = [monthdayString stringByAppendingString:[self.pill.whoRemindFor.special_monthday objectAtIndex:1]];
+                cell.detailTextLabel.text = [NSString stringWithFormat:@"Every %@", monthdayString];
             
             } else if (self.pill.whoRemindFor.interval != nil) {
                 // TODO
@@ -517,7 +772,7 @@
         } else if (indexPath.row == 2) {
             cell.textLabel.text = @"End date";
             if (!self.pill.whoRemindFor.end_date) {
-                cell.detailTextLabel.text = @"- please set -";
+                cell.detailTextLabel.text = @"- set or leave empty -";
             } else {
                 cell.detailTextLabel.text = [self.dateFormatter stringFromDate:self.pill.whoRemindFor.end_date];
             }
@@ -571,6 +826,7 @@
             remindMeCell.accessoryType = UITableViewCellAccessoryNone;
         }
         remindMeCell.remindMeSwitch.on = self.pill.whoRemindFor.remind_me;
+        remindMeCell.remindMeSwitch.onTintColor = [UIColor colorWithRed:(43./255.) green:(78./255.) blue:(105./255.) alpha:1.0];
         return remindMeCell;
     
     } else if (indexPath.section == DELETE_PILL_SECTION) {
@@ -589,7 +845,7 @@
         [cell addSubview:sampleButton];
     }
     
-    if ([cell.detailTextLabel.text isEqualToString:@"- please set -"]) {
+    if ([cell.detailTextLabel.text isEqualToString:@"- please set -"] || [cell.detailTextLabel.text isEqualToString:@"- set or leave empty -"]) {
         [cell.detailTextLabel setTextColor:[UIColor lightGrayColor]];
         
     } else { [cell.detailTextLabel setTextColor:[UIColor blackColor]]; }

@@ -57,6 +57,59 @@
      */
 }
 
+- (void)stop:(UILocalNotification *)notification ifLastDate:(NSDate *)lastDate
+{
+    NSLog(@"LOGGING fireDate: %@", notification.fireDate);
+    
+    NSCalendar *calendar = [NSCalendar currentCalendar];
+    
+    NSTimeInterval day = 24*60*60;
+    NSDate *tomorrow = [[NSDate date] dateByAddingTimeInterval:day];
+    NSDate *expiryDate = lastDate;
+    
+	NSDateComponents *tomorrowDateComponents = [calendar components:NSDayCalendarUnit | NSMonthCalendarUnit | NSYearCalendarUnit fromDate:tomorrow];
+    [tomorrowDateComponents setTimeZone:[NSTimeZone defaultTimeZone]];
+    
+    NSDateComponents *expiryTimeComponents = [calendar components:NSHourCalendarUnit | NSMinuteCalendarUnit | NSSecondCalendarUnit fromDate:expiryDate];
+    [expiryTimeComponents setTimeZone:[NSTimeZone defaultTimeZone]];
+    
+    [tomorrowDateComponents setHour:[expiryTimeComponents hour]];
+    [tomorrowDateComponents setMinute:[expiryTimeComponents minute]];
+    [tomorrowDateComponents setSecond:[expiryTimeComponents second]];
+    
+    NSDate *tomorrowDate = [calendar dateFromComponents:tomorrowDateComponents];
+    
+    //NSLog(@"Tomorrow: %@  -  Expiry: %@", tomorrowDate, expiryDate);
+    
+    if ([tomorrowDate compare:expiryDate] == NSOrderedDescending) {
+        NSLog(@"Canceling notification");
+        [[UIApplication sharedApplication] cancelLocalNotification:notification];
+    }
+}
+
+- (void)application:(UIApplication *)application didReceiveLocalNotification:(UILocalNotification *)notification
+{
+    NSLog(@"%@", __PRETTY_FUNCTION__);
+    
+    NSDictionary *userInfoDictionary = notification.userInfo;
+    NSString *pillName = [userInfoDictionary valueForKey:@"pill.name"];
+    NSString *pillStrength = [userInfoDictionary valueForKey:@"pill.strength"];
+    NSString *pillsPerDose = [userInfoDictionary valueForKey:@"pill.per_dose"];
+    NSDate *pillEndDate = [userInfoDictionary valueForKey:@"pill.end_date"];
+    
+    if (application.applicationState == UIApplicationStateActive)
+    {
+        // NSLog(@"Application is active");
+        UIAlertView *alert = [[UIAlertView alloc] initWithTitle:@"Warning" 
+                                                        message:[NSString stringWithFormat:NSLocalizedString(@"- Take pill(s) -\nName: %@\nStrength: %@\nIntake: %@ pill(s)", nil), pillName, pillStrength, pillsPerDose]
+                                                       delegate:self 
+                                              cancelButtonTitle:@"OK" 
+                                              otherButtonTitles: nil];
+        [alert show];
+    }
+    [self stop:notification ifLastDate:pillEndDate];
+}
+
 - (void)initializeiCloudAccess {
     dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), ^{
         if ([[NSFileManager defaultManager] URLForUbiquityContainerIdentifier:nil] != nil)

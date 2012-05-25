@@ -56,9 +56,15 @@
     NSMutableArray *component1 = nil;
     NSMutableArray *component2 = nil;
     
-    if ([self.editedFieldKey isEqualToString:@"monthday"]) {
+    if ([self.editedFieldKey isEqualToString:@"special_monthday"]) {
         // TODO
         self.title = @"Month day";
+        component1 = [[NSMutableArray alloc] initWithObjects:@"1st", @"2nd", @"3rd", @"4th", @"Last", nil];
+        component2 = [[NSMutableArray alloc] initWithObjects:@"Monday", @"Tuesday", @"Wednesday", @"Thursday", @"Friday", nil];
+        
+        self.pickerComponentOne = [component1 copy];
+        self.pickerComponentTwo = [component2 copy];
+        self.mutableHelperArray = [self.monthday mutableCopy];
         
     } else if ([self.editedFieldKey isEqualToString:@"interval"]) {
         // TODO
@@ -103,7 +109,14 @@
         cell = [[UITableViewCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:CellIdentifier];
     }
     
-    if ([self.editedFieldKey isEqualToString:@"periodicity"]) {
+    if ([self.editedFieldKey isEqualToString:@"special_monthday"]) {
+        cell.textLabel.text = @"Month day";
+        
+        if (self.monthday != nil) {
+            cell.detailTextLabel.text = [NSString stringWithFormat:@"%@ %@", [self.mutableHelperArray objectAtIndex:0], [self.mutableHelperArray objectAtIndex:1]];
+        } else cell.detailTextLabel.text = [NSString stringWithFormat:@"%@ %@", [self.pickerComponentOne objectAtIndex:0], [self.pickerComponentTwo objectAtIndex:0]];
+        
+    } else if ([self.editedFieldKey isEqualToString:@"periodicity"]) {
         cell.textLabel.text = @"Periodicity";
         
         if (self.periodicity != nil) {
@@ -118,8 +131,9 @@
 
 - (IBAction)done:(id)sender
 {
-    if ([self.editedFieldKey isEqualToString:@"monthday"]) {
+    if ([self.editedFieldKey isEqualToString:@"special_monthday"]) {
         // TODO
+        self.monthday = [self.mutableHelperArray copy];
         [self.delegate specialRemindersViewControllerDelegate:self didFinishSelectingMonthday:self.monthday];
         
     } else if ([self.editedFieldKey isEqualToString:@"interval"]) {
@@ -142,7 +156,11 @@
 
 - (void)pickerView:(UIPickerView *)pickerView didSelectRow:(NSInteger)row inComponent:(NSInteger)component
 {
-    if ([self.editedFieldKey isEqualToString:@"periodicity"]) {
+    if ([self.editedFieldKey isEqualToString:@"special_monthday"]) {
+        if (component == 0) [self.mutableHelperArray replaceObjectAtIndex:component withObject:[self.pickerComponentOne objectAtIndex:row]];
+        else [self.mutableHelperArray replaceObjectAtIndex:component withObject:[self.pickerComponentTwo objectAtIndex:row]];
+        
+    } else if ([self.editedFieldKey isEqualToString:@"periodicity"]) {
         [self.mutableHelperArray replaceObjectAtIndex:component withObject:[NSNumber numberWithInt:(row+1)]];
     }
 
@@ -152,12 +170,20 @@
 
 - (CGFloat)pickerView:(UIPickerView *)pickerView widthForComponent:(NSInteger)component
 {
-    return 70;
+    if ([self.editedFieldKey isEqualToString:@"special_monthday"]) {
+        if (component == 0) return 70;
+        else return 120;
+        
+    } else return 70;
 }
 
 - (NSString *)pickerView:(UIPickerView *)pickerView titleForRow:(NSInteger)row forComponent:(NSInteger)component
 {
-    if ([self.editedFieldKey isEqualToString:@"periodicity"]) {
+    if ([self.editedFieldKey isEqualToString:@"special_monthday"]) {
+        if (component == 0) return [NSString stringWithFormat:@"%@", [self.pickerComponentOne objectAtIndex:row]];
+        else return [NSString stringWithFormat:@"%@", [self.pickerComponentTwo objectAtIndex:row]];
+        
+    } else if ([self.editedFieldKey isEqualToString:@"periodicity"]) {
         if (component == 0) return [NSString stringWithFormat:@"%d", [[self.pickerComponentOne objectAtIndex:row] integerValue]];
         else return [NSString stringWithFormat:@"%d", [[self.pickerComponentTwo objectAtIndex:row] integerValue]];
     
@@ -171,22 +197,13 @@
 
 - (NSInteger)pickerView:(UIPickerView *)pickerView numberOfRowsInComponent:(NSInteger)component
 {
-    if ([self.editedFieldKey isEqualToString:@"periodicity"]) {
-        if (component == 0) return [self.pickerComponentOne count];
-        else if (component == 1) return [self.pickerComponentTwo count];
-    
-    } else {
-        // TODO
-    }
-    return 10;
+    if (component == 0) return [self.pickerComponentOne count];
+    else return [self.pickerComponentTwo count];
 }
 
 - (NSInteger)numberOfComponentsInPickerView:(UIPickerView *)pickerView
 {
-    if ([self.editedFieldKey isEqualToString:@"periodicity"]) {
-        return 2;
-    
-    } else return 1;
+    return 2;
 }
 
 @end

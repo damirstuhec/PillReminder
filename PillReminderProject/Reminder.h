@@ -2,7 +2,7 @@
 //  Reminder.h
 //  PillReminderProject
 //
-//  Created by Damir Stuhec on 5/17/12.
+//  Created by Damir Stuhec on 5/22/12.
 //  Copyright (c) 2012 FERI Maribor, Slovenia. All rights reserved.
 //
 
@@ -12,7 +12,6 @@
 @class Pill;
 
 @interface Reminder : NSManagedObject
-
 @property (nonatomic, retain) NSString *alarm_sound;
 @property (nonatomic, retain) NSDate *end_date;
 @property (nonatomic, retain) NSArray *hours;
@@ -23,6 +22,7 @@
 @property (nonatomic, retain) NSNumber *reminder_type;
 @property (nonatomic, retain) NSDate *start_date;
 @property (nonatomic, retain) NSArray *weekdays;
+@property (nonatomic, retain) NSArray *notifications;
 @property (nonatomic, retain) NSArray *special_monthday;
 @property (nonatomic, retain) NSSet *pills;
 @end

@@ -27,68 +27,6 @@
 #define SIMPLE_SECTION 0
 #define SPECIAL_SECTION 1
 
-- (id)initWithStyle:(UITableViewStyle)style
-{
-    self = [super initWithStyle:style];
-    if (self) {
-        // Custom initialization
-    }
-    return self;
-}
-
-/*
-#pragma mark - Getters and Setters
-
-- (NSArray *)weekdays {
-    if (_weekdays == nil) {
-        _weekdays = [[NSArray alloc] initWithObjects:[NSNumber numberWithInt:0],
-                                                     [NSNumber numberWithInt:0], 
-                                                     [NSNumber numberWithInt:0],
-                                                     [NSNumber numberWithInt:0],
-                                                     [NSNumber numberWithInt:0],
-                                                     [NSNumber numberWithInt:0], 
-                                                     [NSNumber numberWithInt:0], nil];
-    }
-    return _weekdays;
-}
-- (void)setWeekdays:(NSArray *)weekdays {
-    _weekdays = weekdays;
-}
-
-- (NSArray *)monthday {
-    if (_monthday == nil) {
-        _monthday = [[NSArray alloc] initWithObjects:[NSNumber numberWithInt:0],
-                                                     [NSNumber numberWithInt:0], nil];
-    }
-    return _monthday;
-}
-- (void)setMonthday:(NSArray *)monthday {
-    _monthday = monthday;
-}
-
-- (NSArray *)interval {
-    if (_interval == nil) {
-        _interval = [[NSArray alloc] initWithObjects:[NSNumber numberWithInt:0],
-                                                     [NSNumber numberWithInt:0], nil];
-    }
-    return _interval;
-}
-- (void)setInterval:(NSArray *)interval {
-    _interval = interval;
-}
-
-- (NSArray *)periodicity {
-    if (_periodicity == nil) {
-        _periodicity = [[NSArray alloc] initWithObjects:[NSNumber numberWithInt:0],
-                                                        [NSNumber numberWithInt:0], nil];
-    }
-    return _periodicity;
-}
-- (void)setPeriodicity:(NSArray *)periodicity {
-    _periodicity = periodicity;
-}
-*/
-
 
 - (void)viewDidLoad
 {
@@ -254,13 +192,16 @@
         
         specialRemindersViewController.delegate = self;
         if (indexPath.row == 1) {
-            // TODO
+            if (!self.monthday) {
+                self.monthday = [[NSArray alloc] initWithObjects:@"", @"", nil];
+            }
+            specialRemindersViewController.monthday = self.monthday;
+            specialRemindersViewController.editedFieldKey = @"special_monthday";
         
         } else if (indexPath.row == 2) {
             // TODO
             
         } else if (indexPath.row == 3) {
-            // TODO
             if (!self.periodicity) {
                 self.periodicity = [[NSArray alloc] initWithObjects:[NSNumber numberWithInt:0],
                                                                 [NSNumber numberWithInt:0], nil];

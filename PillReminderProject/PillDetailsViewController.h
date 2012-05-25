@@ -9,7 +9,7 @@
 #import <UIKit/UIKit.h>
 #import "Pill.h"
 
-@interface PillDetailsViewController : UITableViewController
+@interface PillDetailsViewController : UITableViewController <UIAlertViewDelegate>
 @property (nonatomic, strong) Pill* pill;
 - (IBAction)remindMeSwitched:(id)sender;
 @end

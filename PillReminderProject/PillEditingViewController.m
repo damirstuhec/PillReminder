@@ -89,7 +89,7 @@
         self.textField.text = [NSString stringWithFormat:@"%@", [self.editedPill valueForKey:self.editedFieldKey]];
     
     }else if (self.editingPillsPerDose) {
-        self.textFieldLabel.text = @"Pills per dose";
+        self.textFieldLabel.text = @"Pills per intake";
         NSMutableArray *temp = [[NSMutableArray alloc] initWithCapacity:99];
         for (int i=1; i<100; i++) {
             [temp addObject:[NSString stringWithFormat:@"%d", i]];
