@@ -89,8 +89,6 @@
 
 - (void)application:(UIApplication *)application didReceiveLocalNotification:(UILocalNotification *)notification
 {
-    NSLog(@"%@", __PRETTY_FUNCTION__);
-    
     NSDictionary *userInfoDictionary = notification.userInfo;
     NSString *pillName = [userInfoDictionary valueForKey:@"pill.name"];
     NSString *pillStrength = [userInfoDictionary valueForKey:@"pill.strength"];
@@ -110,6 +108,7 @@
     [self stop:notification ifLastDate:pillEndDate];
 }
 
+/*
 - (void)initializeiCloudAccess {
     dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), ^{
         if ([[NSFileManager defaultManager] URLForUbiquityContainerIdentifier:nil] != nil)
@@ -118,5 +117,6 @@
             NSLog(@"This tutorial requires iCloud, but it is not available.\n");
     });
 }
+*/
 
 @end

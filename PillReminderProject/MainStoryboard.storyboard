@@ -12,26 +12,26 @@
                 <placeholder placeholderIdentifier="IBFirstResponder" id="pNR-hw-5Jo" userLabel="First Responder" sceneMemberID="firstResponder"/>
                 <tableViewController id="UNy-mS-EsR" customClass="PillsViewController" sceneMemberID="viewController">
                     <tableView key="view" opaque="NO" clipsSubviews="YES" clearsContextBeforeDrawing="NO" contentMode="scaleToFill" alwaysBounceVertical="YES" showsHorizontalScrollIndicator="NO" dataMode="prototypes" style="plain" rowHeight="44" sectionHeaderHeight="22" sectionFooterHeight="22" id="l3a-2G-Bm0">
-                        <rect key="frame" x="0.0" y="64" width="320" height="416"/>
-                        <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+                        <rect key="frame" x="0.0" y="64" width="320" height="372"/>
+                        <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES" flexibleMaxY="YES"/>
                         <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                         <prototypes>
-                            <tableViewCell contentMode="scaleToFill" selectionStyle="blue" accessoryType="disclosureIndicator" hidesAccessoryWhenEditing="NO" indentationLevel="1" indentationWidth="0.0" reuseIdentifier="Pill Cell" textLabel="PGz-Qh-ULg" detailTextLabel="r9P-Fb-aiB" style="IBUITableViewCellStyleSubtitle" id="JhP-Fi-Aul">
-                                <rect key="frame" x="0.0" y="22" width="320" height="44"/>
+                            <tableViewCell contentMode="scaleToFill" selectionStyle="blue" accessoryType="disclosureIndicator" hidesAccessoryWhenEditing="NO" indentationLevel="1" indentationWidth="0.0" reuseIdentifier="Pill Cell" textLabel="PGz-Qh-ULg" detailTextLabel="r9P-Fb-aiB" rowHeight="60" style="IBUITableViewCellStyleSubtitle" id="JhP-Fi-Aul">
+                                <rect key="frame" x="0.0" y="22" width="320" height="60"/>
                                 <autoresizingMask key="autoresizingMask"/>
                                 <view key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center">
-                                    <rect key="frame" x="0.0" y="0.0" width="300" height="43"/>
+                                    <rect key="frame" x="0.0" y="0.0" width="300" height="59"/>
                                     <autoresizingMask key="autoresizingMask"/>
                                     <subviews>
                                         <label opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" text="Title" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" id="PGz-Qh-ULg">
-                                            <rect key="frame" x="10" y="1" width="37" height="23"/>
+                                            <rect key="frame" x="10" y="9" width="37" height="23"/>
                                             <autoresizingMask key="autoresizingMask"/>
                                             <fontDescription key="fontDescription" name="HelveticaNeue-Bold" family="Helvetica Neue" pointSize="18"/>
                                             <color key="textColor" red="0.16862745100000001" green="0.30588235289999999" blue="0.41176470590000003" alpha="1" colorSpace="calibratedRGB"/>
                                             <color key="highlightedColor" red="1" green="1" blue="1" alpha="1" colorSpace="calibratedRGB"/>
                                         </label>
                                         <label opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" text="Subtitle" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" id="r9P-Fb-aiB">
-                                            <rect key="frame" x="10" y="24" width="48" height="18"/>
+                                            <rect key="frame" x="10" y="32" width="48" height="18"/>
                                             <autoresizingMask key="autoresizingMask"/>
                                             <fontDescription key="fontDescription" name="HelveticaNeue" family="Helvetica Neue" pointSize="14"/>
                                             <color key="textColor" red="0.50196081399917603" green="0.50196081399917603" blue="0.50196081399917603" alpha="1" colorSpace="calibratedRGB"/>
@@ -50,6 +50,9 @@
                             <outlet property="delegate" destination="UNy-mS-EsR" id="q9p-UB-eLu"/>
                         </connections>
                     </tableView>
+                    <toolbarItems>
+                        <barButtonItem systemItem="edit" id="68v-p5-uep"/>
+                    </toolbarItems>
                     <navigationItem key="navigationItem" title="Pills" id="jMO-YE-3Lm">
                         <barButtonItem key="rightBarButtonItem" systemItem="add" id="6Ss-ZS-yQt">
                             <connections>
@@ -189,6 +192,7 @@
                         </connections>
                     </tableView>
                     <navigationItem key="navigationItem" id="xCh-JQ-BGL"/>
+                    <nil key="simulatedBottomBarMetrics"/>
                     <connections>
                         <segue destination="fVZ-jN-NH6" kind="push" identifier="EditPillData" id="Ksw-1a-6BR"/>
                         <segue destination="5kl-Ne-t9r" kind="push" identifier="AddPillNote" id="0Rx-ey-BbA"/>
@@ -1113,20 +1117,102 @@ AQABAAEAAQAB//+dkAEA//+PgAAE//+dkAEI//+dkAEMUERUAFBTVABQV1QAUFBUAAAAAAEAAAABA
         <scene sceneID="nbx-0c-LK5">
             <objects>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="v2J-dD-KGs" userLabel="First Responder" sceneMemberID="firstResponder"/>
-                <navigationController id="eF4-gK-pNB" sceneMemberID="viewController">
+                <navigationController toolbarHidden="NO" id="eF4-gK-pNB" sceneMemberID="viewController">
                     <toolbarItems/>
+                    <simulatedToolbarMetrics key="simulatedBottomBarMetrics"/>
                     <navigationBar key="navigationBar" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" id="YZt-gh-cMw">
                         <rect key="frame" x="0.0" y="0.0" width="320" height="44"/>
                         <autoresizingMask key="autoresizingMask"/>
                         <color key="tintColor" red="0.16862745100000001" green="0.30588235289999999" blue="0.41176470590000003" alpha="1" colorSpace="calibratedRGB"/>
                     </navigationBar>
                     <nil name="viewControllers"/>
+                    <toolbar key="toolbar" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" id="POC-5T-yan">
+                        <rect key="frame" x="0.0" y="436" width="320" height="44"/>
+                        <autoresizingMask key="autoresizingMask"/>
+                    </toolbar>
                     <connections>
-                        <segue destination="UNy-mS-EsR" kind="relationship" relationship="rootViewController" id="hSO-8o-x34"/>
+                        <segue destination="KhR-Go-F6M" kind="relationship" relationship="rootViewController" id="Cht-dH-5vr"/>
                     </connections>
                 </navigationController>
             </objects>
-            <point key="canvasLocation" x="-719" y="54"/>
+            <point key="canvasLocation" x="-1249" y="54"/>
+        </scene>
+        <!--View Controller - Pill Reminder-->
+        <scene sceneID="Dhz-70-edt">
+            <objects>
+                <placeholder placeholderIdentifier="IBFirstResponder" id="fRD-Ks-o4L" userLabel="First Responder" sceneMemberID="firstResponder"/>
+                <viewController id="KhR-Go-F6M" sceneMemberID="viewController">
+                    <view key="view" contentMode="scaleToFill" id="pWr-LF-6if">
+                        <rect key="frame" x="0.0" y="64" width="320" height="372"/>
+                        <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                        <subviews>
+                            <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" id="qzC-xW-tmx">
+                                <rect key="frame" x="20" y="20" width="280" height="81"/>
+                                <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                                <fontDescription key="fontDescription" type="boldSystem" pointSize="15"/>
+                                <state key="normal">
+                                    <color key="titleColor" red="0.19607843459999999" green="0.30980393290000002" blue="0.52156865600000002" alpha="1" colorSpace="calibratedRGB"/>
+                                    <color key="titleShadowColor" white="0.5" alpha="1" colorSpace="calibratedWhite"/>
+                                </state>
+                                <state key="highlighted">
+                                    <color key="titleColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
+                                </state>
+                                <connections>
+                                    <segue destination="UNy-mS-EsR" kind="push" id="yPb-2U-ejg"/>
+                                </connections>
+                            </button>
+                            <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" id="5Yo-Sz-oBD">
+                                <rect key="frame" x="20" y="109" width="280" height="90"/>
+                                <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                                <fontDescription key="fontDescription" type="boldSystem" pointSize="15"/>
+                                <state key="normal">
+                                    <color key="titleColor" red="0.19607843459999999" green="0.30980393290000002" blue="0.52156865600000002" alpha="1" colorSpace="calibratedRGB"/>
+                                    <color key="titleShadowColor" white="0.5" alpha="1" colorSpace="calibratedWhite"/>
+                                </state>
+                                <state key="highlighted">
+                                    <color key="titleColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
+                                </state>
+                            </button>
+                            <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" id="zb9-Bd-L2d">
+                                <rect key="frame" x="20" y="207" width="280" height="90"/>
+                                <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                                <fontDescription key="fontDescription" type="boldSystem" pointSize="15"/>
+                                <state key="normal">
+                                    <color key="titleColor" red="0.19607843459999999" green="0.30980393290000002" blue="0.52156865600000002" alpha="1" colorSpace="calibratedRGB"/>
+                                    <color key="titleShadowColor" white="0.5" alpha="1" colorSpace="calibratedWhite"/>
+                                </state>
+                                <state key="highlighted">
+                                    <color key="titleColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
+                                </state>
+                            </button>
+                            <label opaque="NO" clipsSubviews="YES" userInteractionEnabled="NO" contentMode="left" text="Pills" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" minimumFontSize="10" id="OyS-x2-mRX">
+                                <rect key="frame" x="35" y="73" width="250" height="21"/>
+                                <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                                <fontDescription key="fontDescription" type="boldSystem" pointSize="18"/>
+                                <color key="textColor" cocoaTouchSystemColor="darkTextColor"/>
+                                <nil key="highlightedColor"/>
+                            </label>
+                            <label opaque="NO" clipsSubviews="YES" userInteractionEnabled="NO" contentMode="left" text="Schedule" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" minimumFontSize="10" id="hRY-vm-YJD">
+                                <rect key="frame" x="35" y="171" width="250" height="21"/>
+                                <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                                <fontDescription key="fontDescription" type="boldSystem" pointSize="18"/>
+                                <color key="textColor" cocoaTouchSystemColor="darkTextColor"/>
+                                <nil key="highlightedColor"/>
+                            </label>
+                            <label opaque="NO" clipsSubviews="YES" userInteractionEnabled="NO" contentMode="left" text="History" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" minimumFontSize="10" id="aGb-H3-0e2">
+                                <rect key="frame" x="35" y="269" width="250" height="21"/>
+                                <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                                <fontDescription key="fontDescription" type="boldSystem" pointSize="18"/>
+                                <color key="textColor" cocoaTouchSystemColor="darkTextColor"/>
+                                <nil key="highlightedColor"/>
+                            </label>
+                        </subviews>
+                        <color key="backgroundColor" cocoaTouchSystemColor="groupTableViewBackgroundColor"/>
+                    </view>
+                    <navigationItem key="navigationItem" title="Pill Reminder" id="hYS-4Q-1gN"/>
+                </viewController>
+            </objects>
+            <point key="canvasLocation" x="-757" y="54"/>
         </scene>
         <!--Navigation Controller-->
         <scene sceneID="x29-Gg-FBP">
@@ -1148,72 +1234,6 @@ AQABAAEAAQAB//+dkAEA//+PgAAE//+dkAEI//+dkAEMUERUAFBTVABQV1QAUFBUAAAAAAEAAAABA
             <point key="canvasLocation" x="-267" y="-541"/>
         </scene>
     </scenes>
-    <classes>
-        <class className="CoreDataTableViewController" superclassName="UITableViewController">
-            <source key="sourceIdentifier" type="project" relativePath="./Classes/CoreDataTableViewController.h"/>
-        </class>
-        <class className="PillAddingViewController" superclassName="PillDetailsViewController">
-            <source key="sourceIdentifier" type="project" relativePath="./Classes/PillAddingViewController.h"/>
-            <relationships>
-                <relationship kind="action" name="cancel:"/>
-                <relationship kind="action" name="save:"/>
-            </relationships>
-        </class>
-        <class className="PillDetailsViewController" superclassName="UITableViewController">
-            <source key="sourceIdentifier" type="project" relativePath="./Classes/PillDetailsViewController.h"/>
-            <relationships>
-                <relationship kind="action" name="remindMeSwitched:"/>
-            </relationships>
-        </class>
-        <class className="PillEditingViewController" superclassName="UIViewController">
-            <source key="sourceIdentifier" type="project" relativePath="./Classes/PillEditingViewController.h"/>
-            <relationships>
-                <relationship kind="outlet" name="textField" candidateClass="UITextField"/>
-                <relationship kind="outlet" name="textFieldLabel" candidateClass="UILabel"/>
-                <relationship kind="outlet" name="textView" candidateClass="UITextView"/>
-                <relationship kind="outlet" name="wheelPicker" candidateClass="UIPickerView"/>
-            </relationships>
-        </class>
-        <class className="PillNotesList" superclassName="UITableViewController">
-            <source key="sourceIdentifier" type="project" relativePath="./Classes/PillNotesList.h"/>
-        </class>
-        <class className="PillsViewController" superclassName="CoreDataTableViewController">
-            <source key="sourceIdentifier" type="project" relativePath="./Classes/PillsViewController.h"/>
-        </class>
-        <class className="RemindMeCell" superclassName="UITableViewCell">
-            <source key="sourceIdentifier" type="project" relativePath="./Classes/RemindMeCell.h"/>
-            <relationships>
-                <relationship kind="outlet" name="remindMeSwitch" candidateClass="UISwitch"/>
-            </relationships>
-        </class>
-        <class className="ReminderDateViewController" superclassName="UIViewController">
-            <source key="sourceIdentifier" type="project" relativePath="./Classes/ReminderDateViewController.h"/>
-            <relationships>
-                <relationship kind="action" name="datePickerValueChanged:"/>
-                <relationship kind="outlet" name="datePicker" candidateClass="UIDatePicker"/>
-                <relationship kind="outlet" name="mainTableView" candidateClass="UITableView"/>
-            </relationships>
-        </class>
-        <class className="ReminderFrequencyViewController" superclassName="UITableViewController">
-            <source key="sourceIdentifier" type="project" relativePath="./Classes/ReminderFrequencyViewController.h"/>
-        </class>
-        <class className="ReminderSoundViewController" superclassName="UITableViewController">
-            <source key="sourceIdentifier" type="project" relativePath="./Classes/ReminderSoundViewController.h"/>
-        </class>
-        <class className="ReminderTypeViewController" superclassName="UITableViewController">
-            <source key="sourceIdentifier" type="project" relativePath="./Classes/ReminderTypeViewController.h"/>
-        </class>
-        <class className="SpecialRemindersViewController" superclassName="UIViewController">
-            <source key="sourceIdentifier" type="project" relativePath="./Classes/SpecialRemindersViewController.h"/>
-            <relationships>
-                <relationship kind="outlet" name="mainTableView" candidateClass="UITableView"/>
-                <relationship kind="outlet" name="pickerView" candidateClass="UIPickerView"/>
-            </relationships>
-        </class>
-        <class className="WeekdaysViewController" superclassName="UITableViewController">
-            <source key="sourceIdentifier" type="project" relativePath="./Classes/WeekdaysViewController.h"/>
-        </class>
-    </classes>
     <simulatedMetricsContainer key="defaultSimulatedMetrics">
         <simulatedStatusBarMetrics key="statusBar"/>
         <simulatedOrientationMetrics key="orientation"/>

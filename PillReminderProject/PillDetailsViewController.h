@@ -9,9 +9,13 @@
 #import <UIKit/UIKit.h>
 #import "Pill.h"
 
+@protocol PillDetailsViewControllerDelegate;
+
 @interface PillDetailsViewController : UITableViewController <UIAlertViewDelegate>
 @property (nonatomic, strong) Pill* pill;
 - (IBAction)remindMeSwitched:(id)sender;
+
+@property (nonatomic, weak) id <PillDetailsViewControllerDelegate> detailsDelegate;
 @end
 
 @interface PillDetailsViewController (Private)
@@ -19,4 +23,8 @@
 - (void)setUpUndoManager;
 - (void)cleanUpUndoManager;
 
+@end
+
+@protocol PillDetailsViewControllerDelegate
+- (void)pillDetailsViewController:(PillDetailsViewController *)controller didFinishWithSave:(BOOL)save;
 @end

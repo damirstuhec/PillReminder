@@ -10,7 +10,7 @@
 #import "CoreDataTableViewController.h"
 #import "PillAddingViewController.h"
 
-@interface PillsViewController : CoreDataTableViewController <PillAddingViewControllerDelegate>
+@interface PillsViewController : CoreDataTableViewController <PillAddingViewControllerDelegate, PillDetailsViewControllerDelegate>
 
 @property (nonatomic, strong) UIManagedDocument *pillReminderDatabase;     // Model is a Core Data database of pills
 

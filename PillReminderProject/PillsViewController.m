@@ -11,10 +11,114 @@
 #import "PillDetailsViewController.h"
 
 
+@interface PillsViewController()
+@property (nonatomic, strong) NSMetadataQuery *iCloudQuery;
+@end
+
 @implementation PillsViewController
 
 @synthesize pillReminderDatabase = _pillReminderDatabase;
+@synthesize iCloudQuery = _iCloudQuery;
 
+
+#pragma mark - iCloud Query
+
+- (NSMetadataQuery *)iCloudQuery
+{
+    if (!_iCloudQuery) {
+        _iCloudQuery = [[NSMetadataQuery alloc] init];
+        _iCloudQuery.searchScopes = [NSArray arrayWithObject:NSMetadataQueryUbiquitousDocumentsScope];
+        _iCloudQuery.predicate = [NSPredicate predicateWithFormat:@"%K like '*'", NSMetadataItemFSNameKey];
+        [[NSNotificationCenter defaultCenter] addObserver:self
+                                                 selector:@selector(processCloudQueryResults:)
+                                                     name:NSMetadataQueryDidFinishGatheringNotification
+                                                   object:_iCloudQuery];
+        [[NSNotificationCenter defaultCenter] addObserver:self
+                                                 selector:@selector(processCloudQueryResults:)
+                                                     name:NSMetadataQueryDidUpdateNotification
+                                                   object:_iCloudQuery];
+    }
+    return _iCloudQuery;
+}
+
+- (NSURL *)iCloudURL
+{
+    return [[NSFileManager defaultManager] URLForUbiquityContainerIdentifier:nil];
+}
+
+- (NSURL *)iCloudDocumentsURL
+{
+    return [[self iCloudURL] URLByAppendingPathComponent:@"Documents"];
+}
+
+
+- (NSURL *)filePackageURLForCloudURL:(NSURL *)url
+{
+    if ([[url path] hasPrefix:[[self iCloudDocumentsURL] path]]) {
+        NSArray *iCloudDocumentsURLComponents = [[self iCloudDocumentsURL] pathComponents];
+        NSArray *urlComponents = [url pathComponents];
+        if ([iCloudDocumentsURLComponents count] < [urlComponents count]) {
+            urlComponents = [urlComponents subarrayWithRange:NSMakeRange(0, [iCloudDocumentsURLComponents count]+1)];
+            url = [NSURL fileURLWithPathComponents:urlComponents];
+        }
+    }
+    return url;
+}
+
+- (void)logError:(NSError *)error inMethod:(SEL)method
+{
+    NSString *errorDescription = error.localizedDescription;
+    if (!errorDescription) errorDescription = @"???";
+    NSString *errorFailureReason = error.localizedFailureReason;
+    if (!errorFailureReason) errorFailureReason = @"???";
+    if (error) NSLog(@"[%@ %@] %@ (%@)", NSStringFromClass([self class]), NSStringFromSelector(method), errorDescription, errorFailureReason);
+}
+
+
+- (void)removeCloudURL:(NSURL *)url
+{
+    [[NSUbiquitousKeyValueStore defaultStore] removeObjectForKey:[url lastPathComponent]];
+    dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), ^{
+        NSFileCoordinator *coordinator = [[NSFileCoordinator alloc] initWithFilePresenter:nil];
+        NSError *coordinationError;
+        [coordinator coordinateWritingItemAtURL:url options:NSFileCoordinatorWritingForDeleting error:&coordinationError byAccessor:^(NSURL *newURL) {
+            NSError *removeError;
+            [[NSFileManager defaultManager] removeItemAtURL:newURL error:&removeError];
+            [self logError:removeError inMethod:_cmd]; // _cmd means "this method" (it's a SEL)
+            // should also remove log files in CoreData directory in the cloud!
+            // i.e., delete the files in [self iCloudCoreDataLogFilesURL]/[url lastPathComponent]
+        }];
+        [self logError:coordinationError inMethod:_cmd];
+    });
+}
+
+- (void)processCloudQueryResults:(NSNotification *)notification
+{
+    [self.iCloudQuery disableUpdates];
+    int resultCount = [self.iCloudQuery resultCount];
+    
+    if (resultCount < 1 || resultCount > 1) {
+        NSLog(@"Napaka: %d dokumentov", resultCount);
+        for (int i=0; i<resultCount; i++) {
+            NSMetadataItem *item = [self.iCloudQuery resultAtIndex:i];
+            NSURL *url = [item valueForAttribute:NSMetadataItemURLKey];
+            url = [self filePackageURLForCloudURL:url];
+            
+            [self removeCloudURL:url];
+        }
+    
+    } else {
+        NSLog(@"OK - 1 dokument");
+        NSMetadataItem *item = [self.iCloudQuery resultAtIndex:0];
+        NSURL *url = [item valueForAttribute:NSMetadataItemURLKey]; // this will be a file, not a directory
+        url = [self filePackageURLForCloudURL:url];
+        if (![url isEqual:self.pillReminderDatabase.fileURL]) {
+            self.pillReminderDatabase = [[UIManagedDocument alloc] initWithFileURL:url];
+            [self setPersistentStoreOptionsInDocument:self.pillReminderDatabase];
+        }
+    }
+    [self.iCloudQuery enableUpdates];
+}
 
 // attaches an NSFetchRequest to this UITableViewController
 - (void)setupFetchedResultsController
@@ -76,11 +180,11 @@
     }
 }
 
-
+// sprememba
 - (void)setPillReminderDatabase:(UIManagedDocument *)pillReminderDatabase
 {
     if (_pillReminderDatabase != pillReminderDatabase) {
-        /*
+        
         [[NSNotificationCenter defaultCenter] removeObserver:self  // remove observing of old document (if any)
                                                         name:NSPersistentStoreDidImportUbiquitousContentChangesNotification
                                                       object:_pillReminderDatabase.managedObjectContext.persistentStoreCoordinator];
@@ -88,9 +192,9 @@
                                                         name:UIDocumentStateChangedNotification
                                                       object:_pillReminderDatabase];
         
-        */
+        
         _pillReminderDatabase = pillReminderDatabase;
-        /*
+        
         [[NSNotificationCenter defaultCenter] addObserver:self
                                                  selector:@selector(documentContentsChanged:)
                                                      name:NSPersistentStoreDidImportUbiquitousContentChangesNotification
@@ -99,19 +203,22 @@
                                                  selector:@selector(documentStateChanged:)
                                                      name:UIDocumentStateChangedNotification
                                                    object:_pillReminderDatabase];
-        */
+        
         [self useDocument];
     }
 }
-/*
+
+// sprememba
 - (void)documentContentsChanged:(NSNotification *)notification
 {
+    NSLog(@"halo1");
     [self.pillReminderDatabase.managedObjectContext mergeChangesFromContextDidSaveNotification:notification];
 }
 
-
+// sprememba
 - (void)documentStateChanged:(NSNotification *)notification
 {
+    NSLog(@"halo2");
     if (self.pillReminderDatabase.documentState & UIDocumentStateInConflict) {
         // look at the changes in notification's userInfo and resolve conflicts
         //   or just take the latest version (by doing nothing)
@@ -131,51 +238,33 @@
             if (error) NSLog(@"[%@ %@] %@ (%@)", NSStringFromClass([self class]), NSStringFromSelector(_cmd), error.localizedDescription, error.localizedFailureReason);
         });
     } else if (self.pillReminderDatabase.documentState & UIDocumentStateSavingError) {
-        // try again?
+        NSLog(@"SAVING ERROR");
     }
 }
-*/
-
 
 - (void)viewWillAppear:(BOOL)animated
 {
     [super viewWillAppear:animated];
     
-    /*
-    NSCalendar *gregorian = [[NSCalendar alloc] initWithCalendarIdentifier:NSGregorianCalendar];
-    NSTimeZone *UTC = [NSTimeZone defaultTimeZone]; //timeZoneWithName:@"UTC"];
-    
-    NSDateComponents *startComponents = [gregorian components:NSHourCalendarUnit | NSMinuteCalendarUnit | NSSecondCalendarUnit fromDate:[NSDate date]];
-    [startComponents setTimeZone:UTC];
-    [startComponents setDay:29];
-    [startComponents setMonth:5];
-    [startComponents setYear:2012];
-
-    NSDate *start = [gregorian dateFromComponents:startComponents];
-    NSLog(@"DATUM start: %@", start);
-    
-    NSDateComponents *fireComponents = [gregorian components:NSHourCalendarUnit | NSMinuteCalendarUnit | NSSecondCalendarUnit | NSMonthCalendarUnit | NSYearCalendarUnit fromDate:start];
-    [fireComponents setTimeZone:UTC];
-    [fireComponents setWeekday:2]; // Monday
-    int weekdayOrdinal = 1;
-    [fireComponents setWeekdayOrdinal:weekdayOrdinal];
-    
-    NSDate *fire = [gregorian dateFromComponents:fireComponents];
-
-    while ([fire compare:start] == NSOrderedAscending) {
-        weekdayOrdinal++;
-        [fireComponents setWeekdayOrdinal:weekdayOrdinal];
-        fire = [gregorian dateFromComponents:fireComponents];
-    }
-    NSLog(@"DATUM fire: %@", fire);
-    */
-    
     if (!self.pillReminderDatabase) {
-        NSURL *url = [[[NSFileManager defaultManager] URLsForDirectory:NSDocumentDirectory 
-                                                             inDomains:NSUserDomainMask] lastObject];
+        NSURL *url = [[self iCloudDocumentsURL] URLByAppendingPathComponent:@"Default PillReminder Database"];
+        
+        //NSURL *url = [[[NSFileManager defaultManager] URLsForDirectory:NSDocumentDirectory 
+                                                             //inDomains:NSUserDomainMask] lastObject];
         url = [url URLByAppendingPathComponent:@"Default PillReminder Database"];
         self.pillReminderDatabase = [[UIManagedDocument alloc] initWithFileURL:url];
+        [self setPersistentStoreOptionsInDocument:self.pillReminderDatabase];
     }
+    
+    [self.tableView reloadData];
+    if (![self.iCloudQuery isStarted]) [self.iCloudQuery startQuery];
+    [self.iCloudQuery enableUpdates];
+}
+
+- (void)viewWillDisappear:(BOOL)animated
+{
+    [super viewWillDisappear:animated];
+    [self.iCloudQuery disableUpdates];
 }
 
 
@@ -184,7 +273,9 @@
     [super viewDidLoad];
     
     // Set up the edit and add buttons.
-    self.navigationItem.leftBarButtonItem = self.editButtonItem;
+    self.toolbarItems = [NSArray arrayWithObject:self.editButtonItem];
+    self.navigationController.toolbar.tintColor = [UIColor colorWithRed:.168f green:.305f blue:.411f alpha:1.0f];
+    //self.navigationItem.leftBarButtonItem = self.editButtonItem;
 }
 
 
@@ -209,21 +300,37 @@
 
 - (void)tableView:(UITableView *)tableView commitEditingStyle:(UITableViewCellEditingStyle)editingStyle forRowAtIndexPath:(NSIndexPath *)indexPath
 {    
-    if (editingStyle == UITableViewCellEditingStyleDelete) {
-        
-        // Delete the managed object.
-        NSManagedObjectContext *context = [self.fetchedResultsController managedObjectContext];
-        [context deleteObject:[self.fetchedResultsController objectAtIndexPath:indexPath]];
+    //if (editingStyle == UITableViewCellEditingStyleDelete) {
+    if (!(self.pillReminderDatabase.documentState & UIDocumentStateEditingDisabled)) {
+        Pill *pill = [self.fetchedResultsController objectAtIndexPath:indexPath];
+        [self.fetchedResultsController.managedObjectContext deleteObject:pill];
         
         NSLog(@"SAVING!");
-        /*NSError *error;
-        if (![context save:&error]) {
-            NSLog(@"Unresolved error %@, %@", error, [error userInfo]);
-            abort();
-        }*/
-    }   
+        
+        [self.pillReminderDatabase saveToURL:self.pillReminderDatabase.fileURL forSaveOperation:UIDocumentSaveForOverwriting completionHandler:NULL];
+
+    } else {
+        // notify user that deletion is not currently possible? (probably not)
+        // we probably also should return NO from canDeleteRowAtIndexPath: whenever editing is disabled
+    }  
 }
 
+- (NSURL *)iCloudCoreDataLogFilesURL
+{
+    return [[self iCloudURL] URLByAppendingPathComponent:@"CoreData"];
+}
+
+- (void)setPersistentStoreOptionsInDocument:(UIManagedDocument *)document
+{
+    NSMutableDictionary *options = [NSMutableDictionary dictionary];
+    [options setObject:[NSNumber numberWithBool:YES] forKey:NSMigratePersistentStoresAutomaticallyOption];
+    [options setObject:[NSNumber numberWithBool:YES] forKey:NSInferMappingModelAutomaticallyOption];
+    
+    [options setObject:[document.fileURL lastPathComponent] forKey:NSPersistentStoreUbiquitousContentNameKey];
+    [options setObject:[self iCloudCoreDataLogFilesURL] forKey:NSPersistentStoreUbiquitousContentURLKey];
+    
+    document.persistentStoreOptions = options;
+}
 
 - (void)prepareForSegue:(UIStoryboardSegue *)segue sender:(id)sender
 {
@@ -275,27 +382,11 @@
  */
 - (void)pillAddingViewController:(PillAddingViewController *)controller didFinishWithSave:(BOOL)save
 {
+    NSLog(@"LOG: SAVING NEW: %d", save);
     if (save) {
-        /*
-         The new book is associated with the add controller's managed object context.
-         This means that any edits that are made don't affect the application's main managed object context -- it's a way of keeping disjoint edits in a separate scratchpad. Saving changes to that context, though, only push changes to the fetched results controller's context. To save the changes to the persistent store, you have to save the fetch results controller's context as well.
-         */
-        
-        //NSError *error;
-        //NSManagedObjectContext *addingManagedObjectContext = [controller managedObjectContext];
-        
-        /*NSLog(@"SAVING!");
-        if (![addingManagedObjectContext save:&error]) {
-            NSLog(@"Unresolved error %@, %@", error, [error userInfo]);
-            abort();
-        }*/
         
         NSLog(@"SAVING!");
-        /*if (![[self.fetchedResultsController managedObjectContext] save:&error]) {
-            NSLog(@"Unresolved error %@, %@", error, [error userInfo]);
-            abort();
-        }
-        */
+        
         [self.pillReminderDatabase saveToURL:self.pillReminderDatabase.fileURL forSaveOperation:UIDocumentSaveForOverwriting completionHandler:^(BOOL success) {
             if (!success) NSLog(@"Failed to save document %@", self.pillReminderDatabase.localizedName);
         }];
@@ -303,6 +394,27 @@
     
     // Dismiss the modal view to return to the main list
     [self dismissModalViewControllerAnimated:YES];
+}
+
+- (void)pillDetailsViewController:(PillDetailsViewController *)controller didFinishWithSave:(BOOL)save
+{
+    NSLog(@"LOG: SAVING: %d", save);
+    if (save) {
+        
+        NSLog(@"SAVING!");
+        
+        [self.pillReminderDatabase saveToURL:self.pillReminderDatabase.fileURL forSaveOperation:UIDocumentSaveForOverwriting completionHandler:^(BOOL success) {
+            if (!success) NSLog(@"Failed to save document %@", self.pillReminderDatabase.localizedName);
+        }];
+    }
+    
+    // Dismiss the modal view to return to the main list
+    [self dismissModalViewControllerAnimated:YES];
+}
+
+- (void)dealloc
+{
+    [[NSNotificationCenter defaultCenter] removeObserver:self];
 }
 
 @end

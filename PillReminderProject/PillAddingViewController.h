@@ -15,7 +15,6 @@
 
 @property (nonatomic, weak) id <PillAddingViewControllerDelegate> delegate;
 @property (nonatomic, strong) NSManagedObjectContext *managedObjectContext;
-
 @end
 
 @protocol PillAddingViewControllerDelegate

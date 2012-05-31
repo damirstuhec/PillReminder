@@ -38,6 +38,7 @@
 
 @synthesize undoManager = _undoManager;
 @synthesize pillNotes = _pillNotes;
+@synthesize detailsDelegate = _detailsDelegate;
 
 @synthesize pill = _pill;
 
@@ -244,24 +245,7 @@
         
         
         
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
+
         
         /*
         NSCalendar *calendar = [NSCalendar autoupdatingCurrentCalendar];
@@ -444,6 +428,11 @@
 - (void)setEditing:(BOOL)editing animated:(BOOL)animated
 {
     [super setEditing:editing animated:animated];
+    
+    if (editing == NO) {
+        [self.detailsDelegate pillDetailsViewController:self didFinishWithSave:YES];
+        NSLog(@"halo");
+    }
     
     // Hide the back button when editing starts, and show it again when editing finishes.
     [self.navigationItem setHidesBackButton:editing animated:animated];

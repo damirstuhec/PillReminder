@@ -11,6 +11,6 @@
 @interface PRAppDelegate : UIResponder <UIApplicationDelegate>
 
 @property (strong, nonatomic) UIWindow *window;
-- (void)initializeiCloudAccess;
+//- (void)initializeiCloudAccess;
 - (void)stop:(UILocalNotification *)notification ifLastDate:(NSDate *)lastDate;
 @end
