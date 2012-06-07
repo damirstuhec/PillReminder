@@ -17,6 +17,7 @@
 		265C30BB154AA82D000C255E /* PillReminderModel.xcdatamodeld in Sources */ = {isa = PBXBuildFile; fileRef = 265C30B9154AA82D000C255E /* PillReminderModel.xcdatamodeld */; };
 		265DE5BF15567FC9004C9303 /* redButton.png in Resources */ = {isa = PBXBuildFile; fileRef = 265DE5BE15567FC9004C9303 /* redButton.png */; };
 		2667C99B1562E373002A50D6 /* RemindMeCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 2667C99A1562E373002A50D6 /* RemindMeCell.m */; };
+		26761A3E1577FF060009C653 /* AskerViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 26761A3D1577FF060009C653 /* AskerViewController.m */; };
 		2686F43D156507AE0026AE56 /* AudioToolbox.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 2686F43C156507AE0026AE56 /* AudioToolbox.framework */; };
 		2686F447156538E80026AE56 /* ReminderFrequencyViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 2686F446156538E80026AE56 /* ReminderFrequencyViewController.m */; };
 		2686F44A156539150026AE56 /* WeekdaysViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 2686F449156539150026AE56 /* WeekdaysViewController.m */; };
@@ -27,6 +28,10 @@
 		26DAFBFB152E28A90025B7CF /* InfoPlist.strings in Resources */ = {isa = PBXBuildFile; fileRef = 26DAFBF9152E28A90025B7CF /* InfoPlist.strings */; };
 		26DAFBFD152E28A90025B7CF /* main.m in Sources */ = {isa = PBXBuildFile; fileRef = 26DAFBFC152E28A90025B7CF /* main.m */; };
 		26DAFC01152E28A90025B7CF /* PRAppDelegate.m in Sources */ = {isa = PBXBuildFile; fileRef = 26DAFC00152E28A90025B7CF /* PRAppDelegate.m */; };
+		26E0D26A1578B8EA00A7124A /* mainButton.png in Resources */ = {isa = PBXBuildFile; fileRef = 26E0D2691578B8EA00A7124A /* mainButton.png */; };
+		26E0D26D1578C53800A7124A /* History.m in Sources */ = {isa = PBXBuildFile; fileRef = 26E0D26C1578C53800A7124A /* History.m */; };
+		26E0D2701578C56A00A7124A /* History+Create.m in Sources */ = {isa = PBXBuildFile; fileRef = 26E0D26F1578C56A00A7124A /* History+Create.m */; };
+		26E0D2731578C92700A7124A /* HistoryViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 26E0D2721578C92700A7124A /* HistoryViewController.m */; };
 		26E9B7F4155D3D6700CDF370 /* ReminderDateViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 26E9B7F3155D3D6700CDF370 /* ReminderDateViewController.m */; };
 		26EAB8CA15411DF2003BD336 /* CoreDataTableViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 26EAB8BD15411DF2003BD336 /* CoreDataTableViewController.m */; };
 		26EAB8CC15411DF2003BD336 /* Pill+Create.m in Sources */ = {isa = PBXBuildFile; fileRef = 26EAB8C115411DF2003BD336 /* Pill+Create.m */; };
@@ -58,6 +63,8 @@
 		265DE5BE15567FC9004C9303 /* redButton.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = redButton.png; sourceTree = "<group>"; };
 		2667C9991562E372002A50D6 /* RemindMeCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = RemindMeCell.h; sourceTree = "<group>"; };
 		2667C99A1562E373002A50D6 /* RemindMeCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = RemindMeCell.m; sourceTree = "<group>"; };
+		26761A3C1577FF060009C653 /* AskerViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = AskerViewController.h; sourceTree = "<group>"; };
+		26761A3D1577FF060009C653 /* AskerViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = AskerViewController.m; sourceTree = "<group>"; };
 		2686F43C156507AE0026AE56 /* AudioToolbox.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = AudioToolbox.framework; path = System/Library/Frameworks/AudioToolbox.framework; sourceTree = SDKROOT; };
 		2686F445156538E80026AE56 /* ReminderFrequencyViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ReminderFrequencyViewController.h; sourceTree = "<group>"; };
 		2686F446156538E80026AE56 /* ReminderFrequencyViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ReminderFrequencyViewController.m; sourceTree = "<group>"; };
@@ -75,6 +82,13 @@
 		26DAFBFE152E28A90025B7CF /* PillReminderProject-Prefix.pch */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "PillReminderProject-Prefix.pch"; sourceTree = "<group>"; };
 		26DAFBFF152E28A90025B7CF /* PRAppDelegate.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = PRAppDelegate.h; sourceTree = "<group>"; };
 		26DAFC00152E28A90025B7CF /* PRAppDelegate.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = PRAppDelegate.m; sourceTree = "<group>"; };
+		26E0D2691578B8EA00A7124A /* mainButton.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = mainButton.png; sourceTree = "<group>"; };
+		26E0D26B1578C53800A7124A /* History.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = History.h; sourceTree = "<group>"; };
+		26E0D26C1578C53800A7124A /* History.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = History.m; sourceTree = "<group>"; };
+		26E0D26E1578C56A00A7124A /* History+Create.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "History+Create.h"; sourceTree = "<group>"; };
+		26E0D26F1578C56A00A7124A /* History+Create.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "History+Create.m"; sourceTree = "<group>"; };
+		26E0D2711578C92700A7124A /* HistoryViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = HistoryViewController.h; sourceTree = "<group>"; };
+		26E0D2721578C92700A7124A /* HistoryViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = HistoryViewController.m; sourceTree = "<group>"; };
 		26E9B7F2155D3D6700CDF370 /* ReminderDateViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ReminderDateViewController.h; sourceTree = "<group>"; };
 		26E9B7F3155D3D6700CDF370 /* ReminderDateViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ReminderDateViewController.m; sourceTree = "<group>"; };
 		26EAB8BC15411DF2003BD336 /* CoreDataTableViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CoreDataTableViewController.h; sourceTree = "<group>"; };
@@ -113,6 +127,8 @@
 		263D553F154AA285002C65B6 /* View Controllers */ = {
 			isa = PBXGroup;
 			children = (
+				26E0D2711578C92700A7124A /* HistoryViewController.h */,
+				26E0D2721578C92700A7124A /* HistoryViewController.m */,
 				2686F44B1565395B0026AE56 /* SpecialRemindersViewController.h */,
 				2686F44C1565395B0026AE56 /* SpecialRemindersViewController.m */,
 				2686F448156539150026AE56 /* WeekdaysViewController.h */,
@@ -139,6 +155,8 @@
 				26EAB8C515411DF2003BD336 /* PillDetailsViewController.m */,
 				26EAB8C615411DF2003BD336 /* PillEditingViewController.h */,
 				26EAB8C715411DF2003BD336 /* PillEditingViewController.m */,
+				26761A3C1577FF060009C653 /* AskerViewController.h */,
+				26761A3D1577FF060009C653 /* AskerViewController.m */,
 			);
 			name = "View Controllers";
 			sourceTree = "<group>";
@@ -156,6 +174,7 @@
 		265DE5BC15567FAA004C9303 /* Images */ = {
 			isa = PBXGroup;
 			children = (
+				26E0D2691578B8EA00A7124A /* mainButton.png */,
 				265DE5BE15567FC9004C9303 /* redButton.png */,
 			);
 			name = Images;
@@ -238,6 +257,10 @@
 				263A0BF7155E56C90027C799 /* Reminder+Create.m */,
 				26EAB8C015411DF2003BD336 /* Pill+Create.h */,
 				26EAB8C115411DF2003BD336 /* Pill+Create.m */,
+				26E0D26E1578C56A00A7124A /* History+Create.h */,
+				26E0D26F1578C56A00A7124A /* History+Create.m */,
+				26E0D26B1578C53800A7124A /* History.h */,
+				26E0D26C1578C53800A7124A /* History.m */,
 			);
 			name = "Model Classes";
 			sourceTree = "<group>";
@@ -298,6 +321,7 @@
 				265DE5BF15567FC9004C9303 /* redButton.png in Resources */,
 				26F4D7E2156AABFB0006C13A /* morning.caf in Resources */,
 				26F4D7E3156AABFB0006C13A /* reminding.caf in Resources */,
+				26E0D26A1578B8EA00A7124A /* mainButton.png in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -328,6 +352,10 @@
 				2686F44A156539150026AE56 /* WeekdaysViewController.m in Sources */,
 				2686F44D1565395B0026AE56 /* SpecialRemindersViewController.m in Sources */,
 				2638FB93156BD125008A334D /* Reminder.m in Sources */,
+				26761A3E1577FF060009C653 /* AskerViewController.m in Sources */,
+				26E0D26D1578C53800A7124A /* History.m in Sources */,
+				26E0D2701578C56A00A7124A /* History+Create.m in Sources */,
+				26E0D2731578C92700A7124A /* HistoryViewController.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

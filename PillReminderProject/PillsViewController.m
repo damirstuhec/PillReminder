@@ -7,19 +7,70 @@
 //
 
 #import "PillsViewController.h"
-#import "Pill+Create.h"
 #import "PillDetailsViewController.h"
+#import "AskerViewController.h"
+#import "Pill+Create.h"
 
 
-@interface PillsViewController()
+@interface PillsViewController() <AskerViewControllerDelegate>
+@property (nonatomic, strong) NSArray *documents;
 @property (nonatomic, strong) NSMetadataQuery *iCloudQuery;
+@property (nonatomic, strong) Pill *pill;
 @end
 
 @implementation PillsViewController
 
-@synthesize pillReminderDatabase = _pillReminderDatabase;
+@synthesize documents = _documents;
 @synthesize iCloudQuery = _iCloudQuery;
+@synthesize pill = _pill;
+//@synthesize pillReminderDatabase = _pillReminderDatabase;   // odstrani kasneje
 
+
+
+
+
+- (void)createDocumentWithURL:(NSURL *)url
+{
+    NSLog(@"Create new UIManagedDocument");
+    UIManagedDocument *document = [[UIManagedDocument alloc] initWithFileURL:url];
+    [document saveToURL:url forSaveOperation:UIDocumentSaveForCreating completionHandler:^(BOOL success) {
+        
+        if (success) {
+            /*NSLog(@"konec shranjevanja");
+            
+            Pill *newPill = [Pill pillWithName:[document.fileURL lastPathComponent] strength:@"0 mg" perDose:[NSNumber numberWithInteger:1] warnings:@"" sideEffects:@"" storage:@"" extra:@"" inManagedObjectContext:document.managedObjectContext];//addingContext];
+            
+            NSLog(@"ponovno shranim");
+            [document saveToURL:document.fileURL forSaveOperation:UIDocumentSaveForOverwriting completionHandler:^(BOOL success){
+                if(!success) NSLog(@"failed to save document");
+                if(success) NSLog(@"Success: save document");
+            }];
+            */
+        } else {
+            NSLog(@"failed to SAVE!");
+        }
+    }];
+}
+
+- (void)setDocuments:(NSArray *)documents
+{
+    documents = [documents sortedArrayUsingComparator:^NSComparisonResult(NSURL *url1, NSURL *url2) {
+        return [[url1 lastPathComponent] caseInsensitiveCompare:[url2 lastPathComponent]];
+    }];
+    
+    if (![_documents isEqualToArray:documents]) {
+        _documents = documents;
+        [self.tableView reloadData];
+        NSLog(@"doc3-2: %d", [self.documents count]);
+    }
+    
+    for (int i=0; i<_documents.count; i++) {
+        if (![[NSFileManager defaultManager] fileExistsAtPath:[[_documents objectAtIndex:i] path]]) {
+            [self createDocumentWithURL:[_documents objectAtIndex:i]];
+        }
+    }
+    NSLog(@"doc3: %d", [self.documents count]);
+}
 
 #pragma mark - iCloud Query
 
@@ -65,63 +116,27 @@
     return url;
 }
 
-- (void)logError:(NSError *)error inMethod:(SEL)method
-{
-    NSString *errorDescription = error.localizedDescription;
-    if (!errorDescription) errorDescription = @"???";
-    NSString *errorFailureReason = error.localizedFailureReason;
-    if (!errorFailureReason) errorFailureReason = @"???";
-    if (error) NSLog(@"[%@ %@] %@ (%@)", NSStringFromClass([self class]), NSStringFromSelector(method), errorDescription, errorFailureReason);
-}
-
-
-- (void)removeCloudURL:(NSURL *)url
-{
-    [[NSUbiquitousKeyValueStore defaultStore] removeObjectForKey:[url lastPathComponent]];
-    dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), ^{
-        NSFileCoordinator *coordinator = [[NSFileCoordinator alloc] initWithFilePresenter:nil];
-        NSError *coordinationError;
-        [coordinator coordinateWritingItemAtURL:url options:NSFileCoordinatorWritingForDeleting error:&coordinationError byAccessor:^(NSURL *newURL) {
-            NSError *removeError;
-            [[NSFileManager defaultManager] removeItemAtURL:newURL error:&removeError];
-            [self logError:removeError inMethod:_cmd]; // _cmd means "this method" (it's a SEL)
-            // should also remove log files in CoreData directory in the cloud!
-            // i.e., delete the files in [self iCloudCoreDataLogFilesURL]/[url lastPathComponent]
-        }];
-        [self logError:coordinationError inMethod:_cmd];
-    });
-}
-
 - (void)processCloudQueryResults:(NSNotification *)notification
 {
     [self.iCloudQuery disableUpdates];
+    
+    NSMutableArray *documents = [NSMutableArray array];
     int resultCount = [self.iCloudQuery resultCount];
+    NSLog(@"LOG: resultCount = %d", resultCount);
     
-    if (resultCount < 1 || resultCount > 1) {
-        NSLog(@"Napaka: %d dokumentov", resultCount);
-        for (int i=0; i<resultCount; i++) {
-            NSMetadataItem *item = [self.iCloudQuery resultAtIndex:i];
-            NSURL *url = [item valueForAttribute:NSMetadataItemURLKey];
-            url = [self filePackageURLForCloudURL:url];
-            
-            [self removeCloudURL:url];
-        }
-    
-    } else {
-        NSLog(@"OK - 1 dokument");
-        NSMetadataItem *item = [self.iCloudQuery resultAtIndex:0];
-        NSURL *url = [item valueForAttribute:NSMetadataItemURLKey]; // this will be a file, not a directory
+    for (int i=0; i<resultCount; i++) {
+        NSMetadataItem *item = [self.iCloudQuery resultAtIndex:i];
+        NSURL *url = [item valueForAttribute:NSMetadataItemURLKey];
         url = [self filePackageURLForCloudURL:url];
-        if (![url isEqual:self.pillReminderDatabase.fileURL]) {
-            self.pillReminderDatabase = [[UIManagedDocument alloc] initWithFileURL:url];
-            [self setPersistentStoreOptionsInDocument:self.pillReminderDatabase];
-        }
+        if (url && ![documents containsObject:url]) [documents addObject:url];
     }
+    self.documents = documents;
+    
     [self.iCloudQuery enableUpdates];
 }
 
 // attaches an NSFetchRequest to this UITableViewController
-- (void)setupFetchedResultsController
+/*- (void)setupFetchedResultsController
 {
     NSFetchRequest *request = [NSFetchRequest fetchRequestWithEntityName:@"Pill"];
     request.sortDescriptors = [NSArray arrayWithObject:[NSSortDescriptor sortDescriptorWithKey:@"name" 
@@ -134,8 +149,9 @@
                                                                           sectionNameKeyPath:nil
                                                                                    cacheName:nil];
 }
+*/
 
-
+/*
 - (void)prepopulateDataIntoDocument:(UIManagedDocument *)document
 {
     dispatch_queue_t fetchQ = dispatch_queue_create("Prepopulate pills data", NULL);
@@ -149,8 +165,9 @@
     });
     dispatch_release(fetchQ);
 }
+*/
 
-
+/*
 - (void)useDocument
 {
     if (![[NSFileManager defaultManager] fileExistsAtPath:[self.pillReminderDatabase.fileURL path]]) {
@@ -179,7 +196,9 @@
         [self setupFetchedResultsController];
     }
 }
+*/
 
+/*
 // sprememba
 - (void)setPillReminderDatabase:(UIManagedDocument *)pillReminderDatabase
 {
@@ -207,7 +226,8 @@
         [self useDocument];
     }
 }
-
+*/
+/*
 // sprememba
 - (void)documentContentsChanged:(NSNotification *)notification
 {
@@ -241,7 +261,8 @@
         NSLog(@"SAVING ERROR");
     }
 }
-
+*/
+/*
 - (void)viewWillAppear:(BOOL)animated
 {
     [super viewWillAppear:animated];
@@ -266,7 +287,23 @@
     [super viewWillDisappear:animated];
     [self.iCloudQuery disableUpdates];
 }
+*/
 
+- (void)viewWillAppear:(BOOL)animated
+{
+    [super viewWillAppear:animated];
+    [self.tableView reloadData]; // step 38: ugh!
+    if (![self.iCloudQuery isStarted]) [self.iCloudQuery startQuery];
+    [self.iCloudQuery enableUpdates];
+    
+    NSLog(@"doc1: %d", [self.documents count]);
+}
+
+- (void)viewWillDisappear:(BOOL)animated
+{
+    [self.iCloudQuery disableUpdates];
+    [super viewWillDisappear:animated];
+}
 
 - (void)viewDidLoad
 {
@@ -278,7 +315,18 @@
     //self.navigationItem.leftBarButtonItem = self.editButtonItem;
 }
 
+#pragma mark - UITableViewDataSource
 
+// 6. Implement UITableViewDataSource number of rows in section and cellForRowAtIndexPath: using Model
+// Back to top for step 7.
+
+- (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section
+{
+    NSLog(@"doc2: %d", [self.documents count]);
+    return [self.documents count];
+}
+
+/*
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath
 {
     static NSString *CellIdentifier = @"Pill Cell";
@@ -296,8 +344,65 @@
     
     return cell;
 }
+*/
+
+- (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath
+{
+    static NSString *CellIdentifier = @"Pill Cell";
+    
+    UITableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:CellIdentifier];
+    if (cell == nil) {
+        cell = [[UITableViewCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:CellIdentifier];
+    }
+    NSLog(@"cellforrow");
+    // Configure the cell...
+    NSURL *url = [self.documents objectAtIndex:indexPath.row];
+    cell.textLabel.text = [url lastPathComponent];
+    cell.detailTextLabel.text = nil;
+    
+    return cell;
+}
+
+- (void)logError:(NSError *)error inMethod:(SEL)method
+{
+    NSString *errorDescription = error.localizedDescription;
+    if (!errorDescription) errorDescription = @"???";
+    NSString *errorFailureReason = error.localizedFailureReason;
+    if (!errorFailureReason) errorFailureReason = @"???";
+    if (error) NSLog(@"[%@ %@] %@ (%@)", NSStringFromClass([self class]), NSStringFromSelector(method), errorDescription, errorFailureReason);
+}
 
 
+- (void)removeCloudURL:(NSURL *)url
+{
+    [[NSUbiquitousKeyValueStore defaultStore] removeObjectForKey:[url lastPathComponent]];
+    dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), ^{
+        NSFileCoordinator *coordinator = [[NSFileCoordinator alloc] initWithFilePresenter:nil];
+        NSError *coordinationError;
+        [coordinator coordinateWritingItemAtURL:url options:NSFileCoordinatorWritingForDeleting error:&coordinationError byAccessor:^(NSURL *newURL) {
+            NSError *removeError;
+            [[NSFileManager defaultManager] removeItemAtURL:newURL error:&removeError];
+            [self logError:removeError inMethod:_cmd]; // _cmd means "this method" (it's a SEL)
+            // should also remove log files in CoreData directory in the cloud!
+            // i.e., delete the files in [self iCloudCoreDataLogFilesURL]/[url lastPathComponent]
+        }];
+        [self logError:coordinationError inMethod:_cmd];
+    });
+}
+
+- (void)tableView:(UITableView *)tableView commitEditingStyle:(UITableViewCellEditingStyle)editingStyle forRowAtIndexPath:(NSIndexPath *)indexPath
+{
+    if (editingStyle == UITableViewCellEditingStyleDelete) {
+        NSURL *url = [self.documents objectAtIndex:indexPath.row];
+        NSMutableArray *documents = [self.documents mutableCopy];
+        [documents removeObject:url];
+        _documents = documents;  // Argh!
+        [tableView deleteRowsAtIndexPaths:[NSArray arrayWithObject:indexPath] withRowAnimation:UITableViewRowAnimationFade];
+        [self removeCloudURL:url];
+    }   
+}
+
+/*
 - (void)tableView:(UITableView *)tableView commitEditingStyle:(UITableViewCellEditingStyle)editingStyle forRowAtIndexPath:(NSIndexPath *)indexPath
 {    
     //if (editingStyle == UITableViewCellEditingStyleDelete) {
@@ -314,6 +419,7 @@
         // we probably also should return NO from canDeleteRowAtIndexPath: whenever editing is disabled
     }  
 }
+*/
 
 - (NSURL *)iCloudCoreDataLogFilesURL
 {
@@ -332,25 +438,18 @@
     document.persistentStoreOptions = options;
 }
 
+/*
 - (void)prepareForSegue:(UIStoryboardSegue *)segue sender:(id)sender
 {
     NSIndexPath *indexPath = [self.tableView indexPathForCell:sender];
     Pill *pill = [self.fetchedResultsController objectAtIndexPath:indexPath];
     
-    /*
-    if ([segue.destinationViewController respondsToSelector:@selector(setPill:)]) {
-        [segue.destinationViewController performSelector:@selector(setPill:) withObject:pill];
-    }
-    */
+    
+    //if ([segue.destinationViewController respondsToSelector:@selector(setPill:)]) {
+    //    [segue.destinationViewController performSelector:@selector(setPill:) withObject:pill];
+    //}
     
     if ([[segue identifier] isEqualToString:@"AddPill"]) {
-        
-        /*
-         The destination view controller for this segue is an AddViewController to manage addition of the book.
-         This block a new managed object context as a child of the root view controller's context. It then creates a new book using the child context. This means that changes made to the book remain discrete from the application's managed object context until the book's context is saved.
-         The root view controller sets itself as the delegate of the add controller so that it can be informed when the user has completed the add operation -- either saving or canceling (see addViewController:didFinishWithSave:).
-         IMPORTANT: It's not necessary to use a second context for this. You could just use the existing context, which would simplify some of the code -- you wouldn't need to perform two saves, for example. This implementation, though, illustrates a pattern that may sometimes be useful (where you want to maintain a separate set of edits).
-         */
         
         UINavigationController *navController = (UINavigationController *)[segue destinationViewController];
         PillAddingViewController *pillAddingViewController = (PillAddingViewController *)[navController topViewController];
@@ -373,45 +472,118 @@
         pillDetailsViewController.pill = pill;
     }  
 }
+*/
 
+- (void)prepareForSegue:(UIStoryboardSegue *)segue sender:(id)sender
+{
+    if ([segue.identifier isEqualToString:@"AddPill"]) {
+        AskerViewController *asker = (AskerViewController *)segue.destinationViewController;
+        asker.delegate = self;
+        asker.question = @"New pill name:";
+
+    } else {
+        NSIndexPath *indexPath = nil;
+        if ([sender isKindOfClass:[NSIndexPath class]]) {
+            indexPath = (NSIndexPath *)sender;
+        } else if ([sender isKindOfClass:[UITableViewCell class]]) {
+            indexPath = [self.tableView indexPathForCell:sender];
+        } else if (!sender || (sender == self) || (sender == self.tableView)) {
+            indexPath = [self.tableView indexPathForSelectedRow];
+        }
+        
+        if (indexPath && [segue.identifier isEqualToString:@"ShowPillDetails"]) {
+            if ([segue.destinationViewController conformsToProtocol:@protocol(PillsViewControllerSegue)]) {
+                NSURL *url = [self.documents objectAtIndex:indexPath.row];
+                [segue.destinationViewController setTitle:[url lastPathComponent]];
+                UIManagedDocument *document = [[UIManagedDocument alloc] initWithFileURL:url];
+                [self setPersistentStoreOptionsInDocument:document]; // make cloud Core Data documents efficient!
+                [segue.destinationViewController setDocument:document];
+                
+                //Pill *newPill = [Pill pillWithName:[document.fileURL lastPathComponent] strength:@"0 mg" perDose:[NSNumber numberWithInteger:1] warnings:@"" sideEffects:@"" storage:@"" extra:@"" inManagedObjectContext:document.managedObjectContext];//addingContext];
+                
+                //[segue.destinationViewController setPill:newPill];
+                
+                /*
+                NSFetchRequest *request = [[NSFetchRequest alloc] init];
+                NSEntityDescription *entity = [NSEntityDescription entityForName:@"Pill" inManagedObjectContext:document.managedObjectContext];
+                [request setEntity:entity];
+                
+                NSPredicate *predicate = [NSPredicate predicateWithFormat: @"name = %@", [document.fileURL lastPathComponent]];
+                [request setPredicate:predicate];
+                
+                // Edit the sort key as appropriate.
+                request.sortDescriptors = [NSArray arrayWithObject:[NSSortDescriptor sortDescriptorWithKey:@"name" 
+                                                                                                 ascending:YES 
+                                                                                                  selector:@selector(localizedCaseInsensitiveCompare:)]];
+                
+                NSError *error = nil;
+                NSArray *result = [document.managedObjectContext executeFetchRequest:request error:&error];
+                
+                NSLog(@"RESULT COUNT: %d", [result count]);
+                NSLog(@"self.pill.name: %@", [[result objectAtIndex:0] name]); */
+            }
+        }
+    }
+}
 
 #pragma mark - Add controller delegate
+
+- (void)askerViewController:(AskerViewController *)sender
+             didAskQuestion:(NSString *)question
+               andGotAnswer:(NSString *)answer
+{
+    NSURL *url = [[self iCloudDocumentsURL] URLByAppendingPathComponent:answer];
+    
+    if ([[NSFileManager defaultManager] fileExistsAtPath:[url path]]) {
+        UIAlertView *alert = [[UIAlertView alloc] initWithTitle:@"Warning" message:@"Pill with given name already exists.\nPlease set new name."
+                                                       delegate:self cancelButtonTitle:@"OK" otherButtonTitles: nil];
+        [alert show];
+    } else {
+        NSMutableArray *documents = [self.documents mutableCopy];
+        [documents addObject:url];
+        self.documents = documents;
+        int row = [self.documents indexOfObject:url];
+        //UIManagedDocument *document = [[UIManagedDocument alloc] initWithFileURL:[self.documents objectAtIndex:row]];
+        //[self setPersistentStoreOptionsInDocument:document]; // make cloud Core Data documents efficient!
+        NSLog(@"segue");
+        NSIndexPath *indexPath = [NSIndexPath indexPathForRow:row inSection:0];
+        [self performSegueWithIdentifier:@"ShowPillDetails" sender:indexPath];
+        [self dismissModalViewControllerAnimated:YES];
+    }
+}
 
 /*
  Add controller's delegate method; informs the delegate that the add operation has completed, and indicates whether the user saved the new pill.
  */
-- (void)pillAddingViewController:(PillAddingViewController *)controller didFinishWithSave:(BOOL)save
-{
-    NSLog(@"LOG: SAVING NEW: %d", save);
-    if (save) {
-        
-        NSLog(@"SAVING!");
-        
-        [self.pillReminderDatabase saveToURL:self.pillReminderDatabase.fileURL forSaveOperation:UIDocumentSaveForOverwriting completionHandler:^(BOOL success) {
-            if (!success) NSLog(@"Failed to save document %@", self.pillReminderDatabase.localizedName);
-        }];
-    }
-    
-    // Dismiss the modal view to return to the main list
-    [self dismissModalViewControllerAnimated:YES];
-}
 
-- (void)pillDetailsViewController:(PillDetailsViewController *)controller didFinishWithSave:(BOOL)save
+/*
+- (void)pillAddingViewController:(PillAddingViewController *)controller didSave:(BOOL)save withDocument:(UIManagedDocument *)document
 {
-    NSLog(@"LOG: SAVING: %d", save);
     if (save) {
-        
-        NSLog(@"SAVING!");
-        
-        [self.pillReminderDatabase saveToURL:self.pillReminderDatabase.fileURL forSaveOperation:UIDocumentSaveForOverwriting completionHandler:^(BOOL success) {
-            if (!success) NSLog(@"Failed to save document %@", self.pillReminderDatabase.localizedName);
-        }];
-    }
+        NSURL *url = document.fileURL;
     
-    // Dismiss the modal view to return to the main list
-    [self dismissModalViewControllerAnimated:YES];
+        if ([[NSFileManager defaultManager] fileExistsAtPath:[url path]]) {
+            UIAlertView *alert = [[UIAlertView alloc] initWithTitle:@"Warning" message:@"Pill with given name already exists.\nPlease set new name."
+                                                           delegate:self cancelButtonTitle:@"OK" otherButtonTitles: nil];
+            [alert show];
+        } else {
+            NSMutableArray *documents = [self.documents mutableCopy];
+            [documents addObject:url];
+            self.documents = documents;
+        
+            int row = [self.documents indexOfObject:url];
+            NSIndexPath *indexPath = [NSIndexPath indexPathForRow:row inSection:0];
+            [self performSegueWithIdentifier:@"Show Document" sender:indexPath];
+            [self dismissModalViewControllerAnimated:YES];
+        
+            //[self.tableView reloadData];
+            //NSLog(@"dodajam dokument. Skupno stevilo=%d", [self.documents count]);
+        }
+    } else {
+        [self dismissModalViewControllerAnimated:YES];
+    }
 }
-
+*/
 - (void)dealloc
 {
     [[NSNotificationCenter defaultCenter] removeObserver:self];

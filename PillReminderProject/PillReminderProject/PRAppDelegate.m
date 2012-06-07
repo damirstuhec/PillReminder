@@ -7,10 +7,12 @@
 //
 
 #import "PRAppDelegate.h"
+#import "History+Create.h"
 
 @implementation PRAppDelegate
 
 @synthesize window = _window;
+@synthesize historyDocument = _historyDocument;
 
 - (BOOL)application:(UIApplication *)application didFinishLaunchingWithOptions:(NSDictionary *)launchOptions
 {
@@ -105,6 +107,11 @@
                                               otherButtonTitles: nil];
         [alert show];
     }
+    NSDateFormatter *dateFormat = [[NSDateFormatter alloc] init];
+    [dateFormat setDateFormat:@"dd. MM. yyyy"];
+    
+    [History historyWithPillName:pillName strength:pillStrength andDate:[dateFormat stringFromDate:[NSDate date]] inManagedObjectContext:self.historyDocument.managedObjectContext];
+    
     [self stop:notification ifLastDate:pillEndDate];
 }
 

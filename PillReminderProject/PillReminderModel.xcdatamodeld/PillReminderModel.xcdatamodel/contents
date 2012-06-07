@@ -1,5 +1,10 @@
 <?xml version="1.0" encoding="UTF-8" standalone="yes"?>
 <model name="" userDefinedModelVersionIdentifier="" type="com.apple.IDECoreDataModeler.DataModel" documentVersion="1.0" lastSavedToolsVersion="1171" systemVersion="11D50" minimumToolsVersion="Automatic" macOSVersion="Automatic" iOSVersion="Automatic">
+    <entity name="History" representedClassName="History" syncable="YES">
+        <attribute name="date" optional="YES" attributeType="String" syncable="YES"/>
+        <attribute name="pillName" optional="YES" attributeType="String" syncable="YES"/>
+        <attribute name="pillStrength" optional="YES" attributeType="String" syncable="YES"/>
+    </entity>
     <entity name="Pill" representedClassName="Pill" syncable="YES">
         <attribute name="extra" optional="YES" attributeType="String" syncable="YES"/>
         <attribute name="name" optional="YES" attributeType="String" syncable="YES"/>
@@ -28,5 +33,6 @@
     <elements>
         <element name="Pill" positionX="-45" positionY="135" width="128" height="165"/>
         <element name="Reminder" positionX="-414" positionY="60" width="128" height="240"/>
+        <element name="History" positionX="160" positionY="192" width="128" height="90"/>
     </elements>
 </model>

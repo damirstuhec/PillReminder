@@ -10,6 +10,7 @@
 
 @interface PRAppDelegate : UIResponder <UIApplicationDelegate>
 
+@property (strong, nonatomic) UIManagedDocument *historyDocument;
 @property (strong, nonatomic) UIWindow *window;
 //- (void)initializeiCloudAccess;
 - (void)stop:(UILocalNotification *)notification ifLastDate:(NSDate *)lastDate;

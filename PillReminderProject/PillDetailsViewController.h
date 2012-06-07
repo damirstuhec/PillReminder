@@ -8,14 +8,12 @@
 
 #import <UIKit/UIKit.h>
 #import "Pill.h"
+#import "CoreDataTableViewController.h"
 
-@protocol PillDetailsViewControllerDelegate;
-
-@interface PillDetailsViewController : UITableViewController <UIAlertViewDelegate>
-@property (nonatomic, strong) Pill* pill;
+@interface PillDetailsViewController : CoreDataTableViewController <UIAlertViewDelegate>
+@property (nonatomic, strong) Pill *pill;
+@property (nonatomic, strong) UIManagedDocument *pillDatabase;
 - (IBAction)remindMeSwitched:(id)sender;
-
-@property (nonatomic, weak) id <PillDetailsViewControllerDelegate> detailsDelegate;
 @end
 
 @interface PillDetailsViewController (Private)
@@ -23,8 +21,4 @@
 - (void)setUpUndoManager;
 - (void)cleanUpUndoManager;
 
-@end
-
-@protocol PillDetailsViewControllerDelegate
-- (void)pillDetailsViewController:(PillDetailsViewController *)controller didFinishWithSave:(BOOL)save;
 @end

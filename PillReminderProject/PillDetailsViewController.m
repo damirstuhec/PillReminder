@@ -6,6 +6,7 @@
 //  Copyright (c) 2012 FERI Maribor, Slovenia. All rights reserved.
 //
 
+#import "PillsViewController.h"
 #import "PillDetailsViewController.h"
 #import "PillEditingViewController.h"
 #import "PillNotesList.h"
@@ -14,10 +15,10 @@
 #import "ReminderTypeViewController.h"
 #import "ReminderSoundViewController.h"
 #import "ReminderFrequencyViewController.h"
+#import "Pill+Create.h"
 
 
-@interface PillDetailsViewController()
-
+@interface PillDetailsViewController() <PillsViewControllerSegue>
 @property (nonatomic) BOOL hasInsertedAddNoteRow;
 @property (nonatomic) BOOL hasInsertedDeletePillSection;
 
@@ -25,9 +26,7 @@
 @property (nonatomic, strong) NSArray *pillNotes;
 
 - (IBAction)remindMeSwitched:(id)sender;
-
 - (void)updateRightBarButtonItemState;
-
 @end
 
 
@@ -38,9 +37,9 @@
 
 @synthesize undoManager = _undoManager;
 @synthesize pillNotes = _pillNotes;
-@synthesize detailsDelegate = _detailsDelegate;
 
 @synthesize pill = _pill;
+@synthesize pillDatabase = _pillDatabase;
 
 #define PILL_SECTION 0
 #define DOSAGE_SECTION 1
@@ -48,6 +47,193 @@
 #define REMINDER_SECTION 3
 #define REMIND_ME_SECTION 4
 #define DELETE_PILL_SECTION 5
+
+
+- (UIManagedDocument *)document
+{
+    return self.pillDatabase;
+}
+
+- (void)setDocument:(UIManagedDocument *)document
+{
+    self.pillDatabase = document;
+}
+
+
+
+
+
+
+
+- (void)setupFetchedResultsController // attaches an NSFetchRequest to this UITableViewController
+{
+    /*
+    NSFetchRequest *request = [NSFetchRequest fetchRequestWithEntityName:@"Photographer"];
+    request.sortDescriptors = [NSArray arrayWithObject:[NSSortDescriptor sortDescriptorWithKey:@"name" ascending:YES selector:@selector(localizedCaseInsensitiveCompare:)]];
+    // no predicate because we want ALL the Photographers
+    
+    self.fetchedResultsController = [[NSFetchedResultsController alloc] initWithFetchRequest:request
+                                                                        managedObjectContext:self.pillDatabase.managedObjectContext
+                                                                          sectionNameKeyPath:nil
+                                                                                   cacheName:nil];
+     */
+    NSFetchRequest *request = [[NSFetchRequest alloc] init];
+    NSEntityDescription *entity = [NSEntityDescription entityForName:@"Pill" inManagedObjectContext:self.pillDatabase.managedObjectContext];
+    [request setEntity:entity];
+    
+    NSPredicate *predicate = [NSPredicate predicateWithFormat: @"name = %@", [self.pillDatabase.fileURL lastPathComponent]];
+    [request setPredicate:predicate];
+    
+    // Edit the sort key as appropriate.
+    request.sortDescriptors = [NSArray arrayWithObject:[NSSortDescriptor sortDescriptorWithKey:@"name" 
+                                                                                     ascending:YES 
+                                                                                      selector:@selector(localizedCaseInsensitiveCompare:)]];
+    
+    NSError *error = nil;
+    NSArray *result = [self.pillDatabase.managedObjectContext executeFetchRequest:request error:&error];
+    
+    if ([result count] == 0) {
+        NSLog(@"stevilo rezultatov = 0, zato klicem fetchIntoDocument");
+        [self fetchFlickrDataIntoDocument:self.pillDatabase];
+    } else if ([result count] == 1) {
+        NSLog(@"stevilo rezultatov = 1");
+        self.pill = [result objectAtIndex:0];
+        self.title = self.pill.name;
+        
+        NSMutableArray *temp = [self.pillNotes mutableCopy];
+        if (self.pill.warnings != nil) [temp replaceObjectAtIndex:0 withObject:self.pill.warnings];
+        if (self.pill.side_effects != nil) [temp replaceObjectAtIndex:1 withObject:self.pill.side_effects];
+        if (self.pill.storage != nil) [temp replaceObjectAtIndex:2 withObject:self.pill.storage];
+        if (self.pill.extra != nil) [temp replaceObjectAtIndex:3 withObject:self.pill.extra];
+        self.pillNotes = [temp copy];
+        
+        [self.tableView reloadData];
+        [self updateRightBarButtonItemState];
+    }
+}
+
+- (void)save
+{
+    [self.pillDatabase saveToURL:self.pillDatabase.fileURL forSaveOperation:UIDocumentSaveForOverwriting completionHandler:^(BOOL success) {
+        if (success) {
+            NSLog(@"shranjujem ponovno to tabletkosdls2");
+        }
+    }];
+}
+
+- (void)fetchFlickrDataIntoDocument:(UIManagedDocument *)document
+{
+    //[self startSpinner:@"Flickr ..."];
+    dispatch_queue_t fetchQ = dispatch_queue_create("Flickr fetcher", NULL);
+    dispatch_async(fetchQ, ^{
+        [document.managedObjectContext performBlock:^{ // perform in the NSMOC's safe thread (main thread)
+            Pill *newPill = [Pill pillWithName:[document.fileURL lastPathComponent] strength:@"0 mg" perDose:[NSNumber numberWithInteger:1] warnings:@"" sideEffects:@"" storage:@"" extra:@"" inManagedObjectContext:document.managedObjectContext];//addingContext];
+            //[self save]; // see step 35
+            [self.pillDatabase saveToURL:self.pillDatabase.fileURL forSaveOperation:UIDocumentSaveForOverwriting completionHandler:^(BOOL success) {
+                if (success) {
+                    NSLog(@"shranjujem ponovno to tabletkosdls");
+                    [self setupFetchedResultsController];
+                }
+            }];
+            
+        }];
+    });
+    dispatch_release(fetchQ);
+}
+
+- (void)useDocument
+{
+    if (![[NSFileManager defaultManager] fileExistsAtPath:[self.pillDatabase.fileURL path]]) {
+        // does not exist on disk, so create it
+        [self.pillDatabase saveToURL:self.pillDatabase.fileURL forSaveOperation:UIDocumentSaveForCreating completionHandler:^(BOOL success) {
+            //[self setupFetchedResultsController];
+            NSLog(@"PILLDB se ne obstaja");
+            [self fetchFlickrDataIntoDocument:self.pillDatabase];
+        }];
+    } else if (self.pillDatabase.documentState == UIDocumentStateClosed) {
+        // exists on disk, but we need to open it
+        [self.pillDatabase openWithCompletionHandler:^(BOOL success) {
+            NSLog(@"PILLDB obstaja in je zaprt");
+            [self setupFetchedResultsController];
+        }];
+    } else if (self.pillDatabase.documentState == UIDocumentStateNormal) {
+        // already open and ready to use
+        NSLog(@"PILLDB obstaja in je odprt");
+        [self setupFetchedResultsController];
+    }
+}
+
+// 29. Merge changes from other documents when we get the NSNotification that the document has changed
+//     (Now the application can delete photographers and will see when other devices delete photographers.)
+
+- (void)documentContentsChanged:(NSNotification *)notification
+{
+    [self.pillDatabase.managedObjectContext mergeChangesFromContextDidSaveNotification:notification];
+}
+
+// 31. React to document state changing to "in conflict" by just taking the current (most recent) version.  Delete other versions.
+// 32. Could also react to saving errors here.
+
+// Next step is to add a subtitle on documents saying how many photographers are in that document.
+// Go to step 33 back in DocumentViewController.
+
+- (void)documentStateChanged:(NSNotification *)notification
+{
+    if (self.pillDatabase.documentState & UIDocumentStateInConflict) {
+        // look at the changes in notification's userInfo and resolve conflicts
+        //   or just take the latest version (by doing nothing)
+        // in any case (even if you do nothing and take latest version),
+        //   mark all old versions resolved ...
+        NSArray *conflictingVersions = [NSFileVersion unresolvedConflictVersionsOfItemAtURL:self.pillDatabase.fileURL];
+        for (NSFileVersion *version in conflictingVersions) {
+            version.resolved = YES;
+        }
+        // ... and remove the old version files in a separate thread
+        dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), ^{
+            NSFileCoordinator *coordinator = [[NSFileCoordinator alloc] initWithFilePresenter:nil];
+            NSError *error;
+            [coordinator coordinateWritingItemAtURL:self.pillDatabase.fileURL options:NSFileCoordinatorWritingForDeleting error:&error byAccessor:^(NSURL *newURL) {
+                [NSFileVersion removeOtherVersionsOfItemAtURL:self.pillDatabase.fileURL error:NULL];
+            }];
+            if (error) NSLog(@"[%@ %@] %@ (%@)", NSStringFromClass([self class]), NSStringFromSelector(_cmd), error.localizedDescription, error.localizedFailureReason);
+        });
+    } else if (self.pillDatabase.documentState & UIDocumentStateSavingError) {
+        // try again?
+    }
+}
+
+- (void)setPillDatabase:(UIManagedDocument *)pillDatabase
+{
+    if (_pillDatabase != pillDatabase) {
+        [[NSNotificationCenter defaultCenter] removeObserver:self  // remove observing of old document (if any)
+                                                        name:NSPersistentStoreDidImportUbiquitousContentChangesNotification
+                                                      object:_pillDatabase.managedObjectContext.persistentStoreCoordinator];
+        [[NSNotificationCenter defaultCenter] removeObserver:self  // remove observing of old document (if any)
+                                                        name:UIDocumentStateChangedNotification
+                                                      object:_pillDatabase];
+        _pillDatabase = pillDatabase;
+        [[NSNotificationCenter defaultCenter] addObserver:self
+                                                 selector:@selector(documentContentsChanged:)
+                                                     name:NSPersistentStoreDidImportUbiquitousContentChangesNotification
+                                                   object:_pillDatabase.managedObjectContext.persistentStoreCoordinator];
+        [[NSNotificationCenter defaultCenter] addObserver:self
+                                                 selector:@selector(documentStateChanged:)
+                                                     name:UIDocumentStateChangedNotification
+                                                   object:_pillDatabase];
+        if ([[NSFileManager defaultManager] isUbiquitousItemAtURL:pillDatabase.fileURL]) {
+            //[self startSpinner:@"iCloud ..."];
+        }
+        [self useDocument];
+    }
+}
+
+
+
+
+
+
+
+
 
 
 - (void)deleteAllNotificationsForThatPill
@@ -385,6 +571,7 @@
     if ([self class] == [PillDetailsViewController class]) {
         self.title = [NSString stringWithFormat:@"%@", self.pill.name];
         self.navigationItem.rightBarButtonItem = self.editButtonItem;
+        self.navigationItem.rightBarButtonItem.enabled = YES;
     }
     self.tableView.allowsSelection = NO;
     self.tableView.allowsSelectionDuringEditing = YES;
@@ -395,12 +582,14 @@
 {
     [super viewWillAppear:animated];
     
+    if (self.pill != nil) {
     NSMutableArray *temp = [self.pillNotes mutableCopy];
-    [temp replaceObjectAtIndex:0 withObject:self.pill.warnings];
-    [temp replaceObjectAtIndex:1 withObject:self.pill.side_effects];
-    [temp replaceObjectAtIndex:2 withObject:self.pill.storage];
-    [temp replaceObjectAtIndex:3 withObject:self.pill.extra];
+    if (self.pill.warnings != nil) [temp replaceObjectAtIndex:0 withObject:self.pill.warnings];
+    if (self.pill.side_effects != nil) [temp replaceObjectAtIndex:1 withObject:self.pill.side_effects];
+    if (self.pill.storage != nil) [temp replaceObjectAtIndex:2 withObject:self.pill.storage];
+    if (self.pill.extra != nil) [temp replaceObjectAtIndex:3 withObject:self.pill.extra];
     self.pillNotes = [temp copy];
+    }
     
 	// Update pill on return.
     [self.tableView reloadData];
@@ -430,8 +619,7 @@
     [super setEditing:editing animated:animated];
     
     if (editing == NO) {
-        [self.detailsDelegate pillDetailsViewController:self didFinishWithSave:YES];
-        NSLog(@"halo");
+        [self save];
     }
     
     // Hide the back button when editing starts, and show it again when editing finishes.
@@ -994,6 +1182,7 @@
     if ([[segue identifier] isEqualToString:@"EditPillData"]) {
         
         PillEditingViewController *pillEditingViewController = (PillEditingViewController *)[segue destinationViewController];
+        NSLog(@"pill: %@", self.pill);
         pillEditingViewController.editedPill = self.pill;
         
         if (indexPath.section == PILL_SECTION) {

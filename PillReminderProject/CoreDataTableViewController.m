@@ -65,7 +65,7 @@
 }
 
 #pragma mark - UITableViewDataSource
-
+/*
 - (NSInteger)numberOfSectionsInTableView:(UITableView *)tableView
 {
     return [[self.fetchedResultsController sections] count];
@@ -90,7 +90,7 @@
 {
     return [self.fetchedResultsController sectionIndexTitles];
 }
-
+*/
 #pragma mark - NSFetchedResultsControllerDelegate
 
 - (void)controllerWillChangeContent:(NSFetchedResultsController *)controller

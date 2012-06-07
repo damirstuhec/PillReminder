@@ -18,5 +18,5 @@
 @end
 
 @protocol PillAddingViewControllerDelegate
-- (void)pillAddingViewController:(PillAddingViewController *)controller didFinishWithSave:(BOOL)save;
+- (void)pillAddingViewController:(PillAddingViewController *)controller didSave:(BOOL)save withDocument:(UIManagedDocument *)document;
 @end

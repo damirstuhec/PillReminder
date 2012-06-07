@@ -10,8 +10,11 @@
 #import "CoreDataTableViewController.h"
 #import "PillAddingViewController.h"
 
-@interface PillsViewController : CoreDataTableViewController <PillAddingViewControllerDelegate, PillDetailsViewControllerDelegate>
+// implement this protocol if you want PillsViewController to be able to segue to you
+@protocol PillsViewControllerSegue <NSObject>
+@property (nonatomic, strong) UIManagedDocument *document;
+@end
 
-@property (nonatomic, strong) UIManagedDocument *pillReminderDatabase;     // Model is a Core Data database of pills
-
+@interface PillsViewController : CoreDataTableViewController <UIAlertViewDelegate>
+//@property (nonatomic, strong) UIManagedDocument *pillReminderDatabase;     // Model is a Core Data database of pills
 @end
